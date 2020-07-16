@@ -1,0 +1,95 @@
+LabelsCityScapesDB:
+  cannyThresh: 100
+  morphThresh: 5
+  polyDPThesh: 3
+  vegetation:
+    name: "vegetation"
+    R: 107
+    G: 142
+    B: 35
+  person:
+    name: "person"
+    R: 220
+    G: 20
+    B: 60
+  rider:
+    name: "rider"    
+    R: 255
+    G: 0
+    B: 0
+  car:
+    name: "car"    
+    R: 0
+    G: 0
+    B: 142
+  truck:
+    name: "truck"    
+    R: 0
+    G: 0
+    B: 70
+  bus:
+    name: "bus"    
+    R: 0
+    G: 60
+    B: 100
+  caravan:
+    name: "caravan"    
+    R: 0
+    G: 0
+    B: 90
+  trailer:
+    name: "trailer"    
+    R: 0
+    G: 0
+    B: 110
+  motorcycle:
+    name: "motorcycle"    
+    R: 0
+    G: 0
+    B: 230
+  bicycle:
+    name: "bicycle"    
+    R: 119
+    G: 11
+    B: 32
+
+LabelsKittyDB:
+  car: "Car"
+  van: "Van"
+  truck: "Truck"
+  pedestrian: "Pedestrian"
+  person_sit: "Person_sitting"
+  cyclist: "Cyclist"
+
+KittyDBfolder:
+  image: "/kittyDBsmall/image/"
+  label: "/kittyDBsmall/label/"
+  cvtimg: "/kittyDBsmall/cvtimage/"
+  xml_label: "/kittyDBsmall/xml_label/"
+  imgfile_type: "*.png"
+  txtfile_type: "*.txt"
+  xmlfile_type: "*.xml"
+  imgfile_extension: "png"
+  xmlfile_extension: "xml"  
+  file_name_fwd: "etridb_ca_"
+  file_name_num_digit: 6
+
+# 1: xml file generator
+# 2: xml file checker
+CityScapesDBConverter:
+  feature: 2
+
+CityScapesDBfolder:
+  raw: "/cityscapeDBsmall/raw/"
+  rawDB: "/cityscapeDBsmall/rawDB/"  
+  color_label: "/cityscapeDBsmall/color_label/"
+  polygon_data: "/cityscapeDBsmall/polygon/"
+  xml_label: "/cityscapeDBsmall/xml_label/"
+  imgfile_type: "*.png"
+  polygonfile_type: "*.json"
+  xmlfile_type: "*.xml"
+  xmlfile_extension: "xml"
+  file_name_fwd: "etridb_ca_"
+  file_name_num_digit: 6
+
+       

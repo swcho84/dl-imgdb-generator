@@ -1,0 +1,6 @@
+<launch>
+  <env name="ROSCONSOLE_CONFIG_FILE" value="$(find dl_imgdb_generator)/config/rosconsole.config"/>
+  <rosparam command="load" file="$(find dl_imgdb_generator)/config/params.yaml"/>
+  
+  <node name="convert_segDB_to_bboxDB" pkg="dl_imgdb_generator" type="cvt_seg2bbox_node" output="screen" />
+</launch>
