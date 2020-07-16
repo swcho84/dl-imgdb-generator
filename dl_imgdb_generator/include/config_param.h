@@ -39,9 +39,10 @@ public:
   string strPicType;
   string strPolygonType;
   string strXmlType;
+  string strImgExt;
   string strXmlExt;
-  string strRawDbFolderNm;
-  string strRawDbFolderPath;
+  string strCvtImgFolderNm;
+  string strCvtImgFolderPath;
   string strRawFolderNm;
   string strRawFolderPath;
   string strAnnoFolderNm;
@@ -50,6 +51,7 @@ public:
   string strPolygonFolderPath;
   string strXmlFolderNm;
   string strXmlFolderPath;
+  string strImgFileNmFwd;
   string strXmlFileNmFwd;
 
   string strKttPicType;
@@ -68,14 +70,22 @@ public:
   string strKttImgFileNmFwd;
   string strKttXmlFileNmFwd;  
 
+  int nKttFeatureCase;
   int nKttImgFileNmDigit;  
   int nKttXmlFileNmDigit;  
 
   int nFeatureCase;
+  int nImgFileNmDigit;
   int nXmlFileNmDigit;
+
   int nCannyThresh;
   int nMorphThresh;
   int nPolyDPThesh;
+
+  int nWidthRef;
+  int nHeightRef;
+  int nKttWidthRef;
+  int nKttHeightRef;
 
   vector<string> vecLabels;
   vector<AnnoDB> vecAnnoDB;

@@ -21,16 +21,19 @@ CvtSeg2Bbox::~CvtSeg2Bbox()
 void CvtSeg2Bbox::MainLoopBboxChecker()
 {
   // assigning variables for browsing annotated images recursively
-  vector<String> vecRawDbFileNm;
+  vector<String> vecCvtImgFileNm;
   vector<String> vecXmlLabelFileNm;
-  glob(cfgParam_.strRawDbFolderPath, vecRawDbFileNm, true);
+  glob(cfgParam_.strCvtImgFolderPath, vecCvtImgFileNm, true);
   glob(cfgParam_.strXmlFolderPath + cfgParam_.strXmlType, vecXmlLabelFileNm, true);
 
   // browsing annotated images recursively
-  for (size_t k = 0; k < vecRawDbFileNm.size(); k++)
+  for (size_t k = 0; k < vecCvtImgFileNm.size(); k++)
   {
     // assigning the raw image
-    Mat imgRaw = imread(vecRawDbFileNm[k]);
+    Mat imgRaw = imread(vecCvtImgFileNm[k]);
+
+    // for debugging
+    ROS_INFO("[%d]file:%s", (int)(k), vecCvtImgFileNm[k].c_str());
 
     // loading xml file
     TiXmlDocument docXml;
@@ -300,10 +303,10 @@ void CvtSeg2Bbox::MainLoopBboxGenerator()
 
     TiXmlElement* pElem4 = new TiXmlElement("size");
     TiXmlElement* pElem41 = new TiXmlElement("width");
-    TiXmlText* txtElem41 = new TiXmlText(to_string(nWidth));
+    TiXmlText* txtElem41 = new TiXmlText(to_string(cfgParam_.nWidthRef));
     pElem41->LinkEndChild(txtElem41);
     TiXmlElement* pElem42 = new TiXmlElement("height");
-    TiXmlText* txtElem42 = new TiXmlText(to_string(nHeight));
+    TiXmlText* txtElem42 = new TiXmlText(to_string(cfgParam_.nHeightRef));
     pElem42->LinkEndChild(txtElem42);
     TiXmlElement* pElem43 = new TiXmlElement("depth");
     TiXmlText* txtElem43 = new TiXmlText("3");
@@ -341,16 +344,24 @@ void CvtSeg2Bbox::MainLoopBboxGenerator()
         rectBbox = cfgParam_.vecImgBboxDB[k][kk].vecBbox[kkk];
         TiXmlElement* pElem55 = new TiXmlElement("bndbox");
         TiXmlElement* pElem551 = new TiXmlElement("xmin");
-        TiXmlText* txtElem551 = new TiXmlText(to_string(rectBbox.tl().x));
+        float fNormalizedTlX = (float)(rectBbox.tl().x) / nWidth;
+        int nResizedTlX = (int)(fNormalizedTlX * cfgParam_.nWidthRef);
+        TiXmlText* txtElem551 = new TiXmlText(to_string(nResizedTlX));
         pElem551->LinkEndChild(txtElem551);
         TiXmlElement* pElem552 = new TiXmlElement("ymin");
-        TiXmlText* txtElem552 = new TiXmlText(to_string(rectBbox.tl().y));
+        float fNormalizedTlY = (float)(rectBbox.tl().y) / nHeight;
+        int nResizedTlY = (int)(fNormalizedTlY * cfgParam_.nHeightRef);
+        TiXmlText* txtElem552 = new TiXmlText(to_string(nResizedTlY));
         pElem552->LinkEndChild(txtElem552);
         TiXmlElement* pElem553 = new TiXmlElement("xmax");
-        TiXmlText* txtElem553 = new TiXmlText(to_string(rectBbox.br().x));
+        float fNormalizedBrX = (float)(rectBbox.br().x) / nWidth;
+        int nResizedBrX = (int)(fNormalizedBrX * cfgParam_.nWidthRef);        
+        TiXmlText* txtElem553 = new TiXmlText(to_string(nResizedBrX));
         pElem553->LinkEndChild(txtElem553);
         TiXmlElement* pElem554 = new TiXmlElement("ymax");
-        TiXmlText* txtElem554 = new TiXmlText(to_string(rectBbox.br().y));
+        float fNormalizedBrY = (float)(rectBbox.br().y) / nHeight;
+        int nResizedBrY = (int)(fNormalizedBrY * cfgParam_.nHeightRef);
+        TiXmlText* txtElem554 = new TiXmlText(to_string(nResizedBrY));
         pElem554->LinkEndChild(txtElem554);
         pElem55->LinkEndChild(pElem551);
         pElem55->LinkEndChild(pElem552);
@@ -389,16 +400,24 @@ void CvtSeg2Bbox::MainLoopBboxGenerator()
         rectBbox = cfgParam_.vecPolygonBboxDB[k][kk].vecBbox[kkk];
         TiXmlElement* pElem65 = new TiXmlElement("bndbox");
         TiXmlElement* pElem651 = new TiXmlElement("xmin");
-        TiXmlText* txtElem651 = new TiXmlText(to_string(rectBbox.tl().x));
+        float fNormalizedTlX = (float)(rectBbox.tl().x) / nWidth;
+        int nResizedTlX = (int)(fNormalizedTlX * cfgParam_.nWidthRef);       
+        TiXmlText* txtElem651 = new TiXmlText(to_string(nResizedTlX));
         pElem651->LinkEndChild(txtElem651);
         TiXmlElement* pElem652 = new TiXmlElement("ymin");
-        TiXmlText* txtElem652 = new TiXmlText(to_string(rectBbox.tl().y));
+        float fNormalizedTlY = (float)(rectBbox.tl().y) / nHeight;
+        int nResizedTlY = (int)(fNormalizedTlY * cfgParam_.nHeightRef);        
+        TiXmlText* txtElem652 = new TiXmlText(to_string(nResizedTlY));
         pElem652->LinkEndChild(txtElem652);
         TiXmlElement* pElem653 = new TiXmlElement("xmax");
-        TiXmlText* txtElem653 = new TiXmlText(to_string(rectBbox.br().x));
+        float fNormalizedBrX = (float)(rectBbox.br().x) / nWidth;
+        int nResizedBrX = (int)(fNormalizedBrX * cfgParam_.nWidthRef);            
+        TiXmlText* txtElem653 = new TiXmlText(to_string(nResizedBrX));
         pElem653->LinkEndChild(txtElem653);
         TiXmlElement* pElem654 = new TiXmlElement("ymax");
-        TiXmlText* txtElem654 = new TiXmlText(to_string(rectBbox.br().y));
+        float fNormalizedBrY = (float)(rectBbox.br().y) / nHeight;
+        int nResizedBrY = (int)(fNormalizedBrY * cfgParam_.nHeightRef);           
+        TiXmlText* txtElem654 = new TiXmlText(to_string(nResizedBrY));
         pElem654->LinkEndChild(txtElem654);
         pElem65->LinkEndChild(pElem651);
         pElem65->LinkEndChild(pElem652);
@@ -426,6 +445,51 @@ void CvtSeg2Bbox::MainLoopBboxGenerator()
 
   // for debugging
   ROS_INFO(" ");
+
+  return;
+}
+
+// main loop: img file resizer
+void CvtSeg2Bbox::MainLoopImgResizer()
+{
+  // 1st, resizing raw image and saving resized images
+  // assigning variables for browsing annotated images recursively
+  vector<String> vecImgFileNm;
+  glob(cfgParam_.strRawFolderPath, vecImgFileNm, true);
+
+  // browsing annotated images recursively
+  for (size_t i = 0; i < vecImgFileNm.size(); i++)
+  {
+    // for debugging
+    ROS_INFO("Processing_imgResize(%d,%d)", (int)(i), (int)(vecImgFileNm.size()));    
+
+    // assigning the raw image
+    Mat imgRaw = imread(vecImgFileNm[i]);
+
+    // image width and height info. (h1024, w2048)
+    nHeight = imgRaw.rows;
+    nWidth = imgRaw.cols;
+
+    // resizing w.r.t the cityscapesDB
+    Mat imgResize;
+    resize(imgRaw, imgResize, Size(cfgParam_.nWidthRef, cfgParam_.nHeightRef), 0, 0, INTER_NEAREST);
+
+    // making the filename  using stringstream, with the numbering rule
+    stringstream strStreamImgFileName;
+    strStreamImgFileName << cfgParam_.strImgFileNmFwd;
+    strStreamImgFileName << std::setfill('0') << std::setw(cfgParam_.nImgFileNmDigit) << i;
+    strStreamImgFileName << "." + cfgParam_.strImgExt;
+
+    // making the full file path
+    string strCvtImgFile;
+    strCvtImgFile = cfgParam_.strCvtImgFolderPath + strStreamImgFileName.str();
+
+    // saving the resized image
+    imwrite(strCvtImgFile, imgResize);
+
+    // calculating size flag
+    bSizeCalcFlag = GenSizeCalcFlag(i, (int)(vecImgFileNm.size()));
+  }
 
   return;
 }

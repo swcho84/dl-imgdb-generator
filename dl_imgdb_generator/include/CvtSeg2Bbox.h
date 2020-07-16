@@ -13,6 +13,7 @@ public:
   CvtSeg2Bbox(const ConfigParam& cfg);
   ~CvtSeg2Bbox();
 
+  void MainLoopImgResizer();
   void MainLoopBboxGenerator();
   void MainLoopBboxChecker();
   bool GetSizeCalcFlag();

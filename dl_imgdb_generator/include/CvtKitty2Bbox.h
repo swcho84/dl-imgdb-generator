@@ -13,7 +13,9 @@ public:
   CvtKtt2Bbox(const ConfigParam& cfg);
   ~CvtKtt2Bbox();
 
+  void MainLoopImgResizer();
   void MainLoopBboxGenerator();
+  
   bool GetSizeCalcFlag();
 
   bool bSizeCalcFlag;  

@@ -61,10 +61,16 @@ LabelsKittyDB:
   person_sit: "Person_sitting"
   cyclist: "Cyclist"
 
+# 11: img file resizer
+# 22: xml file generator
+# 33: xml file checker
+KittyDBConverter:
+  feature: 11
+
 KittyDBfolder:
   image: "/kittyDBsmall/image/"
   label: "/kittyDBsmall/label/"
-  cvtimg: "/kittyDBsmall/cvtimage/"
+  cvtimg: "/kittyDBsmall/cvtimg/"
   xml_label: "/kittyDBsmall/xml_label/"
   imgfile_type: "*.png"
   txtfile_type: "*.txt"
@@ -73,23 +79,29 @@ KittyDBfolder:
   xmlfile_extension: "xml"  
   file_name_fwd: "etridb_ca_"
   file_name_num_digit: 6
+  cvtimg_width: 640
+  cvtimg_height: 480
 
-# 1: xml file generator
-# 2: xml file checker
+# 1: img file resizer
+# 2: xml file generator
+# 3: xml file checker
 CityScapesDBConverter:
-  feature: 2
+  feature: 3
 
 CityScapesDBfolder:
   raw: "/cityscapeDBsmall/raw/"
-  rawDB: "/cityscapeDBsmall/rawDB/"  
+  cvtimg: "/cityscapeDBsmall/cvtimg/"
   color_label: "/cityscapeDBsmall/color_label/"
   polygon_data: "/cityscapeDBsmall/polygon/"
   xml_label: "/cityscapeDBsmall/xml_label/"
   imgfile_type: "*.png"
   polygonfile_type: "*.json"
   xmlfile_type: "*.xml"
+  imgfile_extension: "png"
   xmlfile_extension: "xml"
   file_name_fwd: "etridb_ca_"
   file_name_num_digit: 6
+  cvtimg_width: 640
+  cvtimg_height: 480  
 
        

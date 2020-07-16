@@ -30,6 +30,7 @@ int main(int argc, char** argv)
   }
 
   // converting annotated segmentation DB to bboxs with SIGINT handler
+  ROS_INFO("DB generator using cityscapeDB");  
   CvtSeg2Bbox seg2Bbox(cfg);
   signal(SIGINT, SigIntHandler);
 
@@ -41,22 +42,27 @@ int main(int argc, char** argv)
   {
     switch (cfg.nFeatureCase)
     {
-      case 1:  // xml file generator
+      case CITYDB_IMGFILE_RESIZER:    // img file resizer
+      {
+        ROS_INFO("Feature: img file resizer");
+        seg2Bbox.MainLoopImgResizer();
+        break;
+      }
+      case CITYDB_XMLFILE_GENERATOR:  // xml file generator
       {
         ROS_INFO("Feature: xml file generator");
         seg2Bbox.MainLoopBboxGenerator();
         break;
       }
-      case 2:  // xml file checker
+      case CITYDB_XMLFILE_CHECKER:  // xml file checker
       {
         ROS_INFO("Feature: xml file checker");
         seg2Bbox.MainLoopBboxChecker();
         break;
       }
-      default:  // xml file generator
+      default:
       {
-        ROS_INFO("Feature: xml file generator");
-        seg2Bbox.MainLoopBboxGenerator();
+        ROS_INFO("Please check your parameter..");
         break;
       }
     }

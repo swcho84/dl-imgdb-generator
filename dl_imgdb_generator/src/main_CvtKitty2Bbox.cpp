@@ -30,6 +30,7 @@ int main(int argc, char** argv)
   }
 
   // converting annotated segmentation DB to bboxs with SIGINT handler
+  ROS_INFO("DB generator using kittyDB");
   CvtKtt2Bbox ktt2Bbox(cfg);
   signal(SIGINT, SigIntHandler);
 
@@ -39,7 +40,31 @@ int main(int argc, char** argv)
   // Main loop.
   while (ok())
   {
-    ktt2Bbox.MainLoopBboxGenerator();
+    switch (cfg.nKttFeatureCase)
+    {
+      case KITDB_IMGFILE_RESIZER:    // img file resizer
+      {
+        ROS_INFO("Feature: img file resizer");
+        ktt2Bbox.MainLoopImgResizer();
+        break;
+      }
+      case KITDB_XMLFILE_GENERATOR:  // xml file generator
+      {
+        ROS_INFO("Feature: xml file generator");
+        ktt2Bbox.MainLoopBboxGenerator();
+        break;
+      }
+      case KITDB_XMLFILE_CHECKER:  // xml file checker
+      {
+        ROS_INFO("Feature: xml file checker");
+        break;
+      }
+      default:
+      {
+        ROS_INFO("Please check your parameter..");
+        break;
+      }
+    }    
 
     // breaking loop
     if (ktt2Bbox.GetSizeCalcFlag())

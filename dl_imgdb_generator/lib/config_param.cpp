@@ -30,28 +30,37 @@ bool ConfigParam::ReadRosParams()
     // general information
     strHomeName = getenv("HOME");
 
-    // folder name and picture file type
+    // feature case
     ReadRosParam(nh, "/CityScapesDBConverter/feature", nFeatureCase);
 
     // folder name and picture file type
     ReadRosParam(nh, "/CityScapesDBfolder/raw", strRawFolderNm);
-    ReadRosParam(nh, "/CityScapesDBfolder/rawDB", strRawDbFolderNm);
+    ReadRosParam(nh, "/CityScapesDBfolder/cvtimg", strCvtImgFolderNm);
     ReadRosParam(nh, "/CityScapesDBfolder/color_label", strAnnoFolderNm);
     ReadRosParam(nh, "/CityScapesDBfolder/polygon_data", strPolygonFolderNm);
     ReadRosParam(nh, "/CityScapesDBfolder/xml_label", strXmlFolderNm);
     ReadRosParam(nh, "/CityScapesDBfolder/imgfile_type", strPicType);
     ReadRosParam(nh, "/CityScapesDBfolder/polygonfile_type", strPolygonType);
+    ReadRosParam(nh, "/CityScapesDBfolder/imgfile_extension", strImgExt);
     ReadRosParam(nh, "/CityScapesDBfolder/xmlfile_extension", strXmlExt);
     ReadRosParam(nh, "/CityScapesDBfolder/xmlfile_type", strXmlType);
     ReadRosParam(nh, "/CityScapesDBfolder/file_name_fwd", strXmlFileNmFwd);
     ReadRosParam(nh, "/CityScapesDBfolder/file_name_num_digit", nXmlFileNmDigit);
+    ReadRosParam(nh, "/CityScapesDBfolder/cvtimg_width", nWidthRef);
+    ReadRosParam(nh, "/CityScapesDBfolder/cvtimg_height", nHeightRef);
 
     // folder path, raw and annotated images
     strRawFolderPath = strHomeName + strRawFolderNm + strPicType;
-    strRawDbFolderPath = strHomeName + strRawDbFolderNm + strPicType;
+    strCvtImgFolderPath = strHomeName + strCvtImgFolderNm;
     strAnnoFolderPath = strHomeName + strAnnoFolderNm + strPicType;
     strPolygonFolderPath = strHomeName + strPolygonFolderNm + strPolygonType;
     strXmlFolderPath = strHomeName + strXmlFolderNm;
+
+    strImgFileNmFwd = strXmlFileNmFwd;
+    nImgFileNmDigit = nXmlFileNmDigit;    
+
+    // feature case
+    ReadRosParam(nh, "/KittyDBConverter/feature", nKttFeatureCase);    
 
     // folder name and picture file type
     ReadRosParam(nh, "/KittyDBfolder/image", strKttImgFolderNm);
@@ -65,6 +74,9 @@ bool ConfigParam::ReadRosParams()
     ReadRosParam(nh, "/KittyDBfolder/xmlfile_extension", strKttXmlExt);
     ReadRosParam(nh, "/KittyDBfolder/file_name_fwd", strKttXmlFileNmFwd);
     ReadRosParam(nh, "/KittyDBfolder/file_name_num_digit", nKttXmlFileNmDigit);
+    ReadRosParam(nh, "/KittyDBfolder/cvtimg_width", nKttWidthRef);
+    ReadRosParam(nh, "/KittyDBfolder/cvtimg_height", nKttHeightRef);    
+
 
     // folder path, for kitty data
     strKttImgFolderPath = strHomeName + strKttImgFolderNm + strKttPicType;

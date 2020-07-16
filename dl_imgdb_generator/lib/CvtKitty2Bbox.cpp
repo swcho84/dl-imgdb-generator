@@ -24,42 +24,6 @@ CvtKtt2Bbox::~CvtKtt2Bbox()
 // main loop: xml file generator
 void CvtKtt2Bbox::MainLoopBboxGenerator()
 {
-  // // 1st, resizing raw image and saving resized images
-  // // assigning variables for browsing annotated images recursively
-  // vector<String> vecImgFileNm;
-  // glob(cfgParam_.strKttImgFolderPath, vecImgFileNm, true);
-
-  // // browsing annotated images recursively
-  // for (size_t i = 0; i < vecImgFileNm.size(); i++)
-  // {
-  //   // assigning the raw image
-  //   Mat imgRaw = imread(vecImgFileNm[i]);
-
-  //   // image width and height info. (h1024, w2048)
-  //   nHeight = imgRaw.rows;
-  //   nWidth = imgRaw.cols;
-
-  //   // resizing w.r.t the cityscapesDB
-  //   Mat imgResize;
-  //   resize(imgRaw, imgResize, Size(nWidthCityScapeDB, nHeightCityScapeDB), 0, 0, CV_INTER_NN);
-
-  //   // making the filename  using stringstream, with the numbering rule
-  //   stringstream strStreamImgFileName;
-  //   strStreamImgFileName << cfgParam_.strKttImgFileNmFwd;
-  //   strStreamImgFileName << std::setfill('0') << std::setw(cfgParam_.nKttImgFileNmDigit) << i;
-  //   strStreamImgFileName << "." + cfgParam_.strKttImgExt;
-
-  //   // making the full file path
-  //   string strCvtImgFile;
-  //   strCvtImgFile = cfgParam_.strKttCvtImgFolderPath + strStreamImgFileName.str();
-
-  //   // saving the resized image
-  //   imwrite(strCvtImgFile, imgResize);
-
-  //   // calculating size flag
-  //   bSizeCalcFlag = GenSizeCalcFlag(i, (int)(vecImgFileNm.size()));
-  // }
-
   // 2nd, reading, matching, resizing raw bbox data and saving resized bbox data w.r.t the xml type
   vector<String> vecImgFileNm;
   vector<String> vecCvtImgFileNm;
@@ -350,6 +314,48 @@ void CvtKtt2Bbox::MainLoopBboxGenerator()
 
     // // pausing and destroying all imshow result
     // waitKey(0);
+  }
+
+  return;
+}
+
+// main loop: img file resizer
+void CvtKtt2Bbox::MainLoopImgResizer()
+{
+  // 1st, resizing raw image and saving resized images
+  // assigning variables for browsing annotated images recursively
+  vector<String> vecImgFileNm;
+  glob(cfgParam_.strKttImgFolderPath, vecImgFileNm, true);
+
+  // browsing annotated images recursively
+  for (size_t i = 0; i < vecImgFileNm.size(); i++)
+  {
+    // assigning the raw image
+    Mat imgRaw = imread(vecImgFileNm[i]);
+
+    // image width and height info. (h1024, w2048)
+    nHeight = imgRaw.rows;
+    nWidth = imgRaw.cols;
+
+    // resizing w.r.t the cityscapesDB
+    Mat imgResize;
+    resize(imgRaw, imgResize, Size(cfgParam_.nKttWidthRef, cfgParam_.nKttHeightRef), 0, 0, INTER_NEAREST);
+
+    // making the filename  using stringstream, with the numbering rule
+    stringstream strStreamImgFileName;
+    strStreamImgFileName << cfgParam_.strKttImgFileNmFwd;
+    strStreamImgFileName << std::setfill('0') << std::setw(cfgParam_.nKttImgFileNmDigit) << i;
+    strStreamImgFileName << "." + cfgParam_.strKttImgExt;
+
+    // making the full file path
+    string strCvtImgFile;
+    strCvtImgFile = cfgParam_.strKttCvtImgFolderPath + strStreamImgFileName.str();
+
+    // saving the resized image
+    imwrite(strCvtImgFile, imgResize);
+
+    // calculating size flag
+    bSizeCalcFlag = GenSizeCalcFlag(i, (int)(vecImgFileNm.size()));
   }
 
   return;
