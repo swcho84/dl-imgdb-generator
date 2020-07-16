@@ -10,15 +10,79 @@ CvtKtt2Bbox::CvtKtt2Bbox(const ConfigParam& cfg) : cfgParam_(cfg)
   nHeight = 480;
   nWidth = 640;
 
-  // for cityscapes, (h1024, w2048)
-  nHeightCityScapeDB = 1024;
-  nWidthCityScapeDB = 2048;
-
   bSizeCalcFlag = false;
 }
 
 CvtKtt2Bbox::~CvtKtt2Bbox()
 {
+}
+
+// main loop: xml file checker
+void CvtKtt2Bbox::MainLoopBboxChecker()
+{
+  // assigning variables for browsing annotated images recursively
+  vector<String> vecCvtImgFileNm;
+  vector<String> vecXmlLabelFileNm;
+  glob(cfgParam_.strKttCvtImgFolderPath, vecCvtImgFileNm, true);
+  glob(cfgParam_.strKttXmlFolderPath + cfgParam_.strKttXmlType, vecXmlLabelFileNm, true);
+
+  // browsing annotated images recursively
+  for (size_t k = 0; k < vecCvtImgFileNm.size(); k++)
+  {
+    // assigning the raw image
+    Mat imgRaw = imread(vecCvtImgFileNm[k]);
+
+    // for debugging
+    ROS_INFO("[%d]file:%s", (int)(k), vecCvtImgFileNm[k].c_str());
+
+    // loading xml file
+    TiXmlDocument docXml;
+    docXml.LoadFile(vecXmlLabelFileNm[k]);
+    TiXmlElement* root = docXml.FirstChildElement("annotation");
+
+    // parsing bbox data with the label in xml file
+    for (TiXmlElement* obj = root->FirstChildElement("object"); obj != NULL; obj = obj->NextSiblingElement("object"))
+    {
+      TiXmlElement* name = obj->FirstChildElement("name");
+      const char* label = (const char*)(name->GetText());
+
+      TiXmlElement* bndbox = obj->FirstChildElement("bndbox");
+      TiXmlElement* xminElem = bndbox->FirstChildElement("xmin");
+      const char* xmin = (const char*)(xminElem->GetText());
+      int nXmin = atoi(xmin);
+
+      TiXmlElement* yminElem = bndbox->FirstChildElement("ymin");
+      const char* ymin = (const char*)(yminElem->GetText());
+      int nYmin = atoi(ymin);
+
+      TiXmlElement* xmaxElem = bndbox->FirstChildElement("xmax");
+      const char* xmax = (const char*)(xmaxElem->GetText());
+      int nXmax = atoi(xmax);
+
+      TiXmlElement* ymaxElem = bndbox->FirstChildElement("ymax");
+      const char* ymax = (const char*)(ymaxElem->GetText());
+      int nYmax = atoi(ymax);
+
+      Point ptTl, ptBr;
+      ptTl.x = nXmin;
+      ptTl.y = nYmin;
+      ptBr.x = nXmax;
+      ptBr.y = nYmax;
+
+      rectangle(imgRaw, ptTl, ptBr, colorStat_.scalRed, 2);
+
+      // for debugging
+      ROS_INFO("label(%s):tl(%d,%d),br(%d,%d)", label, nXmin, nYmin, nXmax, nYmax);
+    }
+
+    // for debugging
+    imshow("raw", imgRaw);
+
+    // pausing and destroying all imshow result
+    waitKey(0);
+  }
+
+  return;
 }
 
 // main loop: xml file generator
@@ -89,7 +153,7 @@ void CvtKtt2Bbox::MainLoopBboxGenerator()
             {
               tempKittyDB.fBbox[0] = (float)(atoi(strToken.c_str()));
               float nNormalized = tempKittyDB.fBbox[0] / nWidth;
-              float nResized = nNormalized * nWidthCityScapeDB;
+              float nResized = nNormalized * cfgParam_.nKttWidthRef;
               tempKittyDB.fBbox[0] = nResized;
               break;
             }
@@ -97,7 +161,7 @@ void CvtKtt2Bbox::MainLoopBboxGenerator()
             {
               tempKittyDB.fBbox[1] = (float)(atoi(strToken.c_str()));
               float nNormalized = tempKittyDB.fBbox[1] / nHeight;
-              float nResized = nNormalized * nHeightCityScapeDB;
+              float nResized = nNormalized * cfgParam_.nKttHeightRef;
               tempKittyDB.fBbox[1] = nResized;
               break;
             }
@@ -105,7 +169,7 @@ void CvtKtt2Bbox::MainLoopBboxGenerator()
             {
               tempKittyDB.fBbox[2] = (float)(atoi(strToken.c_str()));
               float nNormalized = tempKittyDB.fBbox[2] / nWidth;
-              float nResized = nNormalized * nWidthCityScapeDB;
+              float nResized = nNormalized * cfgParam_.nKttWidthRef;
               tempKittyDB.fBbox[2] = nResized;
               break;
             }
@@ -113,7 +177,7 @@ void CvtKtt2Bbox::MainLoopBboxGenerator()
             {
               tempKittyDB.fBbox[3] = (float)(atoi(strToken.c_str()));
               float nNormalized = tempKittyDB.fBbox[3] / nHeight;
-              float nResized = nNormalized * nHeightCityScapeDB;
+              float nResized = nNormalized * cfgParam_.nKttHeightRef;
               tempKittyDB.fBbox[3] = nResized;
               break;
             }
@@ -220,10 +284,10 @@ void CvtKtt2Bbox::MainLoopBboxGenerator()
 
     TiXmlElement* pElem4 = new TiXmlElement("size");
     TiXmlElement* pElem41 = new TiXmlElement("width");
-    TiXmlText* txtElem41 = new TiXmlText(to_string(nWidthCityScapeDB));
+    TiXmlText* txtElem41 = new TiXmlText(to_string(cfgParam_.nKttWidthRef));
     pElem41->LinkEndChild(txtElem41);
     TiXmlElement* pElem42 = new TiXmlElement("height");
-    TiXmlText* txtElem42 = new TiXmlText(to_string(nHeightCityScapeDB));
+    TiXmlText* txtElem42 = new TiXmlText(to_string(cfgParam_.nKttHeightRef));
     pElem42->LinkEndChild(txtElem42);
     TiXmlElement* pElem43 = new TiXmlElement("depth");
     TiXmlText* txtElem43 = new TiXmlText("3");
@@ -308,12 +372,6 @@ void CvtKtt2Bbox::MainLoopBboxGenerator()
 
     // calculating size flag
     bSizeCalcFlag = GenSizeCalcFlag(i, (int)(vecImgFileNm.size()));
-
-    // // for debugging
-    // imshow("imgCvtRaw", imgCvtRaw);
-
-    // // pausing and destroying all imshow result
-    // waitKey(0);
   }
 
   return;
@@ -330,6 +388,9 @@ void CvtKtt2Bbox::MainLoopImgResizer()
   // browsing annotated images recursively
   for (size_t i = 0; i < vecImgFileNm.size(); i++)
   {
+    // for debugging
+    ROS_INFO("Processing_imgResize(%d,%d)", (int)(i), (int)(vecImgFileNm.size()));
+
     // assigning the raw image
     Mat imgRaw = imread(vecImgFileNm[i]);
 
@@ -356,6 +417,13 @@ void CvtKtt2Bbox::MainLoopImgResizer()
 
     // calculating size flag
     bSizeCalcFlag = GenSizeCalcFlag(i, (int)(vecImgFileNm.size()));
+
+    // // for debugging
+    // imshow("imgRaw", imgRaw);
+    // imshow("imgCvtRaw", imgResize);
+
+    // // pausing and destroying all imshow result
+    // waitKey(0);
   }
 
   return;

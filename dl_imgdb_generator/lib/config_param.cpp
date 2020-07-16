@@ -192,11 +192,19 @@ bool ConfigParam::ReadRosParams()
     vecAnnoDB.push_back(bicycle);
 
     // for debugging
-    ROS_INFO("labelSize:%d", (int)(vecLabels.size()));
+    ROS_INFO("cityscape:labelSize:%d", (int)(vecLabels.size()));
     for (auto i = 0; i < vecAnnoDB.size(); i++)
     {
       ROS_INFO("[%d]%s:RGB(%d,%d,%d)", i, vecAnnoDB[i].strLabel.c_str(), vecAnnoDB[i].nRGB[0], vecAnnoDB[i].nRGB[1],
                vecAnnoDB[i].nRGB[2]);
+    }
+    ROS_INFO(" ");
+
+    // for debugging
+    ROS_INFO("kitty:labelSize:%d", (int)(vecKttLabels.size()));
+    for (auto i = 0; i < vecAnnoKttDB.size(); i++)
+    {
+      ROS_INFO("[%d]%s", i, vecAnnoDB[i].strLabel.c_str());
     }
     ROS_INFO(" ");
   }

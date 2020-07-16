@@ -65,7 +65,7 @@ LabelsKittyDB:
 # 22: xml file generator
 # 33: xml file checker
 KittyDBConverter:
-  feature: 11
+  feature: 33
 
 KittyDBfolder:
   image: "/kittyDBsmall/image/"

@@ -15,6 +15,7 @@ public:
 
   void MainLoopImgResizer();
   void MainLoopBboxGenerator();
+  void MainLoopBboxChecker();
 
   bool GetSizeCalcFlag();
 
@@ -30,9 +31,6 @@ private:
 
   int nHeight;
   int nWidth;
-
-  int nHeightCityScapeDB;
-  int nWidthCityScapeDB;
 };
 
 #endif

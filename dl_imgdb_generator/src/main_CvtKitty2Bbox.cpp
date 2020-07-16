@@ -57,6 +57,7 @@ int main(int argc, char** argv)
       case KITDB_XMLFILE_CHECKER:  // xml file checker
       {
         ROS_INFO("Feature: xml file checker");
+        ktt2Bbox.MainLoopBboxChecker();
         break;
       }
       default:

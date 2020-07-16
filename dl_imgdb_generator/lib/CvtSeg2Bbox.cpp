@@ -307,7 +307,7 @@ void CvtSeg2Bbox::MainLoopBboxGenerator()
     TiXmlText* txtElem41 = new TiXmlText(to_string(cfgParam_.nWidthRef));
     pElem41->LinkEndChild(txtElem41);
     TiXmlElement* pElem42 = new TiXmlElement("height");
-    TiXmlText* txtElem42 = new TiXmlText(to_string(nHeightRef));
+    TiXmlText* txtElem42 = new TiXmlText(to_string(cfgParam_.nHeightRef));
     pElem42->LinkEndChild(txtElem42);
     TiXmlElement* pElem43 = new TiXmlElement("depth");
     TiXmlText* txtElem43 = new TiXmlText("3");
