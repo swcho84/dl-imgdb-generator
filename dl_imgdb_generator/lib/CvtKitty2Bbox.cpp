@@ -29,6 +29,9 @@ void CvtKtt2Bbox::MainLoopBboxChecker()
   // browsing annotated images recursively
   for (size_t k = 0; k < vecCvtImgFileNm.size(); k++)
   {
+    // for debugging
+    ROS_INFO("Processing_xmlCheck(%d,%d)", (int)(k), (int)(vecCvtImgFileNm.size()));    
+
     // assigning the raw image
     Mat imgRaw = imread(vecCvtImgFileNm[k]);
 
@@ -231,7 +234,7 @@ void CvtKtt2Bbox::MainLoopBboxGenerator()
     }
 
     // for debugging
-    ROS_INFO("Processing_xmlDB(%d,%d)", (int)(i), (int)(vecImgFileNm.size()));
+    ROS_INFO("Processing_xmlGen(%d,%d)", (int)(i), (int)(vecImgFileNm.size()));
 
     // making the filename  using stringstream, with the numbering rule
     stringstream strStreamFileName;
