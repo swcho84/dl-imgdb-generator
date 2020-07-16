@@ -1,16 +1,15 @@
 #ifndef ROSCV_TEST_CVTSEG2BBOX_H
 #define ROSCV_TEST_CVTSEG2BBOX_H
 
-#include "global_header.h"
 #include "config_param.h"
+#include "global_header.h"
 
 using namespace std;
 using namespace ros;
 
-class CvtSeg2Bbox
-{
+class CvtSeg2Bbox {
 public:
-  CvtSeg2Bbox(const ConfigParam& cfg);
+  CvtSeg2Bbox(const ConfigParam &cfg);
   ~CvtSeg2Bbox();
 
   void MainLoopImgResizer();
@@ -31,7 +30,6 @@ private:
 
   int nHeight;
   int nWidth;
-  
 };
 
 #endif

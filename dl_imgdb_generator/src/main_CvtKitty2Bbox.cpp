@@ -5,8 +5,7 @@ using namespace ros;
 using namespace cv;
 
 // using SIGINT handler
-void SigIntHandler(int param)
-{
+void SigIntHandler(int param) {
   ROS_INFO("User pressed Ctrl+C..forced exit..");
   exit(1);
 }
@@ -15,16 +14,14 @@ void SigIntHandler(int param)
  * main()
  * Main function to set up ROS node.
  *------------------------------------------------------------------*/
-int main(int argc, char** argv)
-{
+int main(int argc, char **argv) {
   // Set up ROS.
   init(argc, argv, "convert_kittyDB_to_bboxDB");
   NodeHandle nh("");
 
   // reading ros params
   ConfigParam cfg;
-  if (!cfg.GetRosParams())
-  {
+  if (!cfg.GetRosParams()) {
     ROS_ERROR("Wrong params!! Please check the parameter sheet..");
     return 0;
   }
@@ -38,33 +35,30 @@ int main(int argc, char** argv)
   Rate loopRate(30);
 
   // Main loop.
-  while (ok())
-  {
-    switch (cfg.nKttFeatureCase)
+  while (ok()) {
+    switch (cfg.nKttFeatureCase) {
+    case KITDB_IMGFILE_RESIZER: // img file resizer
     {
-      case KITDB_IMGFILE_RESIZER:    // img file resizer
-      {
-        ROS_INFO("Feature: img file resizer");
-        ktt2Bbox.MainLoopImgResizer();
-        break;
-      }
-      case KITDB_XMLFILE_GENERATOR:  // xml file generator
-      {
-        ROS_INFO("Feature: xml file generator");
-        ktt2Bbox.MainLoopBboxGenerator();
-        break;
-      }
-      case KITDB_XMLFILE_CHECKER:  // xml file checker
-      {
-        ROS_INFO("Feature: xml file checker");
-        break;
-      }
-      default:
-      {
-        ROS_INFO("Please check your parameter..");
-        break;
-      }
-    }    
+      ROS_INFO("Feature: img file resizer");
+      ktt2Bbox.MainLoopImgResizer();
+      break;
+    }
+    case KITDB_XMLFILE_GENERATOR: // xml file generator
+    {
+      ROS_INFO("Feature: xml file generator");
+      ktt2Bbox.MainLoopBboxGenerator();
+      break;
+    }
+    case KITDB_XMLFILE_CHECKER: // xml file checker
+    {
+      ROS_INFO("Feature: xml file checker");
+      break;
+    }
+    default: {
+      ROS_INFO("Please check your parameter..");
+      break;
+    }
+    }
 
     // breaking loop
     if (ktt2Bbox.GetSizeCalcFlag())
@@ -78,4 +72,4 @@ int main(int argc, char** argv)
   ROS_INFO("Work Done: convert_kittyDB_to_bboxDB");
 
   return 0;
-}  // end main()
+} // end main()
