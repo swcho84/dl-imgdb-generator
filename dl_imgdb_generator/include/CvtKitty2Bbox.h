@@ -1,15 +1,16 @@
 #ifndef ROSCV_TEST_CVTKTTIY2BBOX_H
 #define ROSCV_TEST_CVTKTTIY2BBOX_H
 
-#include "config_param.h"
 #include "global_header.h"
+#include "config_param.h"
 
 using namespace std;
 using namespace ros;
 
-class CvtKtt2Bbox {
+class CvtKtt2Bbox
+{
 public:
-  CvtKtt2Bbox(const ConfigParam &cfg);
+  CvtKtt2Bbox(const ConfigParam& cfg);
   ~CvtKtt2Bbox();
 
   void MainLoopImgResizer();

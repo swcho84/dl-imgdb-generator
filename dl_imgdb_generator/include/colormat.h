@@ -2,14 +2,13 @@
 #define ROSCV_TEST_COLORMAT_H
 
 // using vector type data
-#include <ctime>
 #include <iostream>
-#include <stdio.h>
 #include <string>
+#include <stdio.h>
+#include <ctime>
 
 // for using OpenCV operation using Opencv4Tegra
-// optimized OpenCV function using GPU (therefore, the original GPU function is
-// removed)
+// optimized OpenCV function using GPU (therefore, the original GPU function is removed)
 #include "opencv2/opencv.hpp"
 
 // setup the initial name
@@ -17,9 +16,11 @@
 using namespace std;
 using namespace cv;
 
-class ColorStatus {
+class ColorStatus
+{
 public:
-  ColorStatus() {
+  ColorStatus()
+  {
     // maximum 14ea, BGR color space
     // blue, lime(light green), red, yellow, cyan, magneta
     // silver, navy, green, maroon, olive, teal, purple, gray
@@ -27,103 +28,89 @@ public:
 
     mBGRcolor_comb.at<float>(0, 0) = 255;
     mBGRcolor_comb.at<float>(0, 1) = 0;
-    mBGRcolor_comb.at<float>(0, 2) = 0; // blue
+    mBGRcolor_comb.at<float>(0, 2) = 0;  // blue
     mBGRcolor_comb.at<float>(1, 0) = 0;
     mBGRcolor_comb.at<float>(1, 1) = 255;
-    mBGRcolor_comb.at<float>(1, 2) = 0; // lime   (light green)
+    mBGRcolor_comb.at<float>(1, 2) = 0;  // lime   (light green)
     mBGRcolor_comb.at<float>(2, 0) = 0;
     mBGRcolor_comb.at<float>(2, 1) = 0;
-    mBGRcolor_comb.at<float>(2, 2) = 255; // red
+    mBGRcolor_comb.at<float>(2, 2) = 255;  // red
     mBGRcolor_comb.at<float>(3, 0) = 0;
     mBGRcolor_comb.at<float>(3, 1) = 255;
-    mBGRcolor_comb.at<float>(3, 2) = 255; // yellow
+    mBGRcolor_comb.at<float>(3, 2) = 255;  // yellow
     mBGRcolor_comb.at<float>(4, 0) = 255;
     mBGRcolor_comb.at<float>(4, 1) = 255;
-    mBGRcolor_comb.at<float>(4, 2) = 0; // cyan
+    mBGRcolor_comb.at<float>(4, 2) = 0;  // cyan
     mBGRcolor_comb.at<float>(5, 0) = 255;
     mBGRcolor_comb.at<float>(5, 1) = 0;
-    mBGRcolor_comb.at<float>(5, 2) = 255; // magenta
+    mBGRcolor_comb.at<float>(5, 2) = 255;  // magenta
     mBGRcolor_comb.at<float>(6, 0) = 192;
     mBGRcolor_comb.at<float>(6, 1) = 192;
-    mBGRcolor_comb.at<float>(6, 2) = 192; // silver (light gray)
+    mBGRcolor_comb.at<float>(6, 2) = 192;  // silver (light gray)
     mBGRcolor_comb.at<float>(7, 0) = 128;
     mBGRcolor_comb.at<float>(7, 1) = 0;
-    mBGRcolor_comb.at<float>(7, 2) = 0; // navy   (dark blue)
+    mBGRcolor_comb.at<float>(7, 2) = 0;  // navy   (dark blue)
     mBGRcolor_comb.at<float>(8, 0) = 0;
     mBGRcolor_comb.at<float>(8, 1) = 128;
-    mBGRcolor_comb.at<float>(8, 2) = 0; // green  (dark green)
+    mBGRcolor_comb.at<float>(8, 2) = 0;  // green  (dark green)
     mBGRcolor_comb.at<float>(9, 0) = 0;
     mBGRcolor_comb.at<float>(9, 1) = 0;
-    mBGRcolor_comb.at<float>(9, 2) = 128; // maroon (dark red)
+    mBGRcolor_comb.at<float>(9, 2) = 128;  // maroon (dark red)
     mBGRcolor_comb.at<float>(10, 0) = 0;
     mBGRcolor_comb.at<float>(10, 1) = 128;
-    mBGRcolor_comb.at<float>(10, 2) = 128; // Olive  (dark yellow)
+    mBGRcolor_comb.at<float>(10, 2) = 128;  // Olive  (dark yellow)
     mBGRcolor_comb.at<float>(11, 0) = 128;
     mBGRcolor_comb.at<float>(11, 1) = 128;
-    mBGRcolor_comb.at<float>(11, 2) = 0; // teal   (dark cyan)
+    mBGRcolor_comb.at<float>(11, 2) = 0;  // teal   (dark cyan)
     mBGRcolor_comb.at<float>(12, 0) = 128;
     mBGRcolor_comb.at<float>(12, 1) = 0;
-    mBGRcolor_comb.at<float>(12, 2) = 128; // purple (dark margenta)
+    mBGRcolor_comb.at<float>(12, 2) = 128;  // purple (dark margenta)
     mBGRcolor_comb.at<float>(13, 0) = 128;
     mBGRcolor_comb.at<float>(13, 1) = 128;
-    mBGRcolor_comb.at<float>(13, 2) = 128; // gray (dark gray)
+    mBGRcolor_comb.at<float>(13, 2) = 128;  // gray (dark gray)
     mBGRcolor_comb.at<float>(14, 0) = 0;
     mBGRcolor_comb.at<float>(14, 1) = 0;
-    mBGRcolor_comb.at<float>(14, 2) = 0; // black
+    mBGRcolor_comb.at<float>(14, 2) = 0;  // black
     mBGRcolor_comb.at<float>(15, 0) = 255;
     mBGRcolor_comb.at<float>(15, 1) = 255;
-    mBGRcolor_comb.at<float>(15, 2) = 255; // white
+    mBGRcolor_comb.at<float>(15, 2) = 255;  // white
 
-    scalBlue = Scalar((int)(mBGRcolor_comb.at<float>(0, 0)),
-                      (int)(mBGRcolor_comb.at<float>(0, 1)),
+    scalBlue = Scalar((int)(mBGRcolor_comb.at<float>(0, 0)), (int)(mBGRcolor_comb.at<float>(0, 1)),
                       (int)(mBGRcolor_comb.at<float>(0, 2)));
-    scalLime = Scalar((int)(mBGRcolor_comb.at<float>(1, 0)),
-                      (int)(mBGRcolor_comb.at<float>(1, 1)),
+    scalLime = Scalar((int)(mBGRcolor_comb.at<float>(1, 0)), (int)(mBGRcolor_comb.at<float>(1, 1)),
                       (int)(mBGRcolor_comb.at<float>(1, 2)));
-    scalRed = Scalar((int)(mBGRcolor_comb.at<float>(2, 0)),
-                     (int)(mBGRcolor_comb.at<float>(2, 1)),
+    scalRed = Scalar((int)(mBGRcolor_comb.at<float>(2, 0)), (int)(mBGRcolor_comb.at<float>(2, 1)),
                      (int)(mBGRcolor_comb.at<float>(2, 2)));
-    scalYellow = Scalar((int)(mBGRcolor_comb.at<float>(3, 0)),
-                        (int)(mBGRcolor_comb.at<float>(3, 1)),
+    scalYellow = Scalar((int)(mBGRcolor_comb.at<float>(3, 0)), (int)(mBGRcolor_comb.at<float>(3, 1)),
                         (int)(mBGRcolor_comb.at<float>(3, 2)));
-    scalCyan = Scalar((int)(mBGRcolor_comb.at<float>(4, 0)),
-                      (int)(mBGRcolor_comb.at<float>(4, 1)),
+    scalCyan = Scalar((int)(mBGRcolor_comb.at<float>(4, 0)), (int)(mBGRcolor_comb.at<float>(4, 1)),
                       (int)(mBGRcolor_comb.at<float>(4, 2)));
-    scalMagneta = Scalar((int)(mBGRcolor_comb.at<float>(5, 0)),
-                         (int)(mBGRcolor_comb.at<float>(5, 1)),
+    scalMagneta = Scalar((int)(mBGRcolor_comb.at<float>(5, 0)), (int)(mBGRcolor_comb.at<float>(5, 1)),
                          (int)(mBGRcolor_comb.at<float>(5, 2)));
-    scalSilver = Scalar((int)(mBGRcolor_comb.at<float>(6, 0)),
-                        (int)(mBGRcolor_comb.at<float>(6, 1)),
+    scalSilver = Scalar((int)(mBGRcolor_comb.at<float>(6, 0)), (int)(mBGRcolor_comb.at<float>(6, 1)),
                         (int)(mBGRcolor_comb.at<float>(6, 2)));
-    scalNavy = Scalar((int)(mBGRcolor_comb.at<float>(7, 0)),
-                      (int)(mBGRcolor_comb.at<float>(7, 1)),
+    scalNavy = Scalar((int)(mBGRcolor_comb.at<float>(7, 0)), (int)(mBGRcolor_comb.at<float>(7, 1)),
                       (int)(mBGRcolor_comb.at<float>(7, 2)));
-    scalGreen = Scalar((int)(mBGRcolor_comb.at<float>(8, 0)),
-                       (int)(mBGRcolor_comb.at<float>(8, 1)),
+    scalGreen = Scalar((int)(mBGRcolor_comb.at<float>(8, 0)), (int)(mBGRcolor_comb.at<float>(8, 1)),
                        (int)(mBGRcolor_comb.at<float>(8, 2)));
-    scalMaroon = Scalar((int)(mBGRcolor_comb.at<float>(9, 0)),
-                        (int)(mBGRcolor_comb.at<float>(9, 1)),
+    scalMaroon = Scalar((int)(mBGRcolor_comb.at<float>(9, 0)), (int)(mBGRcolor_comb.at<float>(9, 1)),
                         (int)(mBGRcolor_comb.at<float>(9, 2)));
-    scalOlive = Scalar((int)(mBGRcolor_comb.at<float>(10, 0)),
-                       (int)(mBGRcolor_comb.at<float>(10, 1)),
+    scalOlive = Scalar((int)(mBGRcolor_comb.at<float>(10, 0)), (int)(mBGRcolor_comb.at<float>(10, 1)),
                        (int)(mBGRcolor_comb.at<float>(10, 2)));
-    scalTeal = Scalar((int)(mBGRcolor_comb.at<float>(11, 0)),
-                      (int)(mBGRcolor_comb.at<float>(11, 1)),
+    scalTeal = Scalar((int)(mBGRcolor_comb.at<float>(11, 0)), (int)(mBGRcolor_comb.at<float>(11, 1)),
                       (int)(mBGRcolor_comb.at<float>(11, 2)));
-    scalPurple = Scalar((int)(mBGRcolor_comb.at<float>(12, 0)),
-                        (int)(mBGRcolor_comb.at<float>(12, 1)),
+    scalPurple = Scalar((int)(mBGRcolor_comb.at<float>(12, 0)), (int)(mBGRcolor_comb.at<float>(12, 1)),
                         (int)(mBGRcolor_comb.at<float>(12, 2)));
-    scalGray = Scalar((int)(mBGRcolor_comb.at<float>(13, 0)),
-                      (int)(mBGRcolor_comb.at<float>(13, 1)),
+    scalGray = Scalar((int)(mBGRcolor_comb.at<float>(13, 0)), (int)(mBGRcolor_comb.at<float>(13, 1)),
                       (int)(mBGRcolor_comb.at<float>(13, 2)));
-    scalBlack = Scalar((int)(mBGRcolor_comb.at<float>(14, 0)),
-                       (int)(mBGRcolor_comb.at<float>(14, 1)),
+    scalBlack = Scalar((int)(mBGRcolor_comb.at<float>(14, 0)), (int)(mBGRcolor_comb.at<float>(14, 1)),
                        (int)(mBGRcolor_comb.at<float>(14, 2)));
-    scalWhite = Scalar((int)(mBGRcolor_comb.at<float>(15, 0)),
-                       (int)(mBGRcolor_comb.at<float>(15, 1)),
+    scalWhite = Scalar((int)(mBGRcolor_comb.at<float>(15, 0)), (int)(mBGRcolor_comb.at<float>(15, 1)),
                        (int)(mBGRcolor_comb.at<float>(15, 2)));
   }
-  ~ColorStatus() {}
+  ~ColorStatus()
+  {
+  }
 
   // color combinations, BGR
   Mat mBGRcolor_comb;

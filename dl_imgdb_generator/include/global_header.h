@@ -2,18 +2,18 @@
 #define ROSCV_TEST_GLOBAL_HEADER_H
 
 // using vector type data
+#include <iostream>
+#include <string>
+#include <stdio.h>
+#include <signal.h>
 #include <ctime>
+#include <vector>
 #include <dirent.h>
 #include <fstream>
-#include <iostream>
-#include <signal.h>
-#include <stdio.h>
-#include <string>
-#include <vector>
 
 // essential header for ROS-OpenCV operation
-#include <opencv2/opencv.hpp>
 #include <ros/ros.h>
+#include <opencv2/opencv.hpp>
 
 // for using json file parser
 #include <nlohmann/json.hpp>
@@ -44,17 +44,20 @@ using namespace cv;
 // for convenience
 using json = nlohmann::json;
 
-typedef struct {
+typedef struct
+{
   string strLabel;
   int nRGB[3];
 } AnnoDB;
 
-typedef struct {
+typedef struct
+{
   string strLabel;
   vector<Rect> vecBbox;
 } BboxDB;
 
-typedef struct {
+typedef struct
+{
   string strLabel;
   int nTruncated;
   int nOcculded;

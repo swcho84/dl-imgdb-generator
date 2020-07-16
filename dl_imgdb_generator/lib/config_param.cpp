@@ -3,20 +3,28 @@
 using namespace std;
 using namespace ros;
 
-ConfigParam::ConfigParam() {
+ConfigParam::ConfigParam()
+{
   // 0: xml file generator
   // 1: xml file checker
   nFeatureCase = 0;
 }
 
-ConfigParam::~ConfigParam() {}
+ConfigParam::~ConfigParam()
+{
+}
 
 // reading rosparams (public function)
-bool ConfigParam::GetRosParams() { return ReadRosParams(); }
+bool ConfigParam::GetRosParams()
+{
+  return ReadRosParams();
+}
 
 // reading rosparams (private function)
-bool ConfigParam::ReadRosParams() {
-  try {
+bool ConfigParam::ReadRosParams()
+{
+  try
+  {
     NodeHandle nh("");
 
     // general information
@@ -37,8 +45,7 @@ bool ConfigParam::ReadRosParams() {
     ReadRosParam(nh, "/CityScapesDBfolder/xmlfile_extension", strXmlExt);
     ReadRosParam(nh, "/CityScapesDBfolder/xmlfile_type", strXmlType);
     ReadRosParam(nh, "/CityScapesDBfolder/file_name_fwd", strXmlFileNmFwd);
-    ReadRosParam(nh, "/CityScapesDBfolder/file_name_num_digit",
-                 nXmlFileNmDigit);
+    ReadRosParam(nh, "/CityScapesDBfolder/file_name_num_digit", nXmlFileNmDigit);
     ReadRosParam(nh, "/CityScapesDBfolder/cvtimg_width", nWidthRef);
     ReadRosParam(nh, "/CityScapesDBfolder/cvtimg_height", nHeightRef);
 
@@ -114,8 +121,7 @@ bool ConfigParam::ReadRosParams() {
     // label DB, if need to add, please follow the rule
     vecLabels.clear();
     vecAnnoDB.clear();
-    ReadRosParam(nh, "/LabelsCityScapesDB/vegetation/name",
-                 vegetation.strLabel);
+    ReadRosParam(nh, "/LabelsCityScapesDB/vegetation/name", vegetation.strLabel);
     ReadRosParam(nh, "/LabelsCityScapesDB/vegetation/R", vegetation.nRGB[0]);
     ReadRosParam(nh, "/LabelsCityScapesDB/vegetation/G", vegetation.nRGB[1]);
     ReadRosParam(nh, "/LabelsCityScapesDB/vegetation/B", vegetation.nRGB[2]);
@@ -171,8 +177,7 @@ bool ConfigParam::ReadRosParams() {
     vecLabels.push_back(trailer.strLabel);
     vecAnnoDB.push_back(trailer);
 
-    ReadRosParam(nh, "/LabelsCityScapesDB/motorcycle/name",
-                 motorcycle.strLabel);
+    ReadRosParam(nh, "/LabelsCityScapesDB/motorcycle/name", motorcycle.strLabel);
     ReadRosParam(nh, "/LabelsCityScapesDB/motorcycle/R", motorcycle.nRGB[0]);
     ReadRosParam(nh, "/LabelsCityScapesDB/motorcycle/G", motorcycle.nRGB[1]);
     ReadRosParam(nh, "/LabelsCityScapesDB/motorcycle/B", motorcycle.nRGB[2]);
@@ -188,13 +193,15 @@ bool ConfigParam::ReadRosParams() {
 
     // for debugging
     ROS_INFO("labelSize:%d", (int)(vecLabels.size()));
-    for (auto i = 0; i < vecAnnoDB.size(); i++) {
-      ROS_INFO("[%d]%s:RGB(%d,%d,%d)", i, vecAnnoDB[i].strLabel.c_str(),
-               vecAnnoDB[i].nRGB[0], vecAnnoDB[i].nRGB[1],
+    for (auto i = 0; i < vecAnnoDB.size(); i++)
+    {
+      ROS_INFO("[%d]%s:RGB(%d,%d,%d)", i, vecAnnoDB[i].strLabel.c_str(), vecAnnoDB[i].nRGB[0], vecAnnoDB[i].nRGB[1],
                vecAnnoDB[i].nRGB[2]);
     }
     ROS_INFO(" ");
-  } catch (RosParamNotFoundException &ex) {
+  }
+  catch (RosParamNotFoundException& ex)
+  {
     ROS_ERROR("Failed to read param at key \"%s\"", ex.key.c_str());
     return false;
   }
@@ -202,36 +209,36 @@ bool ConfigParam::ReadRosParams() {
   return true;
 }
 
-void ConfigParam::ReadRosParam(ros::NodeHandle &nh, const string &key,
-                               float &val) {
+void ConfigParam::ReadRosParam(ros::NodeHandle& nh, const string& key, float& val)
+{
   if (!nh.hasParam(key))
     throw RosParamNotFoundException(key);
   nh.getParam(key, val);
 }
 
-void ConfigParam::ReadRosParam(ros::NodeHandle &nh, const string &key,
-                               double &val) {
+void ConfigParam::ReadRosParam(ros::NodeHandle& nh, const string& key, double& val)
+{
   if (!nh.hasParam(key))
     throw RosParamNotFoundException(key);
   nh.getParam(key, val);
 }
 
-void ConfigParam::ReadRosParam(ros::NodeHandle &nh, const string &key,
-                               bool &val) {
+void ConfigParam::ReadRosParam(ros::NodeHandle& nh, const string& key, bool& val)
+{
   if (!nh.hasParam(key))
     throw RosParamNotFoundException(key);
   nh.getParam(key, val);
 }
 
-void ConfigParam::ReadRosParam(ros::NodeHandle &nh, const string &key,
-                               int32_t &val) {
+void ConfigParam::ReadRosParam(ros::NodeHandle& nh, const string& key, int32_t& val)
+{
   if (!nh.hasParam(key))
     throw RosParamNotFoundException(key);
   nh.getParam(key, val);
 }
 
-void ConfigParam::ReadRosParam(ros::NodeHandle &nh, const string &key,
-                               string &val) {
+void ConfigParam::ReadRosParam(ros::NodeHandle& nh, const string& key, string& val)
+{
   if (!nh.hasParam(key))
     throw RosParamNotFoundException(key);
   nh.getParam(key, val);
