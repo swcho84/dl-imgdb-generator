@@ -26,7 +26,7 @@ void CvtSeg2Bbox::MainLoopBboxChecker()
   glob(cfgParam_.strCvtImgFolderPath, vecCvtImgFileNm, true);
   glob(cfgParam_.strXmlFolderPath + cfgParam_.strXmlType, vecXmlLabelFileNm, true);
 
-  // browsing annotated images recursively
+  // browsing annotated images recursively 
   for (size_t k = 0; k < vecCvtImgFileNm.size(); k++)
   {
     // for debugging
@@ -97,7 +97,7 @@ void CvtSeg2Bbox::MainLoopBboxGenerator()
   glob(cfgParam_.strAnnoFolderPath, vecAnnoFileNm, true);
   cfgParam_.vecImgBboxDB.clear();
 
-  // browsing annotated images recursively
+  // browsing annotated images recursively 
   for (size_t i = 0; i < vecAnnoFileNm.size(); i++)
   {
     // for debugging
@@ -156,7 +156,7 @@ void CvtSeg2Bbox::MainLoopBboxGenerator()
   glob(cfgParam_.strPolygonFolderPath, vecPolygonFileNm, true);
   cfgParam_.vecPolygonBboxDB.clear();
 
-  // browsing mask images recursively
+  // browsing mask images recursively 
   for (size_t k = 0; k < vecPolygonFileNm.size(); k++)
   {
     // for debugging
@@ -220,7 +220,7 @@ void CvtSeg2Bbox::MainLoopBboxGenerator()
   vector<String> vecRawFileNm;
   glob(cfgParam_.strRawFolderPath, vecRawFileNm, true);
 
-  // browsing raw images recursively
+  // browsing raw images recursively 
   for (size_t k = 0; k < vecRawFileNm.size(); k++)
   {
     // for debugging
@@ -229,6 +229,7 @@ void CvtSeg2Bbox::MainLoopBboxGenerator()
     // making the filename  using stringstream, with the numbering rule
     stringstream strStreamFileName;
     strStreamFileName << cfgParam_.strXmlFileNmFwd;
+
     strStreamFileName << std::setfill('0') << std::setw(cfgParam_.nXmlFileNmDigit) << k;
     strStreamFileName << "." + cfgParam_.strXmlExt;
 
@@ -330,110 +331,155 @@ void CvtSeg2Bbox::MainLoopBboxGenerator()
     {
       for (auto kkk = 0; kkk < cfgParam_.vecImgBboxDB[k][kk].vecBbox.size(); kkk++)
       {
-        TiXmlElement* pElem5 = new TiXmlElement("object");
-        TiXmlElement* pElem51 = new TiXmlElement("name");
-        TiXmlText* txtElem51 = new TiXmlText(cfgParam_.vecImgBboxDB[k][kk].strLabel);
-        pElem51->LinkEndChild(txtElem51);
-        TiXmlElement* pElem52 = new TiXmlElement("pose");
-        TiXmlText* txtElem52 = new TiXmlText("Left");
-        pElem52->LinkEndChild(txtElem52);
-        TiXmlElement* pElem53 = new TiXmlElement("truncated");
-        TiXmlText* txtElem53 = new TiXmlText("1");
-        pElem53->LinkEndChild(txtElem53);
-        TiXmlElement* pElem54 = new TiXmlElement("difficult");
-        TiXmlText* txtElem54 = new TiXmlText("0");
-        pElem54->LinkEndChild(txtElem54);
+        // applying the selected label        
+        if (cfgParam_.vecImgBboxDB[k][kk].strLabel != "vegetation")
+        { 
+          string strSelectedLabelMask;
+          if (cfgParam_.vecImgBboxDB[k][kk].strLabel == "person")
+            strSelectedLabelMask = "person";
+          else if ((cfgParam_.vecImgBboxDB[k][kk].strLabel == "rider") ||
+                   (cfgParam_.vecImgBboxDB[k][kk].strLabel == "motorcycle") ||
+                   (cfgParam_.vecImgBboxDB[k][kk].strLabel == "bicycle"))
+            strSelectedLabelMask = "two_wheel_vehicle";
+          else if ((cfgParam_.vecImgBboxDB[k][kk].strLabel == "car") ||
+                   (cfgParam_.vecImgBboxDB[k][kk].strLabel == "truck") ||
+                   (cfgParam_.vecImgBboxDB[k][kk].strLabel == "bus") ||
+                   (cfgParam_.vecImgBboxDB[k][kk].strLabel == "caravan") ||
+                   (cfgParam_.vecImgBboxDB[k][kk].strLabel == "trailer"))
+            strSelectedLabelMask = "four_wheel_vehicle";
+          else
+          {
 
-        Rect rectBbox;
-        rectBbox = cfgParam_.vecImgBboxDB[k][kk].vecBbox[kkk];
-        TiXmlElement* pElem55 = new TiXmlElement("bndbox");
-        TiXmlElement* pElem551 = new TiXmlElement("xmin");
-        float fNormalizedTlX = (float)(rectBbox.tl().x) / nWidth;
-        int nResizedTlX = (int)(fNormalizedTlX * cfgParam_.nWidthRef);
-        TiXmlText* txtElem551 = new TiXmlText(to_string(nResizedTlX));
-        pElem551->LinkEndChild(txtElem551);
-        TiXmlElement* pElem552 = new TiXmlElement("ymin");
-        float fNormalizedTlY = (float)(rectBbox.tl().y) / nHeight;
-        int nResizedTlY = (int)(fNormalizedTlY * cfgParam_.nHeightRef);
-        TiXmlText* txtElem552 = new TiXmlText(to_string(nResizedTlY));
-        pElem552->LinkEndChild(txtElem552);
-        TiXmlElement* pElem553 = new TiXmlElement("xmax");
-        float fNormalizedBrX = (float)(rectBbox.br().x) / nWidth;
-        int nResizedBrX = (int)(fNormalizedBrX * cfgParam_.nWidthRef);
-        TiXmlText* txtElem553 = new TiXmlText(to_string(nResizedBrX));
-        pElem553->LinkEndChild(txtElem553);
-        TiXmlElement* pElem554 = new TiXmlElement("ymax");
-        float fNormalizedBrY = (float)(rectBbox.br().y) / nHeight;
-        int nResizedBrY = (int)(fNormalizedBrY * cfgParam_.nHeightRef);
-        TiXmlText* txtElem554 = new TiXmlText(to_string(nResizedBrY));
-        pElem554->LinkEndChild(txtElem554);
-        pElem55->LinkEndChild(pElem551);
-        pElem55->LinkEndChild(pElem552);
-        pElem55->LinkEndChild(pElem553);
-        pElem55->LinkEndChild(pElem554);
+          }  
+          
+          TiXmlElement* pElem5 = new TiXmlElement("object");
+          TiXmlElement* pElem51 = new TiXmlElement("name");
+          TiXmlText* txtElem51 = new TiXmlText(strSelectedLabelMask);
+          pElem51->LinkEndChild(txtElem51);
+          TiXmlElement* pElem52 = new TiXmlElement("pose");
+          TiXmlText* txtElem52 = new TiXmlText("Left");
+          pElem52->LinkEndChild(txtElem52);
+          TiXmlElement* pElem53 = new TiXmlElement("truncated");
+          TiXmlText* txtElem53 = new TiXmlText("1");
+          pElem53->LinkEndChild(txtElem53);
+          TiXmlElement* pElem54 = new TiXmlElement("difficult");
+          TiXmlText* txtElem54 = new TiXmlText("0");
+          pElem54->LinkEndChild(txtElem54);
 
-        pElem5->LinkEndChild(pElem51);
-        pElem5->LinkEndChild(pElem52);
-        pElem5->LinkEndChild(pElem53);
-        pElem5->LinkEndChild(pElem54);
-        pElem5->LinkEndChild(pElem55);
-        pRoot->LinkEndChild(pElem5);
+          Rect rectBbox;
+          rectBbox = cfgParam_.vecImgBboxDB[k][kk].vecBbox[kkk];
+          TiXmlElement* pElem55 = new TiXmlElement("bndbox");
+          TiXmlElement* pElem551 = new TiXmlElement("xmin");
+          float fNormalizedTlX = (float)(rectBbox.tl().x) / nWidth;
+          int nResizedTlX = (int)(fNormalizedTlX * cfgParam_.nWidthRef);
+          TiXmlText* txtElem551 = new TiXmlText(to_string(nResizedTlX));
+          pElem551->LinkEndChild(txtElem551);
+          TiXmlElement* pElem552 = new TiXmlElement("ymin");
+          float fNormalizedTlY = (float)(rectBbox.tl().y) / nHeight;
+          int nResizedTlY = (int)(fNormalizedTlY * cfgParam_.nHeightRef);
+          TiXmlText* txtElem552 = new TiXmlText(to_string(nResizedTlY));
+          pElem552->LinkEndChild(txtElem552);
+          TiXmlElement* pElem553 = new TiXmlElement("xmax");
+          float fNormalizedBrX = (float)(rectBbox.br().x) / nWidth;
+          int nResizedBrX = (int)(fNormalizedBrX * cfgParam_.nWidthRef);
+          TiXmlText* txtElem553 = new TiXmlText(to_string(nResizedBrX));
+          pElem553->LinkEndChild(txtElem553);
+          TiXmlElement* pElem554 = new TiXmlElement("ymax");
+          float fNormalizedBrY = (float)(rectBbox.br().y) / nHeight;
+          int nResizedBrY = (int)(fNormalizedBrY * cfgParam_.nHeightRef);
+          TiXmlText* txtElem554 = new TiXmlText(to_string(nResizedBrY));
+          pElem554->LinkEndChild(txtElem554);
+          pElem55->LinkEndChild(pElem551);
+          pElem55->LinkEndChild(pElem552);
+          pElem55->LinkEndChild(pElem553);
+          pElem55->LinkEndChild(pElem554);
+
+          pElem5->LinkEndChild(pElem51);
+          pElem5->LinkEndChild(pElem52);
+          pElem5->LinkEndChild(pElem53);
+          pElem5->LinkEndChild(pElem54);
+          pElem5->LinkEndChild(pElem55);
+          pRoot->LinkEndChild(pElem5);
+        }
       }
     }
 
-    // making bbox, polygon-based
+    // making bbox, polygon-based 
     for (auto kk = 0; kk < cfgParam_.vecPolygonBboxDB[k].size(); kk++)
     {
       for (auto kkk = 0; kkk < cfgParam_.vecPolygonBboxDB[k][kk].vecBbox.size(); kkk++)
       {
-        TiXmlElement* pElem6 = new TiXmlElement("object");
-        TiXmlElement* pElem61 = new TiXmlElement("name");
-        TiXmlText* txtElem61 = new TiXmlText(cfgParam_.vecPolygonBboxDB[k][kk].strLabel);
-        pElem61->LinkEndChild(txtElem61);
-        TiXmlElement* pElem62 = new TiXmlElement("pose");
-        TiXmlText* txtElem62 = new TiXmlText("Left");
-        pElem62->LinkEndChild(txtElem62);
-        TiXmlElement* pElem63 = new TiXmlElement("truncated");
-        TiXmlText* txtElem63 = new TiXmlText("1");
-        pElem63->LinkEndChild(txtElem63);
-        TiXmlElement* pElem64 = new TiXmlElement("difficult");
-        TiXmlText* txtElem64 = new TiXmlText("0");
-        pElem64->LinkEndChild(txtElem64);
+        // applying the selected label        
+        if (cfgParam_.vecPolygonBboxDB[k][kk].strLabel != "vegetation")
+        {
+          string strSelectedLabelPolygon;
+          if (cfgParam_.vecPolygonBboxDB[k][kk].strLabel == "person")
+            strSelectedLabelPolygon = "person";
+          else if ((cfgParam_.vecPolygonBboxDB[k][kk].strLabel == "rider") ||
+                   (cfgParam_.vecPolygonBboxDB[k][kk].strLabel == "motorcycle") ||
+                   (cfgParam_.vecPolygonBboxDB[k][kk].strLabel == "bicycle"))
+            strSelectedLabelPolygon = "two_wheel_vehicle";
+          else if ((cfgParam_.vecPolygonBboxDB[k][kk].strLabel == "car") ||
+                   (cfgParam_.vecPolygonBboxDB[k][kk].strLabel == "truck") ||
+                   (cfgParam_.vecPolygonBboxDB[k][kk].strLabel == "bus") ||
+                   (cfgParam_.vecPolygonBboxDB[k][kk].strLabel == "caravan") ||
+                   (cfgParam_.vecPolygonBboxDB[k][kk].strLabel == "trailer"))
+            strSelectedLabelPolygon = "four_wheel_vehicle";
+          else
+          {
+            
+          }
 
-        Rect rectBbox;
-        rectBbox = cfgParam_.vecPolygonBboxDB[k][kk].vecBbox[kkk];
-        TiXmlElement* pElem65 = new TiXmlElement("bndbox");
-        TiXmlElement* pElem651 = new TiXmlElement("xmin");
-        float fNormalizedTlX = (float)(rectBbox.tl().x) / nWidth;
-        int nResizedTlX = (int)(fNormalizedTlX * cfgParam_.nWidthRef);
-        TiXmlText* txtElem651 = new TiXmlText(to_string(nResizedTlX));
-        pElem651->LinkEndChild(txtElem651);
-        TiXmlElement* pElem652 = new TiXmlElement("ymin");
-        float fNormalizedTlY = (float)(rectBbox.tl().y) / nHeight;
-        int nResizedTlY = (int)(fNormalizedTlY * cfgParam_.nHeightRef);
-        TiXmlText* txtElem652 = new TiXmlText(to_string(nResizedTlY));
-        pElem652->LinkEndChild(txtElem652);
-        TiXmlElement* pElem653 = new TiXmlElement("xmax");
-        float fNormalizedBrX = (float)(rectBbox.br().x) / nWidth;
-        int nResizedBrX = (int)(fNormalizedBrX * cfgParam_.nWidthRef);
-        TiXmlText* txtElem653 = new TiXmlText(to_string(nResizedBrX));
-        pElem653->LinkEndChild(txtElem653);
-        TiXmlElement* pElem654 = new TiXmlElement("ymax");
-        float fNormalizedBrY = (float)(rectBbox.br().y) / nHeight;
-        int nResizedBrY = (int)(fNormalizedBrY * cfgParam_.nHeightRef);
-        TiXmlText* txtElem654 = new TiXmlText(to_string(nResizedBrY));
-        pElem654->LinkEndChild(txtElem654);
-        pElem65->LinkEndChild(pElem651);
-        pElem65->LinkEndChild(pElem652);
-        pElem65->LinkEndChild(pElem653);
-        pElem65->LinkEndChild(pElem654);
+          TiXmlElement* pElem6 = new TiXmlElement("object");
+          TiXmlElement* pElem61 = new TiXmlElement("name");
+          TiXmlText* txtElem61 = new TiXmlText(strSelectedLabelPolygon);
+          pElem61->LinkEndChild(txtElem61);
+          TiXmlElement* pElem62 = new TiXmlElement("pose");
+          TiXmlText* txtElem62 = new TiXmlText("Left");
+          pElem62->LinkEndChild(txtElem62);
+          TiXmlElement* pElem63 = new TiXmlElement("truncated");
+          TiXmlText* txtElem63 = new TiXmlText("1");
+          pElem63->LinkEndChild(txtElem63);
+          TiXmlElement* pElem64 = new TiXmlElement("difficult");
+          TiXmlText* txtElem64 = new TiXmlText("0");
+          pElem64->LinkEndChild(txtElem64);
 
-        pElem6->LinkEndChild(pElem61);
-        pElem6->LinkEndChild(pElem62);
-        pElem6->LinkEndChild(pElem63);
-        pElem6->LinkEndChild(pElem64);
-        pElem6->LinkEndChild(pElem65);
-        pRoot->LinkEndChild(pElem6);
+          Rect rectBbox;
+          rectBbox = cfgParam_.vecPolygonBboxDB[k][kk].vecBbox[kkk];
+          TiXmlElement* pElem65 = new TiXmlElement("bndbox");
+          TiXmlElement* pElem651 = new TiXmlElement("xmin");
+          float fNormalizedTlX = (float)(rectBbox.tl().x) / nWidth;
+          int nResizedTlX = (int)(fNormalizedTlX * cfgParam_.nWidthRef);
+          TiXmlText* txtElem651 = new TiXmlText(to_string(nResizedTlX));
+          pElem651->LinkEndChild(txtElem651);
+          TiXmlElement* pElem652 = new TiXmlElement("ymin");
+          float fNormalizedTlY = (float)(rectBbox.tl().y) / nHeight;
+          int nResizedTlY = (int)(fNormalizedTlY * cfgParam_.nHeightRef);
+          TiXmlText* txtElem652 = new TiXmlText(to_string(nResizedTlY));
+          pElem652->LinkEndChild(txtElem652);
+          TiXmlElement* pElem653 = new TiXmlElement("xmax");
+          float fNormalizedBrX = (float)(rectBbox.br().x) / nWidth;
+          int nResizedBrX = (int)(fNormalizedBrX * cfgParam_.nWidthRef);
+          TiXmlText* txtElem653 = new TiXmlText(to_string(nResizedBrX));
+          pElem653->LinkEndChild(txtElem653);
+          TiXmlElement* pElem654 = new TiXmlElement("ymax");
+          float fNormalizedBrY = (float)(rectBbox.br().y) / nHeight;
+          int nResizedBrY = (int)(fNormalizedBrY * cfgParam_.nHeightRef);
+          TiXmlText* txtElem654 = new TiXmlText(to_string(nResizedBrY));
+          pElem654->LinkEndChild(txtElem654);
+
+          pElem65->LinkEndChild(pElem651);
+          pElem65->LinkEndChild(pElem652);
+          pElem65->LinkEndChild(pElem653);
+          pElem65->LinkEndChild(pElem654);
+
+          pElem6->LinkEndChild(pElem61);
+          pElem6->LinkEndChild(pElem62);
+          pElem6->LinkEndChild(pElem63);
+          pElem6->LinkEndChild(pElem64);
+          pElem6->LinkEndChild(pElem65);
+          pRoot->LinkEndChild(pElem6);
+        }
       }
     }
 

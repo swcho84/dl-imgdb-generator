@@ -311,11 +311,27 @@ void CvtKtt2Bbox::MainLoopBboxGenerator()
       for (auto kkk = 0; kkk < cfgParam_.vecAnnoKttDB.size(); kkk++)
       {
         // reselecting data using the selected label
-        if (cfgParam_.vecAnnoKttDB[kkk].strLabel == vecKittyDB[i][kk].strLabel)
+        if (vecKittyDB[i][kk].strLabel == cfgParam_.vecAnnoKttDB[kkk].strLabel)
         {
+          // applying the selected label
+          string strSelectedLabelPolygon;
+          if ((vecKittyDB[i][kk].strLabel == "Pedestrian") ||
+              (vecKittyDB[i][kk].strLabel == "Person_sitting"))
+            strSelectedLabelPolygon = "person";
+          else if (vecKittyDB[i][kk].strLabel == "Cyclist")
+            strSelectedLabelPolygon = "two_wheel_vehicle";
+          else if ((vecKittyDB[i][kk].strLabel == "Car") ||
+                  (vecKittyDB[i][kk].strLabel == "Van") ||
+                  (vecKittyDB[i][kk].strLabel == "Truck"))
+            strSelectedLabelPolygon = "four_wheel_vehicle";
+          else
+          {
+            
+          }
+
           TiXmlElement* pElem5 = new TiXmlElement("object");
           TiXmlElement* pElem51 = new TiXmlElement("name");
-          TiXmlText* txtElem51 = new TiXmlText(vecKittyDB[i][kk].strLabel);
+          TiXmlText* txtElem51 = new TiXmlText(strSelectedLabelPolygon);
           pElem51->LinkEndChild(txtElem51);
           TiXmlElement* pElem52 = new TiXmlElement("pose");
           TiXmlText* txtElem52 = new TiXmlText("Left");

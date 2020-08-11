@@ -67,11 +67,13 @@ LabelsKittyDB:
 KittyDBConverter:
   feature: 33
 
+#"/Research_DB/workdone_etriDB/v1.0/img/"
+#"/Research_DB/workdone_etriDB/v1.0/label/"
 KittyDBfolder:
-  image: "/kittyDBsmall/image/"
-  label: "/kittyDBsmall/label/"
-  cvtimg: "/kittyDBsmall/cvtimg/"
-  xml_label: "/kittyDBsmall/xml_label/"
+  image: "/Research_DB/raw_etriDB/v1.0/ETRI_kittyDB/image/" #"/kittyDBsmall/image/"
+  label: "/Research_DB/raw_etriDB/v1.0/ETRI_kittyDB/label/" #"/kittyDBsmall/label/"
+  cvtimg: "/Research_DB/raw_etriDB/v1.0/ETRI_kittyDB/raw_vga/" #"/kittyDBsmall/cvtimg/"
+  xml_label: "/Research_DB/raw_etriDB/v1.0/ETRI_kittyDB/xml_label/" #"/kittyDBsmall/xml_label/"
   imgfile_type: "*.png"
   txtfile_type: "*.txt"
   xmlfile_type: "*.xml"
@@ -89,11 +91,11 @@ CityScapesDBConverter:
   feature: 3
 
 CityScapesDBfolder:
-  raw: "/cityscapeDBsmall/raw/"
-  cvtimg: "/cityscapeDBsmall/cvtimg/"
-  color_label: "/cityscapeDBsmall/color_label/"
-  polygon_data: "/cityscapeDBsmall/polygon/"
-  xml_label: "/cityscapeDBsmall/xml_label/"
+  raw: "/Research_DB/raw_etriDB/v1.0/ETRI_cityscapeDB/raw/" #"/cityscapeDBsmall/raw/"
+  cvtimg: "/Research_DB/raw_etriDB/v1.0/ETRI_cityscapeDB/raw_vga/" #"/cityscapeDBsmall/cvtimg/"
+  color_label: "/Research_DB/raw_etriDB/v1.0/ETRI_cityscapeDB/color_label/" #"/cityscapeDBsmall/color_label/"
+  polygon_data: "/Research_DB/raw_etriDB/v1.0/ETRI_cityscapeDB/polygon/" #"/cityscapeDBsmall/polygon/"
+  xml_label: "/Research_DB/raw_etriDB/v1.0/ETRI_cityscapeDB/xml_label/" #"/cityscapeDBsmall/xml_label/"
   imgfile_type: "*.png"
   polygonfile_type: "*.json"
   xmlfile_type: "*.xml"
