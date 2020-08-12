@@ -27,7 +27,7 @@ find_package(TinyXML REQUIRED)
 find_package(nlohmann_json 3.2.0 REQUIRED)
 find_package(dlib REQUIRED)
 find_package(Boost REQUIRED COMPONENTS system)
-find_package(OpenCV 4.2 REQUIRED
+find_package(OpenCV 4 REQUIRED
   COMPONENTS
     opencv_core
     opencv_imgproc
@@ -35,9 +35,7 @@ find_package(OpenCV 4.2 REQUIRED
     opencv_highgui
     opencv_videoio
     opencv_flann
-    opencv_tracking
     opencv_video
-    opencv_xphoto
     opencv_calib3d
     opencv_features2d
   CONFIG
