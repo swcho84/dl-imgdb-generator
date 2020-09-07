@@ -10,6 +10,7 @@
 #include <vector>
 #include <dirent.h>
 #include <fstream>
+#include <random>
 
 // essential header for ROS-OpenCV operation
 #include <ros/ros.h>
