@@ -68,4 +68,18 @@ typedef struct
   float fRotAngRad;
 } KittyDB;
 
+typedef struct
+{
+  Point ptPixel;
+  uchar blue;
+  uchar green;
+  uchar red;
+} SelectRGB;
+
+typedef struct
+{
+  int nWidth;
+  int nHeight;
+} ImgSize;
+
 #endif

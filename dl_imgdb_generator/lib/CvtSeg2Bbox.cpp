@@ -26,11 +26,11 @@ void CvtSeg2Bbox::MainLoopBboxChecker()
   glob(cfgParam_.strCvtImgFolderPath, vecCvtImgFileNm, true);
   glob(cfgParam_.strXmlFolderPath + cfgParam_.strXmlType, vecXmlLabelFileNm, true);
 
-  // browsing annotated images recursively 
+  // browsing annotated images recursively
   for (size_t k = 0; k < vecCvtImgFileNm.size(); k++)
   {
     // for debugging
-    ROS_INFO("Processing_xmlCheck(%d,%d)", (int)(k), (int)(vecCvtImgFileNm.size()));    
+    ROS_INFO("Processing_xmlCheck(%d,%d)", (int)(k), (int)(vecCvtImgFileNm.size()));
 
     // assigning the raw image
     Mat imgRaw = imread(vecCvtImgFileNm[k]);
@@ -97,7 +97,7 @@ void CvtSeg2Bbox::MainLoopBboxGenerator()
   glob(cfgParam_.strAnnoFolderPath, vecAnnoFileNm, true);
   cfgParam_.vecImgBboxDB.clear();
 
-  // browsing annotated images recursively 
+  // browsing annotated images recursively
   for (size_t i = 0; i < vecAnnoFileNm.size(); i++)
   {
     // for debugging
@@ -124,10 +124,9 @@ void CvtSeg2Bbox::MainLoopBboxGenerator()
 
       // generating bounding box data
       vector<Rect> vecBbox;
-      vecBbox = GenBboxData(
-          imgCanny,
-          Scalar(cfgParam_.vecAnnoDB[ii].nRGB[2], cfgParam_.vecAnnoDB[ii].nRGB[1], cfgParam_.vecAnnoDB[ii].nRGB[0]),
-          cfgParam_.nPolyDPThesh);
+      vecBbox = GenBboxData(imgCanny, Scalar(cfgParam_.vecAnnoDB[ii].nRGB[2], cfgParam_.vecAnnoDB[ii].nRGB[1],
+                                             cfgParam_.vecAnnoDB[ii].nRGB[0]),
+                            cfgParam_.nPolyDPThesh);
 
       // saving bbox data
       if (vecBbox.size() > 0)
@@ -156,7 +155,7 @@ void CvtSeg2Bbox::MainLoopBboxGenerator()
   glob(cfgParam_.strPolygonFolderPath, vecPolygonFileNm, true);
   cfgParam_.vecPolygonBboxDB.clear();
 
-  // browsing mask images recursively 
+  // browsing mask images recursively
   for (size_t k = 0; k < vecPolygonFileNm.size(); k++)
   {
     // for debugging
@@ -216,11 +215,80 @@ void CvtSeg2Bbox::MainLoopBboxGenerator()
   ROS_INFO("vecPolygonBboxDB.size:%d", (int)(cfgParam_.vecPolygonBboxDB.size()));
   ROS_INFO(" ");
 
+  // using pet image mixing loop, for ver.2.0
+  if (cfgParam_.bPetMix)
+  {
+    // for debugging
+    ROS_INFO("Adding usecase: pet mixing for ver2.0");
+
+    // assigning variables for browsing raw images recursively
+    vector<String> vecCvtBaseImgFileNm;
+    glob(cfgParam_.strRawFolderPath, vecCvtBaseImgFileNm, true);
+
+    // assigning variables for browsing pet images recursively
+    vector<String> vecCvtPetImgFileNm;  // cat and dog
+    glob(cfgParam_.strPetImgFolderPath, vecCvtPetImgFileNm, true);
+    vecSelectPixelMask_.clear();
+    vecRectTarget_.clear();
+    cfgParam_.vecPetBboxDB.clear();
+
+    // mixing loop
+    for (unsigned int ii = 0; ii < cfgParam_.nTrialPetMix; ii++)
+    {
+      // for debugging
+      ROS_INFO("Processing_petMixImgDB(%d, %d, %d)", (int)(ii), cfgParam_.nTrialPetMix,
+               (int)(cfgParam_.vecPetBboxDB.size()));
+
+      // getting the base image
+      imgBase_ = GetImgFromFile(vecCvtBaseImgFileNm[GenRandNum((int)(vecCvtBaseImgFileNm.size()))]);
+      imgBaseSize_ = GetImgSize(imgBase_);
+
+      // getting the target image (single type)
+      imgTarget_ = GetImgFromFile(vecCvtPetImgFileNm[GenRandNum((int)(vecCvtPetImgFileNm.size()))]);
+      imgTargetSize_ = GetImgSize(imgTarget_);
+
+      // calculating the resized tareget image and mask
+      imgTargetResized_ =
+          GetImgTargetResized(imgTarget_, imgTargetSize_, imgBaseSize_, cfgParam_.fWidthRatio, cfgParam_.fHeightRatio);
+      imgTargetResizedSize_ = GetImgSize(imgTargetResized_);
+      ptRndTargetResizedPos_ = GetRngPtTlForTargetResized(imgTargetResizedSize_, imgBaseSize_, cfgParam_.fInnerRatio);
+      vecSelectPixelMask_ = GetMaskInfo(imgTargetResized_, imgTargetResizedSize_);
+
+      // calculating the mask, contour and mixed image
+      imgForMix_ = GetImgMix(imgBase_, vecSelectPixelMask_, ptRndTargetResizedPos_, "black");
+      imgForContour_ = GetImgMix(imgBase_, vecSelectPixelMask_, ptRndTargetResizedPos_, "contour");
+      imgMixed_ = GetImgMix(imgForMix_, vecSelectPixelMask_, ptRndTargetResizedPos_, "rgb");
+
+      // calculating the resized image
+      Mat imgMixedResize;
+      resize(imgMixed_, imgMixedResize, Size(640, 480));
+
+      // calculating the resized bounding rectangle information
+      vecRectTarget_ = GetTargetRect(imgForContour_);
+      sort(vecRectTarget_.begin(), vecRectTarget_.end(), &sortArea);
+      rectangle(imgMixedResize, vecRectTarget_[0].tl(), vecRectTarget_[0].br(), Scalar(0, 0, 255), 2, 8, 0);
+
+      // saving data into DB style, for ver.2.0
+      vector<BboxDB> vecBboxDB;
+      BboxDB tempBbox;
+      tempBbox.strLabel = "pet";
+      tempBbox.vecBbox.push_back(vecRectTarget_[0]);
+      vecBboxDB.push_back(tempBbox);
+      cfgParam_.vecPetBboxDB.push_back(vecBboxDB);
+
+      // for debugging
+      imshow("imgMixedResize", imgMixedResize);
+
+      // for debugging
+      waitKey(0);
+    }
+  }
+
   // assigning variables for browsing raw images with bbox result and saving bbox position data recursively
   vector<String> vecRawFileNm;
   glob(cfgParam_.strRawFolderPath, vecRawFileNm, true);
 
-  // browsing raw images recursively 
+  // browsing raw images recursively
   for (size_t k = 0; k < vecRawFileNm.size(); k++)
   {
     // for debugging
@@ -331,9 +399,9 @@ void CvtSeg2Bbox::MainLoopBboxGenerator()
     {
       for (auto kkk = 0; kkk < cfgParam_.vecImgBboxDB[k][kk].vecBbox.size(); kkk++)
       {
-        // applying the selected label        
+        // applying the selected label
         if (cfgParam_.vecImgBboxDB[k][kk].strLabel != "vegetation")
-        { 
+        {
           string strSelectedLabelMask;
           if (cfgParam_.vecImgBboxDB[k][kk].strLabel == "person")
             strSelectedLabelMask = "person";
@@ -349,9 +417,8 @@ void CvtSeg2Bbox::MainLoopBboxGenerator()
             strSelectedLabelMask = "four_wheel_vehicle";
           else
           {
+          }
 
-          }  
-          
           TiXmlElement* pElem5 = new TiXmlElement("object");
           TiXmlElement* pElem51 = new TiXmlElement("name");
           TiXmlText* txtElem51 = new TiXmlText(strSelectedLabelMask);
@@ -404,12 +471,12 @@ void CvtSeg2Bbox::MainLoopBboxGenerator()
       }
     }
 
-    // making bbox, polygon-based 
+    // making bbox, polygon-based
     for (auto kk = 0; kk < cfgParam_.vecPolygonBboxDB[k].size(); kk++)
     {
       for (auto kkk = 0; kkk < cfgParam_.vecPolygonBboxDB[k][kk].vecBbox.size(); kkk++)
       {
-        // applying the selected label        
+        // applying the selected label
         if (cfgParam_.vecPolygonBboxDB[k][kk].strLabel != "vegetation")
         {
           string strSelectedLabelPolygon;
@@ -427,7 +494,6 @@ void CvtSeg2Bbox::MainLoopBboxGenerator()
             strSelectedLabelPolygon = "four_wheel_vehicle";
           else
           {
-            
           }
 
           TiXmlElement* pElem6 = new TiXmlElement("object");
@@ -483,6 +549,73 @@ void CvtSeg2Bbox::MainLoopBboxGenerator()
       }
     }
 
+    // making bbox, using pet image mixing loop, for ver.2.0
+    if (cfgParam_.bPetMix)
+    {
+      for (auto kk = 0; kk < cfgParam_.vecPetBboxDB[k].size(); kk++)
+      {
+        for (auto kkk = 0; kkk < cfgParam_.vecPetBboxDB[k][kk].vecBbox.size(); kkk++)
+        {
+          // applying the selected label
+          if (cfgParam_.vecPetBboxDB[k][kk].strLabel != "vegetation")
+          {
+            string strSelectedLabelPet;
+            strSelectedLabelPet = "pet";
+
+            TiXmlElement* pElem7 = new TiXmlElement("object");
+            TiXmlElement* pElem71 = new TiXmlElement("name");
+            TiXmlText* txtElem71 = new TiXmlText(strSelectedLabelPet);
+            pElem71->LinkEndChild(txtElem71);
+            TiXmlElement* pElem72 = new TiXmlElement("pose");
+            TiXmlText* txtElem72 = new TiXmlText("Left");
+            pElem72->LinkEndChild(txtElem72);
+            TiXmlElement* pElem73 = new TiXmlElement("truncated");
+            TiXmlText* txtElem73 = new TiXmlText("1");
+            pElem73->LinkEndChild(txtElem73);
+            TiXmlElement* pElem74 = new TiXmlElement("difficult");
+            TiXmlText* txtElem74 = new TiXmlText("0");
+            pElem74->LinkEndChild(txtElem74);
+
+            Rect rectBbox;
+            rectBbox = cfgParam_.vecPetBboxDB[k][kk].vecBbox[kkk];
+            TiXmlElement* pElem75 = new TiXmlElement("bndbox");
+            TiXmlElement* pElem751 = new TiXmlElement("xmin");
+            float fNormalizedTlX = (float)(rectBbox.tl().x) / nWidth;
+            int nResizedTlX = (int)(fNormalizedTlX * cfgParam_.nWidthRef);
+            TiXmlText* txtElem751 = new TiXmlText(to_string(nResizedTlX));
+            pElem751->LinkEndChild(txtElem751);
+            TiXmlElement* pElem752 = new TiXmlElement("ymin");
+            float fNormalizedTlY = (float)(rectBbox.tl().y) / nHeight;
+            int nResizedTlY = (int)(fNormalizedTlY * cfgParam_.nHeightRef);
+            TiXmlText* txtElem752 = new TiXmlText(to_string(nResizedTlY));
+            pElem752->LinkEndChild(txtElem752);
+            TiXmlElement* pElem753 = new TiXmlElement("xmax");
+            float fNormalizedBrX = (float)(rectBbox.br().x) / nWidth;
+            int nResizedBrX = (int)(fNormalizedBrX * cfgParam_.nWidthRef);
+            TiXmlText* txtElem753 = new TiXmlText(to_string(nResizedBrX));
+            pElem753->LinkEndChild(txtElem753);
+            TiXmlElement* pElem754 = new TiXmlElement("ymax");
+            float fNormalizedBrY = (float)(rectBbox.br().y) / nHeight;
+            int nResizedBrY = (int)(fNormalizedBrY * cfgParam_.nHeightRef);
+            TiXmlText* txtElem754 = new TiXmlText(to_string(nResizedBrY));
+            pElem754->LinkEndChild(txtElem754);
+
+            pElem75->LinkEndChild(pElem751);
+            pElem75->LinkEndChild(pElem752);
+            pElem75->LinkEndChild(pElem753);
+            pElem75->LinkEndChild(pElem754);
+
+            pElem7->LinkEndChild(pElem71);
+            pElem7->LinkEndChild(pElem72);
+            pElem7->LinkEndChild(pElem73);
+            pElem7->LinkEndChild(pElem74);
+            pElem7->LinkEndChild(pElem75);
+            pRoot->LinkEndChild(pElem7);
+          }
+        }
+      }
+    }
+
     // saving xml file
     docXml.SaveFile(strXmlFile);
 
@@ -503,11 +636,11 @@ void CvtSeg2Bbox::MainLoopBboxGenerator()
 void CvtSeg2Bbox::MainLoopImgResizer()
 {
   // 1st, resizing raw image and saving resized images
-  // assigning variables for browsing annotated images recursively
+  // assigning variables for browsing raw images recursively
   vector<String> vecImgFileNm;
   glob(cfgParam_.strRawFolderPath, vecImgFileNm, true);
 
-  // browsing annotated images recursively
+  // browsing raw images recursively
   for (size_t i = 0; i < vecImgFileNm.size(); i++)
   {
     // for debugging
@@ -640,4 +773,175 @@ Mat CvtSeg2Bbox::GenFilteredImg(Mat imgIn, int nHeight, int nWidth, int nAnno, i
   // imshow("filtered", imgRes);
 
   return imgRes;
+}
+
+// calculating the bounding rectangle w.r.t the resized target image
+vector<Rect> CvtSeg2Bbox::GetTargetRect(Mat imgInput)
+{
+  Mat imgContourResize;
+  resize(imgInput, imgContourResize, Size(640, 480));
+  cvtColor(imgContourResize, imgContourResize, CV_BGR2GRAY);
+  threshold(imgContourResize, imgContourResize, 250, 255, THRESH_BINARY);
+
+  vector<vector<Point>> contours;
+  vector<Vec4i> hierarchy;
+  findContours(imgContourResize, contours, hierarchy, CV_RETR_EXTERNAL, CV_CHAIN_APPROX_SIMPLE, Point(0, 0));
+
+  vector<vector<Point>> contours_poly(contours.size());
+  vector<Rect> result(contours.size());
+  for (size_t i = 0; i < contours.size(); i++)
+  {
+    approxPolyDP(contours[i], contours_poly[i], 3, true);
+    result[i] = boundingRect(contours_poly[i]);
+  }
+
+  return result;
+}
+
+// calculating the image w.r.t the string command
+Mat CvtSeg2Bbox::GetImgMix(Mat imgInput, vector<SelectRGB> vecInput, Point ptInput, string strCmd)
+{
+  Mat result;
+  imgInput.copyTo(result);
+  vector<Point> vecSelectPtMask;
+
+  if (strCmd == "contour")
+    result = Mat::zeros(imgInput.size(), CV_8UC3);
+  else
+    imgInput.copyTo(result);
+
+  for (unsigned int k = 0; k < vecInput.size(); k++)
+  {
+    Point ptMixRef;
+    ptMixRef.x = ptInput.y + vecInput[k].ptPixel.y;
+    ptMixRef.y = ptInput.x + vecInput[k].ptPixel.x;
+
+    if (strCmd == "black")
+    {
+      result.at<Vec3b>(ptMixRef.x, ptMixRef.y)[0] = 0;
+      result.at<Vec3b>(ptMixRef.x, ptMixRef.y)[1] = 0;
+      result.at<Vec3b>(ptMixRef.x, ptMixRef.y)[2] = 0;
+    }
+    else if (strCmd == "rgb")
+    {
+      result.at<Vec3b>(ptMixRef.x, ptMixRef.y)[0] = vecInput[k].blue;
+      result.at<Vec3b>(ptMixRef.x, ptMixRef.y)[1] = vecInput[k].green;
+      result.at<Vec3b>(ptMixRef.x, ptMixRef.y)[2] = vecInput[k].red;
+    }
+    else if (strCmd == "contour")
+    {
+      result.at<Vec3b>(ptMixRef.x, ptMixRef.y)[0] = 255;
+      result.at<Vec3b>(ptMixRef.x, ptMixRef.y)[1] = 255;
+      result.at<Vec3b>(ptMixRef.x, ptMixRef.y)[2] = 255;
+    }
+    else
+    {
+    }
+  }
+
+  return result;
+}
+
+// calculating the mask information
+vector<SelectRGB> CvtSeg2Bbox::GetMaskInfo(Mat imgTargetResized, ImgSize imgTargetResizedSize)
+{
+  vector<SelectRGB> result;
+  for (unsigned int j = 0; j < imgTargetResizedSize.nHeight; j++)
+  {
+    uchar* ptInTargetResized = imgTargetResized.ptr<uchar>(j);
+    for (unsigned int i = 0; i < imgTargetResizedSize.nWidth; i++)
+    {
+      uchar bTar = ptInTargetResized[i * 3 + 0];
+      uchar gTar = ptInTargetResized[i * 3 + 1];
+      uchar rTar = ptInTargetResized[i * 3 + 2];
+
+      if (!((bTar > 245) && (gTar > 245) && (rTar > 245)))
+      {
+        SelectRGB temp;
+        temp.ptPixel.x = i;
+        temp.ptPixel.y = j;
+        temp.blue = bTar;
+        temp.green = gTar;
+        temp.red = rTar;
+        result.push_back(temp);
+      }
+    }
+  }
+  return result;
+}
+
+// calculating the random top-left point w.r.t the resized target
+Point CvtSeg2Bbox::GetRngPtTlForTargetResized(ImgSize imgTargetResizedSize, ImgSize imgBaseSize, float fRatio)
+{
+  Point result;
+  int nRngRangeHeight = (imgBaseSize.nHeight - imgTargetResizedSize.nHeight * 1.5f);
+  random_device rd;
+  mt19937 gen(rd());
+  uniform_int_distribution<> rngPtTlX(
+      0, ((imgBaseSize.nWidth - (imgBaseSize.nWidth * fRatio)) - imgTargetResizedSize.nWidth));
+  uniform_int_distribution<> rngPtTlY(
+      (int)(imgBaseSize.nHeight * 0.35f),
+      ((imgBaseSize.nHeight - (imgBaseSize.nHeight * fRatio)) - imgTargetResizedSize.nHeight));
+  result.x = rngPtTlX(gen);
+  result.y = rngPtTlY(gen);
+
+  if (result.x > (imgBaseSize.nWidth - imgTargetResizedSize.nWidth))
+    result.x = (imgBaseSize.nWidth - imgTargetResizedSize.nWidth);
+  if (result.y > (imgBaseSize.nHeight - imgTargetResizedSize.nHeight))
+    result.y = (imgBaseSize.nHeight - imgTargetResizedSize.nHeight);
+  return result;
+}
+
+// generating the random number w.r.t the range of number of image
+int CvtSeg2Bbox::GenRandNum(int nSize)
+{
+  int result;
+  random_device rd;
+  mt19937 gen(rd());
+  uniform_int_distribution<> rngRange(0, nSize - 1);
+  result = rngRange(gen);
+  return result;
+}
+
+// calculating the resized target image
+Mat CvtSeg2Bbox::GetImgTargetResized(Mat imgTarget, ImgSize imgTargetSize, ImgSize imgBaseSize, float fWidthRatio,
+                                     float fHeightRatio)
+{
+  Mat result;
+  if ((imgTargetSize.nWidth > ((int)(imgBaseSize.nWidth * fWidthRatio))) ||
+      (imgTargetSize.nHeight > ((int)(imgBaseSize.nHeight * fHeightRatio))))
+  {
+    float fRatio = 0.5f;
+    Size szResizeTarget;
+    szResizeTarget.width = (int)(imgTargetSize.nWidth * fRatio);
+    szResizeTarget.height = (int)(imgTargetSize.nHeight * fRatio);
+    resize(imgTarget, result, szResizeTarget);
+  }
+  else
+    imgTarget.copyTo(result);
+  return result;
+}
+
+// getting the size information of the image
+ImgSize CvtSeg2Bbox::GetImgSize(Mat imgInput)
+{
+  ImgSize result;
+  result.nWidth = imgInput.size().width;
+  result.nHeight = imgInput.size().height;
+  return result;
+}
+
+// getting the image from file
+Mat CvtSeg2Bbox::GetImgFromFile(string strBaseImgName)
+{
+  Mat result;
+  result = imread(strBaseImgName, IMREAD_COLOR);
+  return result;
+}
+
+bool CvtSeg2Bbox::sortArea(cv::Rect rect1, cv::Rect rect2)
+{
+  int nArea1 = rect1.width * rect1.height;
+  int nArea2 = rect2.width * rect2.height;
+  return (nArea1 > nArea2);
 }

@@ -32,6 +32,11 @@ bool ConfigParam::ReadRosParams()
 
     // feature case
     ReadRosParam(nh, "/CityScapesDBConverter/feature", nFeatureCase);
+    ReadRosParam(nh, "/CityScapesDBConverter/use_pet_mixing", bPetMix);
+    ReadRosParam(nh, "/CityScapesDBConverter/trial_pet_mixing", nTrialPetMix);
+    ReadRosParam(nh, "/CityScapesDBConverter/mix_width_ratio", fWidthRatio);
+    ReadRosParam(nh, "/CityScapesDBConverter/mix_height_ratio", fHeightRatio);
+    ReadRosParam(nh, "/CityScapesDBConverter/mix_inner_ratio", fInnerRatio);
 
     // folder name and picture file type
     ReadRosParam(nh, "/CityScapesDBfolder/raw", strRawFolderNm);
@@ -39,6 +44,7 @@ bool ConfigParam::ReadRosParams()
     ReadRosParam(nh, "/CityScapesDBfolder/color_label", strAnnoFolderNm);
     ReadRosParam(nh, "/CityScapesDBfolder/polygon_data", strPolygonFolderNm);
     ReadRosParam(nh, "/CityScapesDBfolder/xml_label", strXmlFolderNm);
+    ReadRosParam(nh, "/CityScapesDBfolder/pet_mix", strPetImgFolderNm);
     ReadRosParam(nh, "/CityScapesDBfolder/imgfile_type", strPicType);
     ReadRosParam(nh, "/CityScapesDBfolder/polygonfile_type", strPolygonType);
     ReadRosParam(nh, "/CityScapesDBfolder/imgfile_extension", strImgExt);
@@ -55,6 +61,7 @@ bool ConfigParam::ReadRosParams()
     strAnnoFolderPath = strHomeName + strAnnoFolderNm + strPicType;
     strPolygonFolderPath = strHomeName + strPolygonFolderNm + strPolygonType;
     strXmlFolderPath = strHomeName + strXmlFolderNm;
+    strPetImgFolderPath = strHomeName + strPetImgFolderNm;
 
     strImgFileNmFwd = strXmlFileNmFwd;
     nImgFileNmDigit = nXmlFileNmDigit;

@@ -53,6 +53,8 @@ public:
   string strXmlFolderPath;
   string strImgFileNmFwd;
   string strXmlFileNmFwd;
+  string strPetImgFolderNm;
+  string strPetImgFolderPath;
 
   string strKttPicType;
   string strKttTxtType;
@@ -69,6 +71,12 @@ public:
   string strKttXmlFolderPath;
   string strKttImgFileNmFwd;
   string strKttXmlFileNmFwd;
+
+  bool bPetMix;
+  int nTrialPetMix;
+  float fWidthRatio;
+  float fHeightRatio;
+  float fInnerRatio;
 
   int nKttFeatureCase;
   int nKttImgFileNmDigit;
@@ -95,6 +103,7 @@ public:
 
   vector<vector<BboxDB>> vecImgBboxDB;
   vector<vector<BboxDB>> vecPolygonBboxDB;
+  vector<vector<BboxDB>> vecPetBboxDB;
 
   AnnoDB vegetation;
   AnnoDB person;
