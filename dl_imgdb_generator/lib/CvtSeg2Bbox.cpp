@@ -780,12 +780,12 @@ vector<Rect> CvtSeg2Bbox::GetTargetRect(Mat imgInput)
 {
   Mat imgContourResize;
   resize(imgInput, imgContourResize, Size(640, 480));
-  cvtColor(imgContourResize, imgContourResize, CV_BGR2GRAY);
+  cvtColor(imgContourResize, imgContourResize, COLOR_BGR2GRAY);
   threshold(imgContourResize, imgContourResize, 250, 255, THRESH_BINARY);
 
   vector<vector<Point>> contours;
   vector<Vec4i> hierarchy;
-  findContours(imgContourResize, contours, hierarchy, CV_RETR_EXTERNAL, CV_CHAIN_APPROX_SIMPLE, Point(0, 0));
+  findContours(imgContourResize, contours, hierarchy, RETR_EXTERNAL, CHAIN_APPROX_SIMPLE, Point(0, 0));
 
   vector<vector<Point>> contours_poly(contours.size());
   vector<Rect> result(contours.size());
