@@ -124,9 +124,10 @@ void CvtSeg2Bbox::MainLoopBboxGenerator()
 
       // generating bounding box data
       vector<Rect> vecBbox;
-      vecBbox = GenBboxData(imgCanny, Scalar(cfgParam_.vecAnnoDB[ii].nRGB[2], cfgParam_.vecAnnoDB[ii].nRGB[1],
-                                             cfgParam_.vecAnnoDB[ii].nRGB[0]),
-                            cfgParam_.nPolyDPThesh);
+      vecBbox = GenBboxData(
+          imgCanny,
+          Scalar(cfgParam_.vecAnnoDB[ii].nRGB[2], cfgParam_.vecAnnoDB[ii].nRGB[1], cfgParam_.vecAnnoDB[ii].nRGB[0]),
+          cfgParam_.nPolyDPThesh);
 
       // saving bbox data
       if (vecBbox.size() > 0)
@@ -262,6 +263,13 @@ void CvtSeg2Bbox::MainLoopBboxGenerator()
       // calculating the resized image
       Mat imgMixedResize;
       resize(imgMixed_, imgMixedResize, Size(640, 480));
+
+      // saving resized imgs (from No. ~~~ to No. ~~~)
+
+
+
+
+
 
       // calculating the resized bounding rectangle information
       vecRectTarget_ = GetTargetRect(imgForContour_);
