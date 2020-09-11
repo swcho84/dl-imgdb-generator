@@ -45,6 +45,7 @@ bool ConfigParam::ReadRosParams()
     ReadRosParam(nh, "/CityScapesDBfolder/polygon_data", strPolygonFolderNm);
     ReadRosParam(nh, "/CityScapesDBfolder/xml_label", strXmlFolderNm);
     ReadRosParam(nh, "/CityScapesDBfolder/pet_mix", strPetImgFolderNm);
+    ReadRosParam(nh, "/CityScapesDBfolder/pet_mix_img", strCvtPetMixImgFolderNm);
     ReadRosParam(nh, "/CityScapesDBfolder/imgfile_type", strPicType);
     ReadRosParam(nh, "/CityScapesDBfolder/polygonfile_type", strPolygonType);
     ReadRosParam(nh, "/CityScapesDBfolder/imgfile_extension", strImgExt);
@@ -62,6 +63,7 @@ bool ConfigParam::ReadRosParams()
     strPolygonFolderPath = strHomeName + strPolygonFolderNm + strPolygonType;
     strXmlFolderPath = strHomeName + strXmlFolderNm;
     strPetImgFolderPath = strHomeName + strPetImgFolderNm;
+    strCvtPetMixImgFolderPath = strHomeName + strCvtPetMixImgFolderNm;
 
     strImgFileNmFwd = strXmlFileNmFwd;
     nImgFileNmDigit = nXmlFileNmDigit;

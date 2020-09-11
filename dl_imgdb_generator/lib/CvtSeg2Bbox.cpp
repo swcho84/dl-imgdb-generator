@@ -241,7 +241,8 @@ void CvtSeg2Bbox::MainLoopBboxGenerator()
                (int)(cfgParam_.vecPetBboxDB.size()));
 
       // getting the base image
-      imgBase_ = GetImgFromFile(vecCvtBaseImgFileNm[GenRandNum((int)(vecCvtBaseImgFileNm.size()))]);
+      int nRandomBaseNum = GenRandNum((int)(vecCvtBaseImgFileNm.size()));
+      imgBase_ = GetImgFromFile(vecCvtBaseImgFileNm[nRandomBaseNum]);
       imgBaseSize_ = GetImgSize(imgBase_);
 
       // getting the target image (single type)
@@ -265,11 +266,18 @@ void CvtSeg2Bbox::MainLoopBboxGenerator()
       resize(imgMixed_, imgMixedResize, Size(640, 480));
 
       // saving resized imgs (from No. ~~~ to No. ~~~)
+      // making the filename  using stringstream, with the numbering rule
+      stringstream strStreamImgFileName;
+      strStreamImgFileName << cfgParam_.strImgFileNmFwd;
+      strStreamImgFileName << std::setfill('0') << std::setw(cfgParam_.nImgFileNmDigit) << (ii + 7481);
+      strStreamImgFileName << "." + cfgParam_.strImgExt;
 
+      // making the full file path  
+      string strCvtImgFile;
+      strCvtImgFile = cfgParam_.strCvtPetMixImgFolderPath + strStreamImgFileName.str();
 
-
-
-
+      // saving the resized image 
+      imwrite(strCvtImgFile, imgMixedResize);
 
       // calculating the resized bounding rectangle information
       vecRectTarget_ = GetTargetRect(imgForContour_);
@@ -284,11 +292,293 @@ void CvtSeg2Bbox::MainLoopBboxGenerator()
       vecBboxDB.push_back(tempBbox);
       cfgParam_.vecPetBboxDB.push_back(vecBboxDB);
 
-      // for debugging
-      imshow("imgMixedResize", imgMixedResize);
+      // making the filename  using stringstream, with the numbering rule
+      stringstream strStreamFileName;
+      strStreamFileName << cfgParam_.strXmlFileNmFwd;
 
-      // for debugging
-      waitKey(0);
+      strStreamFileName << std::setfill('0') << std::setw(cfgParam_.nXmlFileNmDigit) << (ii + 7481);
+      strStreamFileName << "." + cfgParam_.strXmlExt;
+
+      // making the full file path
+      string strXmlFile;
+      strXmlFile = cfgParam_.strXmlFolderPath + strStreamFileName.str();
+
+      // declarating xml file
+      TiXmlDocument docXml;
+
+      // w.r.t pascal VOC xml file
+      TiXmlElement* pRoot = new TiXmlElement("annotation");
+      docXml.LinkEndChild(pRoot);
+
+      TiXmlElement* pElem0 = new TiXmlElement("folder");
+      TiXmlText* txtElem0 = new TiXmlText("VOC2017");
+      pElem0->LinkEndChild(txtElem0);
+      pRoot->LinkEndChild(pElem0);
+
+      TiXmlElement* pElem1 = new TiXmlElement("filename");
+      TiXmlText* txtElem1 = new TiXmlText(strStreamFileName.str());
+      pElem1->LinkEndChild(txtElem1);
+      pRoot->LinkEndChild(pElem1);
+
+      TiXmlElement* pElem2 = new TiXmlElement("source");
+      TiXmlElement* pElem21 = new TiXmlElement("database");
+      TiXmlText* txtElem21 = new TiXmlText("ETRI collision avoidance DB");
+      pElem21->LinkEndChild(txtElem21);
+      TiXmlElement* pElem22 = new TiXmlElement("annotation");
+      TiXmlText* txtElem22 = new TiXmlText("PASCAL VOC2017");
+      pElem22->LinkEndChild(txtElem22);
+      pElem2->LinkEndChild(pElem21);
+      pElem2->LinkEndChild(pElem22);
+      pRoot->LinkEndChild(pElem2);
+
+      TiXmlElement* pElem3 = new TiXmlElement("owner");
+      TiXmlElement* pElem31 = new TiXmlElement("institute");
+      TiXmlText* txtElem31 = new TiXmlText("ETRI");
+      pElem31->LinkEndChild(txtElem31);
+      TiXmlElement* pElem32 = new TiXmlElement("name");
+      TiXmlText* txtElem32 = new TiXmlText("Dr. Eunhye Kim");
+      pElem32->LinkEndChild(txtElem32);
+      pElem3->LinkEndChild(pElem31);
+      pElem3->LinkEndChild(pElem32);
+      pRoot->LinkEndChild(pElem3);
+
+      TiXmlElement* pElem4 = new TiXmlElement("size");
+      TiXmlElement* pElem41 = new TiXmlElement("width");
+      TiXmlText* txtElem41 = new TiXmlText(to_string(cfgParam_.nWidthRef));
+      pElem41->LinkEndChild(txtElem41);
+      TiXmlElement* pElem42 = new TiXmlElement("height");
+      TiXmlText* txtElem42 = new TiXmlText(to_string(cfgParam_.nHeightRef));
+      pElem42->LinkEndChild(txtElem42);
+      TiXmlElement* pElem43 = new TiXmlElement("depth");
+      TiXmlText* txtElem43 = new TiXmlText("3");
+      pElem43->LinkEndChild(txtElem43);
+      pElem4->LinkEndChild(pElem41);
+      pElem4->LinkEndChild(pElem42);
+      pElem4->LinkEndChild(pElem43);
+      pRoot->LinkEndChild(pElem4);
+
+      TiXmlElement* pElem5 = new TiXmlElement("segmented");
+      TiXmlText* txtElem5 = new TiXmlText("0");
+      pElem5->LinkEndChild(txtElem5);
+      pRoot->LinkEndChild(pElem5);
+
+      // making bbox, maskImg-based
+      for (auto kk = 0; kk < cfgParam_.vecImgBboxDB[nRandomBaseNum].size(); kk++)
+      {
+        for (auto kkk = 0; kkk < cfgParam_.vecImgBboxDB[nRandomBaseNum][kk].vecBbox.size(); kkk++)
+        {
+          // applying the selected label
+          if (cfgParam_.vecImgBboxDB[nRandomBaseNum][kk].strLabel != "vegetation")
+          {
+            string strSelectedLabelMask;
+            if (cfgParam_.vecImgBboxDB[nRandomBaseNum][kk].strLabel == "person")
+              strSelectedLabelMask = "person";
+            else if ((cfgParam_.vecImgBboxDB[nRandomBaseNum][kk].strLabel == "rider") ||
+                    (cfgParam_.vecImgBboxDB[nRandomBaseNum][kk].strLabel == "motorcycle") ||
+                    (cfgParam_.vecImgBboxDB[nRandomBaseNum][kk].strLabel == "bicycle"))
+              strSelectedLabelMask = "two_wheel_vehicle";
+            else if ((cfgParam_.vecImgBboxDB[nRandomBaseNum][kk].strLabel == "car") ||
+                    (cfgParam_.vecImgBboxDB[nRandomBaseNum][kk].strLabel == "truck") ||
+                    (cfgParam_.vecImgBboxDB[nRandomBaseNum][kk].strLabel == "bus") ||
+                    (cfgParam_.vecImgBboxDB[nRandomBaseNum][kk].strLabel == "caravan") ||
+                    (cfgParam_.vecImgBboxDB[nRandomBaseNum][kk].strLabel == "trailer"))
+              strSelectedLabelMask = "four_wheel_vehicle";
+            else
+            {
+            }
+
+            TiXmlElement* pElem5 = new TiXmlElement("object");
+            TiXmlElement* pElem51 = new TiXmlElement("name");
+            TiXmlText* txtElem51 = new TiXmlText(strSelectedLabelMask);
+            pElem51->LinkEndChild(txtElem51);
+            TiXmlElement* pElem52 = new TiXmlElement("pose");
+            TiXmlText* txtElem52 = new TiXmlText("Left");
+            pElem52->LinkEndChild(txtElem52);
+            TiXmlElement* pElem53 = new TiXmlElement("truncated");
+            TiXmlText* txtElem53 = new TiXmlText("1");
+            pElem53->LinkEndChild(txtElem53);
+            TiXmlElement* pElem54 = new TiXmlElement("difficult");
+            TiXmlText* txtElem54 = new TiXmlText("0");
+            pElem54->LinkEndChild(txtElem54);
+
+            Rect rectBbox;
+            rectBbox = cfgParam_.vecImgBboxDB[nRandomBaseNum][kk].vecBbox[kkk];
+            TiXmlElement* pElem55 = new TiXmlElement("bndbox");
+            TiXmlElement* pElem551 = new TiXmlElement("xmin");
+            float fNormalizedTlX = (float)(rectBbox.tl().x) / nWidth;
+            int nResizedTlX = (int)(fNormalizedTlX * cfgParam_.nWidthRef);
+            TiXmlText* txtElem551 = new TiXmlText(to_string(nResizedTlX));
+            pElem551->LinkEndChild(txtElem551);
+            TiXmlElement* pElem552 = new TiXmlElement("ymin");
+            float fNormalizedTlY = (float)(rectBbox.tl().y) / nHeight;
+            int nResizedTlY = (int)(fNormalizedTlY * cfgParam_.nHeightRef);
+            TiXmlText* txtElem552 = new TiXmlText(to_string(nResizedTlY));
+            pElem552->LinkEndChild(txtElem552);
+            TiXmlElement* pElem553 = new TiXmlElement("xmax");
+            float fNormalizedBrX = (float)(rectBbox.br().x) / nWidth;
+            int nResizedBrX = (int)(fNormalizedBrX * cfgParam_.nWidthRef);
+            TiXmlText* txtElem553 = new TiXmlText(to_string(nResizedBrX));
+            pElem553->LinkEndChild(txtElem553);
+            TiXmlElement* pElem554 = new TiXmlElement("ymax");
+            float fNormalizedBrY = (float)(rectBbox.br().y) / nHeight;
+            int nResizedBrY = (int)(fNormalizedBrY * cfgParam_.nHeightRef);
+            TiXmlText* txtElem554 = new TiXmlText(to_string(nResizedBrY));
+            pElem554->LinkEndChild(txtElem554);
+            pElem55->LinkEndChild(pElem551);
+            pElem55->LinkEndChild(pElem552);
+            pElem55->LinkEndChild(pElem553);
+            pElem55->LinkEndChild(pElem554);
+
+            pElem5->LinkEndChild(pElem51);
+            pElem5->LinkEndChild(pElem52);
+            pElem5->LinkEndChild(pElem53);
+            pElem5->LinkEndChild(pElem54);
+            pElem5->LinkEndChild(pElem55);
+            pRoot->LinkEndChild(pElem5);
+          }
+        }
+      }
+
+      // making bbox, polygon-based
+      for (auto kk = 0; kk < cfgParam_.vecPolygonBboxDB[nRandomBaseNum].size(); kk++)
+      {
+        for (auto kkk = 0; kkk < cfgParam_.vecPolygonBboxDB[nRandomBaseNum][kk].vecBbox.size(); kkk++)
+        {
+          // applying the selected label
+          if (cfgParam_.vecPolygonBboxDB[nRandomBaseNum][kk].strLabel != "vegetation")
+          {
+            string strSelectedLabelPolygon;
+            if (cfgParam_.vecPolygonBboxDB[nRandomBaseNum][kk].strLabel == "person")
+              strSelectedLabelPolygon = "person";
+            else if ((cfgParam_.vecPolygonBboxDB[nRandomBaseNum][kk].strLabel == "rider") ||
+                    (cfgParam_.vecPolygonBboxDB[nRandomBaseNum][kk].strLabel == "motorcycle") ||
+                    (cfgParam_.vecPolygonBboxDB[nRandomBaseNum][kk].strLabel == "bicycle"))
+              strSelectedLabelPolygon = "two_wheel_vehicle";
+            else if ((cfgParam_.vecPolygonBboxDB[nRandomBaseNum][kk].strLabel == "car") ||
+                    (cfgParam_.vecPolygonBboxDB[nRandomBaseNum][kk].strLabel == "truck") ||
+                    (cfgParam_.vecPolygonBboxDB[nRandomBaseNum][kk].strLabel == "bus") ||
+                    (cfgParam_.vecPolygonBboxDB[nRandomBaseNum][kk].strLabel == "caravan") ||
+                    (cfgParam_.vecPolygonBboxDB[nRandomBaseNum][kk].strLabel == "trailer"))
+              strSelectedLabelPolygon = "four_wheel_vehicle";
+            else
+            {
+            }
+
+            TiXmlElement* pElem6 = new TiXmlElement("object");
+            TiXmlElement* pElem61 = new TiXmlElement("name");
+            TiXmlText* txtElem61 = new TiXmlText(strSelectedLabelPolygon);
+            pElem61->LinkEndChild(txtElem61);
+            TiXmlElement* pElem62 = new TiXmlElement("pose");
+            TiXmlText* txtElem62 = new TiXmlText("Left");
+            pElem62->LinkEndChild(txtElem62);
+            TiXmlElement* pElem63 = new TiXmlElement("truncated");
+            TiXmlText* txtElem63 = new TiXmlText("1");
+            pElem63->LinkEndChild(txtElem63);
+            TiXmlElement* pElem64 = new TiXmlElement("difficult");
+            TiXmlText* txtElem64 = new TiXmlText("0");
+            pElem64->LinkEndChild(txtElem64);
+
+            Rect rectBbox;
+            rectBbox = cfgParam_.vecPolygonBboxDB[nRandomBaseNum][kk].vecBbox[kkk];
+            TiXmlElement* pElem65 = new TiXmlElement("bndbox");
+            TiXmlElement* pElem651 = new TiXmlElement("xmin");
+            float fNormalizedTlX = (float)(rectBbox.tl().x) / nWidth;
+            int nResizedTlX = (int)(fNormalizedTlX * cfgParam_.nWidthRef);
+            TiXmlText* txtElem651 = new TiXmlText(to_string(nResizedTlX));
+            pElem651->LinkEndChild(txtElem651);
+            TiXmlElement* pElem652 = new TiXmlElement("ymin");
+            float fNormalizedTlY = (float)(rectBbox.tl().y) / nHeight;
+            int nResizedTlY = (int)(fNormalizedTlY * cfgParam_.nHeightRef);
+            TiXmlText* txtElem652 = new TiXmlText(to_string(nResizedTlY));
+            pElem652->LinkEndChild(txtElem652);
+            TiXmlElement* pElem653 = new TiXmlElement("xmax");
+            float fNormalizedBrX = (float)(rectBbox.br().x) / nWidth;
+            int nResizedBrX = (int)(fNormalizedBrX * cfgParam_.nWidthRef);
+            TiXmlText* txtElem653 = new TiXmlText(to_string(nResizedBrX));
+            pElem653->LinkEndChild(txtElem653);
+            TiXmlElement* pElem654 = new TiXmlElement("ymax");
+            float fNormalizedBrY = (float)(rectBbox.br().y) / nHeight;
+            int nResizedBrY = (int)(fNormalizedBrY * cfgParam_.nHeightRef);
+            TiXmlText* txtElem654 = new TiXmlText(to_string(nResizedBrY));
+            pElem654->LinkEndChild(txtElem654);
+
+            pElem65->LinkEndChild(pElem651);
+            pElem65->LinkEndChild(pElem652);
+            pElem65->LinkEndChild(pElem653);
+            pElem65->LinkEndChild(pElem654);
+
+            pElem6->LinkEndChild(pElem61);
+            pElem6->LinkEndChild(pElem62);
+            pElem6->LinkEndChild(pElem63);
+            pElem6->LinkEndChild(pElem64);
+            pElem6->LinkEndChild(pElem65);
+            pRoot->LinkEndChild(pElem6);
+          }
+        }
+      }
+
+      // making bbox, using pet image mixing loop, for ver.2.0
+      for (auto kk = 0; kk < cfgParam_.vecPetBboxDB[ii].size(); kk++)
+      {
+        for (auto kkk = 0; kkk < cfgParam_.vecPetBboxDB[ii][kk].vecBbox.size(); kkk++)
+        {
+          // applying the selected label
+          if (cfgParam_.vecPetBboxDB[ii][kk].strLabel != "vegetation")
+          {
+            string strSelectedLabelPet;
+            strSelectedLabelPet = "pet";
+
+            TiXmlElement* pElem7 = new TiXmlElement("object");
+            TiXmlElement* pElem71 = new TiXmlElement("name");
+            TiXmlText* txtElem71 = new TiXmlText(strSelectedLabelPet);
+            pElem71->LinkEndChild(txtElem71);
+            TiXmlElement* pElem72 = new TiXmlElement("pose");
+            TiXmlText* txtElem72 = new TiXmlText("Left");
+            pElem72->LinkEndChild(txtElem72);
+            TiXmlElement* pElem73 = new TiXmlElement("truncated");
+            TiXmlText* txtElem73 = new TiXmlText("1");
+            pElem73->LinkEndChild(txtElem73);
+            TiXmlElement* pElem74 = new TiXmlElement("difficult");
+            TiXmlText* txtElem74 = new TiXmlText("0");
+            pElem74->LinkEndChild(txtElem74);
+
+            // already resized
+            Rect rectBbox;
+            rectBbox = cfgParam_.vecPetBboxDB[ii][kk].vecBbox[kkk];
+            TiXmlElement* pElem75 = new TiXmlElement("bndbox");
+            TiXmlElement* pElem751 = new TiXmlElement("xmin");
+            TiXmlText* txtElem751 = new TiXmlText(to_string(rectBbox.tl().x));
+            pElem751->LinkEndChild(txtElem751);
+            TiXmlElement* pElem752 = new TiXmlElement("ymin");
+            TiXmlText* txtElem752 = new TiXmlText(to_string(rectBbox.tl().y));
+            pElem752->LinkEndChild(txtElem752);
+            TiXmlElement* pElem753 = new TiXmlElement("xmax");
+            TiXmlText* txtElem753 = new TiXmlText(to_string(rectBbox.br().x));
+            pElem753->LinkEndChild(txtElem753);
+            TiXmlElement* pElem754 = new TiXmlElement("ymax");
+            TiXmlText* txtElem754 = new TiXmlText(to_string(rectBbox.br().y));
+            pElem754->LinkEndChild(txtElem754);
+
+            pElem75->LinkEndChild(pElem751);
+            pElem75->LinkEndChild(pElem752);
+            pElem75->LinkEndChild(pElem753);
+            pElem75->LinkEndChild(pElem754);
+
+            pElem7->LinkEndChild(pElem71);
+            pElem7->LinkEndChild(pElem72);
+            pElem7->LinkEndChild(pElem73);
+            pElem7->LinkEndChild(pElem74);
+            pElem7->LinkEndChild(pElem75);
+            pRoot->LinkEndChild(pElem7);
+          }
+        }
+      }
+
+      // saving xml file
+      docXml.SaveFile(strXmlFile);
+
+      // // pausing and destroying all imshow result
+      // waitKey(0);      
     }
   }
 
@@ -312,36 +602,6 @@ void CvtSeg2Bbox::MainLoopBboxGenerator()
     // making the full file path
     string strXmlFile;
     strXmlFile = cfgParam_.strXmlFolderPath + strStreamFileName.str();
-
-    // // assigning the raw image
-    // Mat imgRaw = imread(vecRawFileNm[k]);
-
-    // // checking bbox, maskImg-based
-    // for (auto kk = 0; kk < cfgParam_.vecImgBboxDB[k].size(); kk++)
-    // {
-    //   for (auto kkk = 0; kkk < cfgParam_.vecImgBboxDB[k][kk].vecBbox.size(); kkk++)
-    //   {
-    //     // drawing results, 3.4.0 only
-    //     Rect rectBbox;
-    //     rectBbox = cfgParam_.vecImgBboxDB[k][kk].vecBbox[kkk];
-    //     rectangle(imgRaw, rectBbox.tl(), rectBbox.br(), colorStat_.scalRed, 2);
-    //   }
-    // }
-
-    // // checking bbox, polygon-based
-    // for (auto kk = 0; kk < cfgParam_.vecPolygonBboxDB[k].size(); kk++)
-    // {
-    //   for (auto kkk = 0; kkk < cfgParam_.vecPolygonBboxDB[k][kk].vecBbox.size(); kkk++)
-    //   {
-    //     // drawing results, 3.4.0 only
-    //     Rect rectBbox;
-    //     rectBbox = cfgParam_.vecPolygonBboxDB[k][kk].vecBbox[kkk];
-    //     rectangle(imgRaw, rectBbox.tl(), rectBbox.br(), colorStat_.scalLime, 2);
-    //   }
-    // }
-
-    // // for debugging
-    // imshow("raw_bbox", imgRaw);
 
     // declarating xml file
     TiXmlDocument docXml;
@@ -553,73 +813,6 @@ void CvtSeg2Bbox::MainLoopBboxGenerator()
           pElem6->LinkEndChild(pElem64);
           pElem6->LinkEndChild(pElem65);
           pRoot->LinkEndChild(pElem6);
-        }
-      }
-    }
-
-    // making bbox, using pet image mixing loop, for ver.2.0
-    if (cfgParam_.bPetMix)
-    {
-      for (auto kk = 0; kk < cfgParam_.vecPetBboxDB[k].size(); kk++)
-      {
-        for (auto kkk = 0; kkk < cfgParam_.vecPetBboxDB[k][kk].vecBbox.size(); kkk++)
-        {
-          // applying the selected label
-          if (cfgParam_.vecPetBboxDB[k][kk].strLabel != "vegetation")
-          {
-            string strSelectedLabelPet;
-            strSelectedLabelPet = "pet";
-
-            TiXmlElement* pElem7 = new TiXmlElement("object");
-            TiXmlElement* pElem71 = new TiXmlElement("name");
-            TiXmlText* txtElem71 = new TiXmlText(strSelectedLabelPet);
-            pElem71->LinkEndChild(txtElem71);
-            TiXmlElement* pElem72 = new TiXmlElement("pose");
-            TiXmlText* txtElem72 = new TiXmlText("Left");
-            pElem72->LinkEndChild(txtElem72);
-            TiXmlElement* pElem73 = new TiXmlElement("truncated");
-            TiXmlText* txtElem73 = new TiXmlText("1");
-            pElem73->LinkEndChild(txtElem73);
-            TiXmlElement* pElem74 = new TiXmlElement("difficult");
-            TiXmlText* txtElem74 = new TiXmlText("0");
-            pElem74->LinkEndChild(txtElem74);
-
-            Rect rectBbox;
-            rectBbox = cfgParam_.vecPetBboxDB[k][kk].vecBbox[kkk];
-            TiXmlElement* pElem75 = new TiXmlElement("bndbox");
-            TiXmlElement* pElem751 = new TiXmlElement("xmin");
-            float fNormalizedTlX = (float)(rectBbox.tl().x) / nWidth;
-            int nResizedTlX = (int)(fNormalizedTlX * cfgParam_.nWidthRef);
-            TiXmlText* txtElem751 = new TiXmlText(to_string(nResizedTlX));
-            pElem751->LinkEndChild(txtElem751);
-            TiXmlElement* pElem752 = new TiXmlElement("ymin");
-            float fNormalizedTlY = (float)(rectBbox.tl().y) / nHeight;
-            int nResizedTlY = (int)(fNormalizedTlY * cfgParam_.nHeightRef);
-            TiXmlText* txtElem752 = new TiXmlText(to_string(nResizedTlY));
-            pElem752->LinkEndChild(txtElem752);
-            TiXmlElement* pElem753 = new TiXmlElement("xmax");
-            float fNormalizedBrX = (float)(rectBbox.br().x) / nWidth;
-            int nResizedBrX = (int)(fNormalizedBrX * cfgParam_.nWidthRef);
-            TiXmlText* txtElem753 = new TiXmlText(to_string(nResizedBrX));
-            pElem753->LinkEndChild(txtElem753);
-            TiXmlElement* pElem754 = new TiXmlElement("ymax");
-            float fNormalizedBrY = (float)(rectBbox.br().y) / nHeight;
-            int nResizedBrY = (int)(fNormalizedBrY * cfgParam_.nHeightRef);
-            TiXmlText* txtElem754 = new TiXmlText(to_string(nResizedBrY));
-            pElem754->LinkEndChild(txtElem754);
-
-            pElem75->LinkEndChild(pElem751);
-            pElem75->LinkEndChild(pElem752);
-            pElem75->LinkEndChild(pElem753);
-            pElem75->LinkEndChild(pElem754);
-
-            pElem7->LinkEndChild(pElem71);
-            pElem7->LinkEndChild(pElem72);
-            pElem7->LinkEndChild(pElem73);
-            pElem7->LinkEndChild(pElem74);
-            pElem7->LinkEndChild(pElem75);
-            pRoot->LinkEndChild(pElem7);
-          }
         }
       }
     }
