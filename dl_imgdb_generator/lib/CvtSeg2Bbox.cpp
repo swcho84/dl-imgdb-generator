@@ -272,11 +272,11 @@ void CvtSeg2Bbox::MainLoopBboxGenerator()
       strStreamImgFileName << std::setfill('0') << std::setw(cfgParam_.nImgFileNmDigit) << (ii + 7481);
       strStreamImgFileName << "." + cfgParam_.strImgExt;
 
-      // making the full file path  
+      // making the full file path
       string strCvtImgFile;
       strCvtImgFile = cfgParam_.strCvtPetMixImgFolderPath + strStreamImgFileName.str();
 
-      // saving the resized image 
+      // saving the resized image
       imwrite(strCvtImgFile, imgMixedResize);
 
       // calculating the resized bounding rectangle information
@@ -374,14 +374,14 @@ void CvtSeg2Bbox::MainLoopBboxGenerator()
             if (cfgParam_.vecImgBboxDB[nRandomBaseNum][kk].strLabel == "person")
               strSelectedLabelMask = "person";
             else if ((cfgParam_.vecImgBboxDB[nRandomBaseNum][kk].strLabel == "rider") ||
-                    (cfgParam_.vecImgBboxDB[nRandomBaseNum][kk].strLabel == "motorcycle") ||
-                    (cfgParam_.vecImgBboxDB[nRandomBaseNum][kk].strLabel == "bicycle"))
+                     (cfgParam_.vecImgBboxDB[nRandomBaseNum][kk].strLabel == "motorcycle") ||
+                     (cfgParam_.vecImgBboxDB[nRandomBaseNum][kk].strLabel == "bicycle"))
               strSelectedLabelMask = "two_wheel_vehicle";
             else if ((cfgParam_.vecImgBboxDB[nRandomBaseNum][kk].strLabel == "car") ||
-                    (cfgParam_.vecImgBboxDB[nRandomBaseNum][kk].strLabel == "truck") ||
-                    (cfgParam_.vecImgBboxDB[nRandomBaseNum][kk].strLabel == "bus") ||
-                    (cfgParam_.vecImgBboxDB[nRandomBaseNum][kk].strLabel == "caravan") ||
-                    (cfgParam_.vecImgBboxDB[nRandomBaseNum][kk].strLabel == "trailer"))
+                     (cfgParam_.vecImgBboxDB[nRandomBaseNum][kk].strLabel == "truck") ||
+                     (cfgParam_.vecImgBboxDB[nRandomBaseNum][kk].strLabel == "bus") ||
+                     (cfgParam_.vecImgBboxDB[nRandomBaseNum][kk].strLabel == "caravan") ||
+                     (cfgParam_.vecImgBboxDB[nRandomBaseNum][kk].strLabel == "trailer"))
               strSelectedLabelMask = "four_wheel_vehicle";
             else
             {
@@ -451,14 +451,14 @@ void CvtSeg2Bbox::MainLoopBboxGenerator()
             if (cfgParam_.vecPolygonBboxDB[nRandomBaseNum][kk].strLabel == "person")
               strSelectedLabelPolygon = "person";
             else if ((cfgParam_.vecPolygonBboxDB[nRandomBaseNum][kk].strLabel == "rider") ||
-                    (cfgParam_.vecPolygonBboxDB[nRandomBaseNum][kk].strLabel == "motorcycle") ||
-                    (cfgParam_.vecPolygonBboxDB[nRandomBaseNum][kk].strLabel == "bicycle"))
+                     (cfgParam_.vecPolygonBboxDB[nRandomBaseNum][kk].strLabel == "motorcycle") ||
+                     (cfgParam_.vecPolygonBboxDB[nRandomBaseNum][kk].strLabel == "bicycle"))
               strSelectedLabelPolygon = "two_wheel_vehicle";
             else if ((cfgParam_.vecPolygonBboxDB[nRandomBaseNum][kk].strLabel == "car") ||
-                    (cfgParam_.vecPolygonBboxDB[nRandomBaseNum][kk].strLabel == "truck") ||
-                    (cfgParam_.vecPolygonBboxDB[nRandomBaseNum][kk].strLabel == "bus") ||
-                    (cfgParam_.vecPolygonBboxDB[nRandomBaseNum][kk].strLabel == "caravan") ||
-                    (cfgParam_.vecPolygonBboxDB[nRandomBaseNum][kk].strLabel == "trailer"))
+                     (cfgParam_.vecPolygonBboxDB[nRandomBaseNum][kk].strLabel == "truck") ||
+                     (cfgParam_.vecPolygonBboxDB[nRandomBaseNum][kk].strLabel == "bus") ||
+                     (cfgParam_.vecPolygonBboxDB[nRandomBaseNum][kk].strLabel == "caravan") ||
+                     (cfgParam_.vecPolygonBboxDB[nRandomBaseNum][kk].strLabel == "trailer"))
               strSelectedLabelPolygon = "four_wheel_vehicle";
             else
             {
@@ -578,7 +578,7 @@ void CvtSeg2Bbox::MainLoopBboxGenerator()
       docXml.SaveFile(strXmlFile);
 
       // // pausing and destroying all imshow result
-      // waitKey(0);      
+      // waitKey(0);
     }
   }
 
