@@ -17,6 +17,23 @@ CvtSeg2Bbox::~CvtSeg2Bbox()
 {
 }
 
+// main loop: seg label converter (from RGB to label)
+void CvtSeg2Bbox::MainLoopSemanticSegLabelConverter()
+{
+  // assigning variables for browsing annotated images recursively
+  vector<String> vecSegLabelImgFileNm;
+  glob(cfgParam_.strSegLabelImgFolderPath, vecSegLabelImgFileNm, true);
+
+  // browsing annotated images recursively
+  for (size_t k = 0; k < vecSegLabelImgFileNm.size(); k++)
+  {
+    // convert the rgb label w.r.t pixel to the gray label w.r.t pixel
+
+  }  
+
+  return;
+}
+
 // main loop: xml file checker
 void CvtSeg2Bbox::MainLoopBboxChecker()
 {

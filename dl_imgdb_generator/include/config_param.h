@@ -55,6 +55,8 @@ public:
   string strXmlFileNmFwd;
   string strPetImgFolderNm;
   string strPetImgFolderPath;
+  string strSegLabelImgFoldeNm;
+  string strSegLabelImgFolderPath;
 
   string strKttPicType;
   string strKttTxtType;
@@ -101,6 +103,8 @@ public:
   vector<string> vecKttLabels;
   vector<AnnoDB> vecAnnoKttDB;
 
+  vector<AnnoDB> vecAnnoKariDB;
+
   vector<vector<BboxDB>> vecImgBboxDB;
   vector<vector<BboxDB>> vecPolygonBboxDB;
   vector<vector<BboxDB>> vecPetBboxDB;
@@ -122,6 +126,16 @@ public:
   AnnoDB kttPedestrian;
   AnnoDB kttPersonSit;
   AnnoDB kttCyclist;
+
+  AnnoDB building;
+  AnnoDB sky;
+  AnnoDB ground;
+  AnnoDB river;
+
+  int nOrderBuilding;
+  int nOrderSky;
+  int nOrderGround;
+  int nOrderRiver;
 
 private:
   bool ReadRosParams();

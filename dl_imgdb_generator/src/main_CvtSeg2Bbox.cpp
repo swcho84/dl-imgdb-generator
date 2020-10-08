@@ -60,6 +60,12 @@ int main(int argc, char** argv)
         seg2Bbox.MainLoopBboxChecker();
         break;
       }
+      case KARIDB_SEMANTIC_SEGMENTATION_LABEL_CONVERTER:
+      {
+        ROS_INFO("Feature: semantic segmentation label converter for kariDB");
+        seg2Bbox.MainLoopSemanticSegLabelConverter();
+        break;
+      }
       default:
       {
         ROS_INFO("Please check your parameter..");
