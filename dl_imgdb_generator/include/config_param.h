@@ -57,6 +57,8 @@ public:
   string strPetImgFolderPath;
   string strSegLabelImgFoldeNm;
   string strSegLabelImgFolderPath;
+  string strCvtPetMixImgFolderNm;
+  string strCvtPetMixImgFolderPath;
 
   string strKttPicType;
   string strKttTxtType;
