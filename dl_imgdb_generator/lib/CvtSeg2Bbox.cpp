@@ -21,15 +21,94 @@ CvtSeg2Bbox::~CvtSeg2Bbox()
 void CvtSeg2Bbox::MainLoopSemanticSegLabelConverter()
 {
   // assigning variables for browsing annotated images recursively
-  vector<String> vecSegLabelImgFileNm;
-  glob(cfgParam_.strSegLabelImgFolderPath, vecSegLabelImgFileNm, true);
+  vector<String> vecSegColorImgFileNm;
+  glob(cfgParam_.strSegColorImgFolderPath, vecSegColorImgFileNm, true);
 
   // browsing annotated images recursively
-  for (size_t k = 0; k < vecSegLabelImgFileNm.size(); k++)
+  for (size_t k = 0; k < vecSegColorImgFileNm.size(); k++)
   {
-    // convert the rgb label w.r.t pixel to the gray label w.r.t pixel
+    // for debugging
+    ROS_INFO("Processing_ConvertSegLabelImg(%d,%d)", (int)(k), (int)(vecSegColorImgFileNm.size()));
 
-  }  
+    // assigning the raw image
+    Mat imgRaw = imread(vecSegColorImgFileNm[k]);
+
+    // spliting the file name and extension
+    char sep = '/';
+    size_t index = vecSegColorImgFileNm[k].rfind(sep, vecSegColorImgFileNm[k].length());
+    string strSegColorImgFileNameWithExtension =
+        vecSegColorImgFileNm[k].substr(index + 1, vecSegColorImgFileNm[k].length() - index);
+    size_t lastIndex = strSegColorImgFileNameWithExtension.find_last_of(".");
+    string strSegColorImgFileName = strSegColorImgFileNameWithExtension.substr(0, lastIndex);
+    string strSegColorImgFileExtension =
+        strSegColorImgFileNameWithExtension.substr(strSegColorImgFileNameWithExtension.find_last_of(".") + 1);
+
+    // assigning the result image
+    Mat imgLabel;
+    imgRaw.copyTo(imgLabel);
+
+    // converting label image: pixel-wise calculation
+    for (int y = 0; y < imgRaw.size().height; y++)
+    {
+      uchar* ptInput = imgRaw.ptr<uchar>(y);
+      uchar* ptOutput = imgLabel.ptr<uchar>(y);
+      for (int x = 0; x < imgRaw.size().width; x++)
+      {
+        uchar b = ptInput[x * 3 + 0];
+        uchar g = ptInput[x * 3 + 1];
+        uchar r = ptInput[x * 3 + 2];
+
+        // building
+        if ((b == cfgParam_.vecAnnoKariDB[0].nRGB[2]) && (g == cfgParam_.vecAnnoKariDB[0].nRGB[1]) &&
+            (r == cfgParam_.vecAnnoKariDB[0].nRGB[0]))
+        {
+          ptOutput[x * 3 + 0] = cfgParam_.nOrderBuilding;
+          ptOutput[x * 3 + 1] = cfgParam_.nOrderBuilding;
+          ptOutput[x * 3 + 2] = cfgParam_.nOrderBuilding;
+        }
+        else if ((b == cfgParam_.vecAnnoKariDB[1].nRGB[2]) && (g == cfgParam_.vecAnnoKariDB[1].nRGB[1]) &&
+                 (r == cfgParam_.vecAnnoKariDB[1].nRGB[0]))
+        {
+          ptOutput[x * 3 + 0] = cfgParam_.nOrderSky;
+          ptOutput[x * 3 + 1] = cfgParam_.nOrderSky;
+          ptOutput[x * 3 + 2] = cfgParam_.nOrderSky;
+        }
+        else if ((b == cfgParam_.vecAnnoKariDB[2].nRGB[2]) && (g == cfgParam_.vecAnnoKariDB[2].nRGB[1]) &&
+                 (r == cfgParam_.vecAnnoKariDB[2].nRGB[0]))
+        {
+          ptOutput[x * 3 + 0] = cfgParam_.nOrderGround;
+          ptOutput[x * 3 + 1] = cfgParam_.nOrderGround;
+          ptOutput[x * 3 + 2] = cfgParam_.nOrderGround;
+        }
+        else if ((b == cfgParam_.vecAnnoKariDB[3].nRGB[2]) && (g == cfgParam_.vecAnnoKariDB[3].nRGB[1]) &&
+                 (r == cfgParam_.vecAnnoKariDB[3].nRGB[0]))
+        {
+          ptOutput[x * 3 + 0] = cfgParam_.nOrderRiver;
+          ptOutput[x * 3 + 1] = cfgParam_.nOrderRiver;
+          ptOutput[x * 3 + 2] = cfgParam_.nOrderRiver;
+        }
+        else
+        {
+          ptOutput[x * 3 + 0] = 0;
+          ptOutput[x * 3 + 1] = 0;
+          ptOutput[x * 3 + 2] = 0;
+        }
+      }
+    }
+
+    // saving result
+    string strSegLabelImgFilePath;
+    strSegLabelImgFilePath = cfgParam_.strSegLabelImgFolderPath + strSegColorImgFileName + "." + cfgParam_.strImgExt;
+    imwrite(strSegLabelImgFilePath, imgLabel);
+
+    // for debugging
+    // imshow("raw_img", imgRaw);
+    // imshow("converted", imgLabel);
+    // waitKey(0);
+
+    // calculating size flag
+    bSizeCalcFlag = GenSizeCalcFlag(k, (int)(vecSegColorImgFileNm.size()));
+  }
 
   return;
 }
@@ -313,7 +392,7 @@ void CvtSeg2Bbox::MainLoopBboxGenerator()
       stringstream strStreamFileName;
       strStreamFileName << cfgParam_.strXmlFileNmFwd;
 
-      strStreamFileName << std::setfill('0') << std::setw(cfgParam_.nXmlFileNmDigit) << (ii + 7481);
+      strStreamFileName << std::setfill('0') << std::setw(cfgParam_.nXmlFileNmDigit) << (ii);
       strStreamFileName << "." + cfgParam_.strXmlExt;
 
       // making the full file path
