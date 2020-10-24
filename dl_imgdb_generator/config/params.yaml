@@ -64,25 +64,25 @@ LabelsKittyDB:
 LabelKariDB:
   building:
     name: "building"
-    order: 0
+    order: 1
     R: 80
     G: 0
     B: 0
   sky:
     name: "sky"
-    order: 1
+    order: 2
     R: 0
     G: 0
     B: 80
   ground:
     name: "ground"
-    order: 2
+    order: 3
     R: 0
     G: 80
     B: 0
   river:
     name: "river"
-    order: 3
+    order: 4
     R: 80
     G: 80
     B: 0
