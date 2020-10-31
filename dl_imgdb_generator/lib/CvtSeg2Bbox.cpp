@@ -941,6 +941,19 @@ void CvtSeg2Bbox::MainLoopImgResizer()
     nHeight = imgRaw.rows;
     nWidth = imgRaw.cols;
 
+    // (option) making crop img
+    // Rect recCropBbox;
+    // recCropBbox.x = 0;
+    // recCropBbox.y = 90;
+    // recCropBbox.width = nWidth;
+    // recCropBbox.height = 630;
+    // imgRaw = imgRaw(recCropBbox);
+
+    // (option) for debugging
+    // rectangle(imgRaw, recCropBbox, Scalar(0, 0, 255), 2, 8, 0);
+    // imshow("imgRaw", imgRaw);
+    // waitKey(0);
+
     // resizing w.r.t the cityscapesDB
     Mat imgResize;
     resize(imgRaw, imgResize, Size(cfgParam_.nWidthRef, cfgParam_.nHeightRef), 0, 0, INTER_NEAREST);
