@@ -942,12 +942,12 @@ void CvtSeg2Bbox::MainLoopImgResizer()
     nWidth = imgRaw.cols;
 
     // (option) making crop img
-    // Rect recCropBbox;
-    // recCropBbox.x = 0;
-    // recCropBbox.y = 90;
-    // recCropBbox.width = nWidth;
-    // recCropBbox.height = 630;
-    // imgRaw = imgRaw(recCropBbox);
+    Rect recCropBbox;
+    recCropBbox.x = 0;
+    recCropBbox.y = 38;
+    recCropBbox.width = nWidth;
+    recCropBbox.height = 410;
+    imgRaw = imgRaw(recCropBbox);
 
     // (option) for debugging
     // rectangle(imgRaw, recCropBbox, Scalar(0, 0, 255), 2, 8, 0);

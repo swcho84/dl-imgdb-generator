@@ -91,7 +91,7 @@ LabelKariDB:
 # 22: xml file generator
 # 33: xml file checker
 KittyDBConverter:
-  feature: 33
+  feature: 22
 
 #"/Research_DB/workdone_etriDB/v1.0/img/"
 #"/Research_DB/workdone_etriDB/v1.0/label/"
@@ -115,7 +115,7 @@ KittyDBfolder:
 # 3: xml file checker
 # 4: seg label converter (from RGB to label)
 CityScapesDBConverter:
-  feature: 1
+  feature: 3
   use_pet_mixing: true
   trial_pet_mixing: 3000
   mix_width_ratio: 0.1
@@ -123,11 +123,11 @@ CityScapesDBConverter:
   mix_inner_ratio: 0.1
 
 CityScapesDBfolder:
-  raw: "/Dropbox/RnD_ubuntu/for_semantic_segmentation/additional_img/need_crop/"                   #"/cityscapeDBsmall/raw/"   /Research_DB/raw_etriDB/v1.0/ETRI_cityscapeDB/raw/
-  cvtimg: "/Dropbox/RnD_ubuntu/for_semantic_segmentation/additional_img/raw_imgs_4/"            #"/cityscapeDBsmall/cvtimg/"    /Research_DB/raw_etriDB/v1.0/ETRI_cityscapeDB/raw_vga/
+  raw: "/v4.0_5000ea/img/"                   #"/cityscapeDBsmall/raw/"   /Research_DB/raw_etriDB/v1.0/ETRI_cityscapeDB/raw/
+  cvtimg: "/v4.0_5000ea/img/"            #"/cityscapeDBsmall/cvtimg/"    /Research_DB/raw_etriDB/v1.0/ETRI_cityscapeDB/raw_vga/
   color_label: "/Research_DB/raw_etriDB/v1.0/ETRI_cityscapeDB/color_label/"   #"/cityscapeDBsmall/color_label/"
   polygon_data: "/Research_DB/raw_etriDB/v1.0/ETRI_cityscapeDB/polygon/"      #"/cityscapeDBsmall/polygon/"
-  xml_label: "/Research_DB/raw_etriDB/v1.0/ETRI_cityscapeDB/xml_label/"       #"/cityscapeDBsmall/xml_label/"
+  xml_label: "/v4.0_5000ea/label/"       #"/cityscapeDBsmall/xml_label/"
   pet_mix: "/Research_DB/raw_etriDB/v1.0/ETRI_cityscapeDB/pet_db/"            # pet imgs
   seg_color_img: "/label_img/rgb_label/"                                      # /path/to/seg/color/img
   seg_label_img: "/label_img/seg_label/"                                      # /path/to/seg/label/img
