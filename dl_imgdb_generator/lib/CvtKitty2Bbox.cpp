@@ -88,6 +88,123 @@ void CvtKtt2Bbox::MainLoopBboxChecker()
   return;
 }
 
+// main loop: xml file generator for specific version (no label type)
+void CvtKtt2Bbox::MainLoopBboxGeneratorV2()
+{
+  // 2nd, reading, matching, resizing raw bbox data and saving resized bbox data w.r.t the xml type
+  vector<String> vecImgFileNm;
+  vector<String> vecCvtImgFileNm;
+  vector<String> vecTxtFileNm;
+  vecKittyDB.clear();
+  glob(cfgParam_.strKttImgFolderPath, vecImgFileNm, true);
+  glob(cfgParam_.strKttCvtImgFolderPath, vecCvtImgFileNm, true);
+  glob(cfgParam_.strKttLabelFolderPath, vecTxtFileNm, true);
+
+  // browsing annotated images recursively
+  for (size_t i = 0; i < vecImgFileNm.size(); i++)
+  {
+    // for debugging
+    ROS_INFO("Processing_xmlGen_v2(%d,%d)", (int)(i), (int)(vecImgFileNm.size()));
+
+    // assigning the raw image
+    Mat imgRaw = imread(vecImgFileNm[i]);
+
+    // image width and height info. (h1024, w2048)
+    nHeight = imgRaw.rows;
+    nWidth = imgRaw.cols;
+
+    // reading txt file
+    ifstream openFile(vecTxtFileNm[i]);
+    if (openFile.is_open())
+    {
+      ROS_INFO("%s", vecImgFileNm[i].c_str());
+      ROS_INFO("%s", vecTxtFileNm[i].c_str());      
+
+      // parsing kitty label into vector-list type
+      string strLine;
+      vector<KittyDB> tempKittyVec;
+
+      // parsing line-by-line
+      while (getline(openFile, strLine))
+      {
+        istringstream strStrmLine(strLine);
+        string strToken;
+        int nFlag = 0;
+        KittyDB tempKittyDB;
+
+        // parsing space-by-space
+        while (getline(strStrmLine, strToken, ' '))
+        {
+          ROS_INFO("[%d] (%s)", nFlag, strToken.c_str());
+
+          // yolo type
+          switch (nFlag)
+          {
+            case 0:
+            {
+              tempKittyDB.strLabel = "postman";
+              break;
+            }
+            case 1:
+            {
+              tempKittyDB.fBbox[0] = (atof(strToken.c_str())) * (float)(cfgParam_.nKttWidthRef);
+              break;
+            }
+            case 2:
+            {
+              tempKittyDB.fBbox[1] = (atof(strToken.c_str())) * (float)(cfgParam_.nKttHeightRef);
+              break;
+            }
+            case 3:
+            {
+              tempKittyDB.fBbox[2] = (atof(strToken.c_str())) * (float)(cfgParam_.nKttWidthRef);
+              break;
+            }
+            case 4:
+            {
+              tempKittyDB.fBbox[3] = (atof(strToken.c_str())) * (float)(cfgParam_.nKttHeightRef);
+              break;
+            }
+          }
+
+          nFlag++;
+        }
+
+        // saving parsing result w.r.t space
+        tempKittyVec.push_back(tempKittyDB);
+      }
+
+      Rect rectTempBbox;
+      rectTempBbox.x = (int)((tempKittyVec[0].fBbox[0]) - (tempKittyVec[0].fBbox[2])/(2.0)) ;
+      rectTempBbox.y = (int)((tempKittyVec[0].fBbox[1]) - (tempKittyVec[0].fBbox[3])/(2.0)) ;
+      rectTempBbox.width = (int)(tempKittyVec[0].fBbox[2]);
+      rectTempBbox.height = (int)(tempKittyVec[0].fBbox[3]);
+
+      ROS_INFO("(%d, %d, %d, %d)", rectTempBbox.x, rectTempBbox.y, rectTempBbox.width, rectTempBbox.height);
+
+      Point ptCen;
+      ptCen.x = (int)(tempKittyVec[0].fBbox[0]);
+      ptCen.y = (int)(tempKittyVec[0].fBbox[1]);
+
+      rectangle(imgRaw, rectTempBbox, Scalar(0, 0, 255), 2, 8, 0);
+      circle(imgRaw, ptCen, 10, Scalar(0, 0, 255), 2, 8, 0);
+
+      // for debugging
+      imshow("imgRaw", imgRaw);      
+
+      // saving parsing result w.r.t line
+      vecKittyDB.push_back(tempKittyVec);
+      openFile.close();
+    }
+
+
+    waitKey(0);
+  }  
+
+
+  return;
+}
+
 // main loop: xml file generator
 void CvtKtt2Bbox::MainLoopBboxGenerator()
 {
@@ -421,7 +538,7 @@ void CvtKtt2Bbox::MainLoopImgResizer()
     // making the filename  using stringstream, with the numbering rule
     stringstream strStreamImgFileName;
     strStreamImgFileName << cfgParam_.strKttImgFileNmFwd;
-    strStreamImgFileName << std::setfill('0') << std::setw(cfgParam_.nKttImgFileNmDigit) << i;
+    strStreamImgFileName << std::setfill('0') << std::setw(cfgParam_.nKttImgFileNmDigit) << (i);
     strStreamImgFileName << "." + cfgParam_.strKttImgExt;
 
     // making the full file path

@@ -90,17 +90,18 @@ LabelKariDB:
 # 11: img file resizer
 # 22: xml file generator
 # 33: xml file checker
+# 44: xml file generator v2
 KittyDBConverter:
-  feature: 22
+  feature: 11
 
 #"/Research_DB/workdone_etriDB/v1.0/img/"
 #"/Research_DB/workdone_etriDB/v1.0/label/"
 KittyDBfolder:
-  image: "/Research_DB/raw_etriDB/v1.0/ETRI_kittyDB/image/" #"/kittyDBsmall/image/"
-  label: "/Research_DB/raw_etriDB/v1.0/ETRI_kittyDB/label/" #"/kittyDBsmall/label/"
-  cvtimg: "/Research_DB/raw_etriDB/v1.0/ETRI_kittyDB/raw_vga/" #"/kittyDBsmall/cvtimg/"
-  xml_label: "/Research_DB/raw_etriDB/v1.0/ETRI_kittyDB/xml_label/" #"/kittyDBsmall/xml_label/"
-  imgfile_type: "*.png"
+  image: "/jumper_only_data/JPEGImages/" #"/kittyDBsmall/image/"  "/Research_DB/raw_etriDB/v1.0/ETRI_kittyDB/image/"
+  label: "/jumper_only_data/labels/" #"/kittyDBsmall/label/"
+  cvtimg: "/jumper_only_data/raw_imgs/" #"/kittyDBsmall/cvtimg/"
+  xml_label: "/jumper_only_data/xml_labels/" #"/kittyDBsmall/xml_label/"
+  imgfile_type: "*.jpg"
   txtfile_type: "*.txt"
   xmlfile_type: "*.xml"
   imgfile_extension: "png"

@@ -59,7 +59,13 @@ int main(int argc, char** argv)
         ROS_INFO("Feature: xml file checker");
         ktt2Bbox.MainLoopBboxChecker();
         break;
-      }
+      }      
+      case KITDB_XMLFILE_GENERATOR_V2:  // xml file generator v2
+      {
+        ROS_INFO("Feature: xml file checker v2");
+        ktt2Bbox.MainLoopBboxGeneratorV2();
+        break;
+      }      
       default:
       {
         ROS_INFO("Please check your parameter..");
