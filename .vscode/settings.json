@@ -1,0 +1,11 @@
+{
+    "cmake.configureOnOpen": false,
+    "files.associations": {
+        "*.tcc": "cpp",
+        "string": "cpp",
+        "string_view": "cpp",
+        "typeindex": "cpp",
+        "typeinfo": "cpp",
+        "iosfwd": "cpp"
+    }
+}

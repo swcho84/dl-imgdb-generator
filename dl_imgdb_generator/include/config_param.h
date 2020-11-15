@@ -78,6 +78,9 @@ public:
   string strKttImgFileNmFwd;
   string strKttXmlFileNmFwd;
 
+  string strYoloLabelFolderNm;
+  string strYoloLabelFolderPath;
+
   bool bPetMix;
   int nTrialPetMix;
   float fWidthRatio;
