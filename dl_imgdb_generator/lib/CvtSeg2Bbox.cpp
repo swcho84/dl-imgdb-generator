@@ -39,7 +39,7 @@ void CvtSeg2Bbox::MainLoopBboxYoloLabelConverter()
 
     // image width and height info. (h1024, w2048)
     nHeight = imgRaw.rows;
-    nWidth = imgRaw.cols;    
+    nWidth = imgRaw.cols;
 
     // for debugging
     ROS_INFO("[%d]file:%s", (int)(k), vecCvtImgFileNm[k].c_str());
@@ -61,7 +61,7 @@ void CvtSeg2Bbox::MainLoopBboxYoloLabelConverter()
 
     // assigning the yolo data format
     string strYoloLabelFilePath;
-    strYoloLabelFilePath = cfgParam_.strYoloLabelFolderPath + strPascalXmlFileName + "." + "txt";           
+    strYoloLabelFilePath = cfgParam_.strYoloLabelFolderPath + strPascalXmlFileName + "." + "txt";
 
     // opening the file pointer
     ofstream writeFile(strYoloLabelFilePath.data());
@@ -90,7 +90,7 @@ void CvtSeg2Bbox::MainLoopBboxYoloLabelConverter()
       int nYmax = atoi(ymax);
 
       // for debugging
-      ROS_INFO("label(%s):tl(%d,%d),br(%d,%d)", label, nXmin, nYmin, nXmax, nYmax);      
+      ROS_INFO("label(%s):tl(%d,%d),br(%d,%d)", label, nXmin, nYmin, nXmax, nYmax);
 
       // for yolo label
       // calculating the label info.
@@ -105,36 +105,37 @@ void CvtSeg2Bbox::MainLoopBboxYoloLabelConverter()
       else if (strLabel == "stroller")
         nName = 3;
       else if (strLabel == "pet")
-        nName = 4;                
+        nName = 4;
       else if (strLabel == "post_office_symbol")
         nName = 5;
       else if (strLabel == "postman_vest")
-        nName = 6;     
+        nName = 6;
       else
         nName = 99;
 
       // calculating the bbox center
       Point ptBboxCenter;
-      ptBboxCenter.x = (int)(nXmin + ((nXmax - nXmin)/(2)));
-      ptBboxCenter.y = (int)(nYmin + ((nYmax - nYmin)/(2)));
+      ptBboxCenter.x = (int)(nXmin + ((nXmax - nXmin) / (2)));
+      ptBboxCenter.y = (int)(nYmin + ((nYmax - nYmin) / (2)));
 
       // calculating the bbox width and height
       int nBboxWidth = (int)(nXmax - nXmin);
       int nBboxHeight = (int)(nYmax - nYmin);
 
       // calculating the normalized yolo bbox data
-      double dPtXCenNorm = ((double)(ptBboxCenter.x)/(double)(nWidth));
-      double dPtYCenNorm = ((double)(ptBboxCenter.y)/(double)(nHeight));
-      double dWidthNorm = ((double)(nBboxWidth)/(double)(nWidth));
-      double dHeightNorm = ((double)(nBboxHeight)/(double)(nHeight));
+      double dPtXCenNorm = ((double)(ptBboxCenter.x) / (double)(nWidth));
+      double dPtYCenNorm = ((double)(ptBboxCenter.y) / (double)(nHeight));
+      double dWidthNorm = ((double)(nBboxWidth) / (double)(nWidth));
+      double dHeightNorm = ((double)(nBboxHeight) / (double)(nHeight));
 
       // for debugging
-      ROS_INFO("(nName,dPtXCenNorm,dPtYCenNorm,dWidthNorm,dHeightNorm):(%d,%lf,%lf,%lf,%lf)", 
-                nName, dPtXCenNorm, dPtYCenNorm, dWidthNorm, dHeightNorm);
+      ROS_INFO("(nName,dPtXCenNorm,dPtYCenNorm,dWidthNorm,dHeightNorm):(%d,%lf,%lf,%lf,%lf)", nName, dPtXCenNorm,
+               dPtYCenNorm, dWidthNorm, dHeightNorm);
 
       // making string result
       string strYoloBboxData;
-      strYoloBboxData = to_string(nName) + " " + to_string(dPtXCenNorm) + " " + to_string(dPtYCenNorm) + " " + to_string(dWidthNorm) + " " + to_string(dHeightNorm) + "\n";
+      strYoloBboxData = to_string(nName) + " " + to_string(dPtXCenNorm) + " " + to_string(dPtYCenNorm) + " " +
+                        to_string(dWidthNorm) + " " + to_string(dHeightNorm) + "\n";
 
       // writing result
       writeFile << strYoloBboxData;
@@ -151,7 +152,7 @@ void CvtSeg2Bbox::MainLoopBboxYoloLabelConverter()
       // rectBbox.y = nYmin;
       // rectBbox.width = nBboxWidth;
       // rectBbox.height = nBboxHeight;
-      
+
       // circle(imgRaw2, ptBboxCenter, 2, colorStat_.scalBlue, 2, 8, 0);
       // rectangle(imgRaw2, rectBbox, colorStat_.scalLime, 2);
       // circle(imgRaw, ptTl, 2, colorStat_.scalBlue, 2, 8, 0);
@@ -170,7 +171,7 @@ void CvtSeg2Bbox::MainLoopBboxYoloLabelConverter()
     // waitKey(0);
 
     // calculating size flag
-    bSizeCalcFlag = GenSizeCalcFlag(k, (int)(vecCvtImgFileNm.size()));    
+    bSizeCalcFlag = GenSizeCalcFlag(k, (int)(vecCvtImgFileNm.size()));
   }
 
   return;
@@ -248,7 +249,7 @@ void CvtSeg2Bbox::MainLoopSemanticSegLabelConverter()
     // saving result
     string strSegLabelImgFilePath;
     strSegLabelImgFilePath = cfgParam_.strSegLabelImgFolderPath + strSegColorImgFileName + "." + cfgParam_.strImgExt;
-    
+
     imwrite(strSegLabelImgFilePath, imgLabel);
 
     // for debugging

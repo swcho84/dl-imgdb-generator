@@ -118,7 +118,7 @@ void CvtKtt2Bbox::MainLoopBboxGeneratorV2()
     if (openFile.is_open())
     {
       ROS_INFO("%s", vecImgFileNm[i].c_str());
-      ROS_INFO("%s", vecTxtFileNm[i].c_str());      
+      ROS_INFO("%s", vecTxtFileNm[i].c_str());
 
       // parsing kitty label into vector-list type
       string strLine;
@@ -175,8 +175,8 @@ void CvtKtt2Bbox::MainLoopBboxGeneratorV2()
       }
 
       Rect rectTempBbox;
-      rectTempBbox.x = (int)((tempKittyVec[0].fBbox[0]) - (tempKittyVec[0].fBbox[2])/(2.0)) ;
-      rectTempBbox.y = (int)((tempKittyVec[0].fBbox[1]) - (tempKittyVec[0].fBbox[3])/(2.0)) ;
+      rectTempBbox.x = (int)((tempKittyVec[0].fBbox[0]) - (tempKittyVec[0].fBbox[2]) / (2.0));
+      rectTempBbox.y = (int)((tempKittyVec[0].fBbox[1]) - (tempKittyVec[0].fBbox[3]) / (2.0));
       rectTempBbox.width = (int)(tempKittyVec[0].fBbox[2]);
       rectTempBbox.height = (int)(tempKittyVec[0].fBbox[3]);
 
@@ -190,17 +190,15 @@ void CvtKtt2Bbox::MainLoopBboxGeneratorV2()
       circle(imgRaw, ptCen, 10, Scalar(0, 0, 255), 2, 8, 0);
 
       // for debugging
-      imshow("imgRaw", imgRaw);      
+      imshow("imgRaw", imgRaw);
 
       // saving parsing result w.r.t line
       vecKittyDB.push_back(tempKittyVec);
       openFile.close();
     }
 
-
     waitKey(0);
-  }  
-
+  }
 
   return;
 }
