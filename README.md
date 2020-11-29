@@ -56,6 +56,7 @@
 ------
 ------
 ## Parameter 설명
+- getenv("HOME") 을 통해 home folder 의 경로는 자동으로 추출하고 있음, 이 경로 이후의 정보를 parameterize 해야 함
 - LabelsCityScapesDB: Cityscape DB 의 semantic colored label 읽어와서 원하는 bbox 로 만들기 위해 필요한 정보
   - contour 로 만들기 위해 필요한 parameter (cannyThresh, morphThresh, polyDPThesh) 설정
   - semantic colored label 중에 원하는 정보만 읽어내기 위해 RGB value 설정 필요 (Cityscape DB 설명 참고)
