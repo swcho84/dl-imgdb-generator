@@ -421,7 +421,7 @@ void CvtKtt2Bbox::MainLoopImgResizer()
     // making the filename  using stringstream, with the numbering rule
     stringstream strStreamImgFileName;
     strStreamImgFileName << cfgParam_.strKttImgFileNmFwd;
-    strStreamImgFileName << std::setfill('0') << std::setw(cfgParam_.nKttImgFileNmDigit) << i;
+    strStreamImgFileName << std::setfill('0') << std::setw(cfgParam_.nKttImgFileNmDigit) << (i);
     strStreamImgFileName << "." + cfgParam_.strKttImgExt;
 
     // making the full file path

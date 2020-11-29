@@ -69,6 +69,9 @@ bool ConfigParam::ReadRosParams()
     strSegColorImgFolderPath = strHomeName + strSegColorImgFoldeNm;
     strCvtPetMixImgFolderPath = strHomeName + strCvtPetMixImgFolderNm;
 
+    ReadRosParam(nh, "/CityScapesDBfolder/yolo_label", strYoloLabelFolderNm);
+    strYoloLabelFolderPath = strHomeName + strYoloLabelFolderNm;
+
     strImgFileNmFwd = strXmlFileNmFwd;
     nImgFileNmDigit = nXmlFileNmDigit;
 

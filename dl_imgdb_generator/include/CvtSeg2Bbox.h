@@ -17,6 +17,7 @@ public:
   void MainLoopBboxGenerator();
   void MainLoopBboxChecker();
   void MainLoopSemanticSegLabelConverter();
+  void MainLoopBboxYoloLabelConverter();
   bool GetSizeCalcFlag();
 
   bool bSizeCalcFlag;

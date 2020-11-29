@@ -15,6 +15,7 @@ public:
 
   void MainLoopImgResizer();
   void MainLoopBboxGenerator();
+  void MainLoopBboxGeneratorV2();
   void MainLoopBboxChecker();
 
   bool GetSizeCalcFlag();

@@ -17,6 +17,166 @@ CvtSeg2Bbox::~CvtSeg2Bbox()
 {
 }
 
+// main loop: bbox label converter (from Pascal VOC xml to YOLO txt)
+void CvtSeg2Bbox::MainLoopBboxYoloLabelConverter()
+{
+  // assigning variables for browsing annotated images recursively
+  vector<String> vecCvtImgFileNm;
+  vector<String> vecXmlLabelFileNm;
+  glob(cfgParam_.strCvtImgFolderPath, vecCvtImgFileNm, true);
+  glob(cfgParam_.strXmlFolderPath + cfgParam_.strXmlType, vecXmlLabelFileNm, true);
+
+  // browsing annotated images recursively
+  for (size_t k = 0; k < vecCvtImgFileNm.size(); k++)
+  {
+    // for debugging
+    ROS_INFO("Processing_xmlCheck(%d,%d)", (int)(k), (int)(vecCvtImgFileNm.size()));
+
+    // assigning the raw image
+    Mat imgRaw = imread(vecCvtImgFileNm[k]);
+    Mat imgRaw2;
+    imgRaw.copyTo(imgRaw2);
+
+    // image width and height info. (h1024, w2048)
+    nHeight = imgRaw.rows;
+    nWidth = imgRaw.cols;
+
+    // for debugging
+    ROS_INFO("[%d]file:%s", (int)(k), vecCvtImgFileNm[k].c_str());
+
+    // loading xml file
+    TiXmlDocument docXml;
+    docXml.LoadFile(vecXmlLabelFileNm[k]);
+    TiXmlElement* root = docXml.FirstChildElement("annotation");
+
+    // spliting the file name and extension
+    char sep = '/';
+    size_t index = vecXmlLabelFileNm[k].rfind(sep, vecXmlLabelFileNm[k].length());
+    string strPascalXmlFileNameWithExtension =
+        vecXmlLabelFileNm[k].substr(index + 1, vecXmlLabelFileNm[k].length() - index);
+    size_t lastIndex = strPascalXmlFileNameWithExtension.find_last_of(".");
+    string strPascalXmlFileName = strPascalXmlFileNameWithExtension.substr(0, lastIndex);
+    string strPascalXmlFileExtension =
+        strPascalXmlFileNameWithExtension.substr(strPascalXmlFileNameWithExtension.find_last_of(".") + 1);
+
+    // assigning the yolo data format
+    string strYoloLabelFilePath;
+    strYoloLabelFilePath = cfgParam_.strYoloLabelFolderPath + strPascalXmlFileName + "." + "txt";
+
+    // opening the file pointer
+    ofstream writeFile(strYoloLabelFilePath.data());
+
+    // parsing bbox data with the label in xml file
+    for (TiXmlElement* obj = root->FirstChildElement("object"); obj != NULL; obj = obj->NextSiblingElement("object"))
+    {
+      TiXmlElement* name = obj->FirstChildElement("name");
+      const char* label = (const char*)(name->GetText());
+
+      TiXmlElement* bndbox = obj->FirstChildElement("bndbox");
+      TiXmlElement* xminElem = bndbox->FirstChildElement("xmin");
+      const char* xmin = (const char*)(xminElem->GetText());
+      int nXmin = atoi(xmin);
+
+      TiXmlElement* yminElem = bndbox->FirstChildElement("ymin");
+      const char* ymin = (const char*)(yminElem->GetText());
+      int nYmin = atoi(ymin);
+
+      TiXmlElement* xmaxElem = bndbox->FirstChildElement("xmax");
+      const char* xmax = (const char*)(xmaxElem->GetText());
+      int nXmax = atoi(xmax);
+
+      TiXmlElement* ymaxElem = bndbox->FirstChildElement("ymax");
+      const char* ymax = (const char*)(ymaxElem->GetText());
+      int nYmax = atoi(ymax);
+
+      // for debugging
+      ROS_INFO("label(%s):tl(%d,%d),br(%d,%d)", label, nXmin, nYmin, nXmax, nYmax);
+
+      // for yolo label
+      // calculating the label info.
+      int nName = 99;
+      string strLabel = label;
+      if (strLabel == "person")
+        nName = 0;
+      else if (strLabel == "four_wheel_vehicle")
+        nName = 1;
+      else if (strLabel == "two_wheel_vehicle")
+        nName = 2;
+      else if (strLabel == "stroller")
+        nName = 3;
+      else if (strLabel == "pet")
+        nName = 4;
+      else if (strLabel == "post_office_symbol")
+        nName = 5;
+      else if (strLabel == "postman_vest")
+        nName = 6;
+      else
+        nName = 99;
+
+      // calculating the bbox center
+      Point ptBboxCenter;
+      ptBboxCenter.x = (int)(nXmin + ((nXmax - nXmin) / (2)));
+      ptBboxCenter.y = (int)(nYmin + ((nYmax - nYmin) / (2)));
+
+      // calculating the bbox width and height
+      int nBboxWidth = (int)(nXmax - nXmin);
+      int nBboxHeight = (int)(nYmax - nYmin);
+
+      // calculating the normalized yolo bbox data
+      double dPtXCenNorm = ((double)(ptBboxCenter.x) / (double)(nWidth));
+      double dPtYCenNorm = ((double)(ptBboxCenter.y) / (double)(nHeight));
+      double dWidthNorm = ((double)(nBboxWidth) / (double)(nWidth));
+      double dHeightNorm = ((double)(nBboxHeight) / (double)(nHeight));
+
+      // for debugging
+      ROS_INFO("(nName,dPtXCenNorm,dPtYCenNorm,dWidthNorm,dHeightNorm):(%d,%lf,%lf,%lf,%lf)", nName, dPtXCenNorm,
+               dPtYCenNorm, dWidthNorm, dHeightNorm);
+
+      // making string result
+      string strYoloBboxData;
+      strYoloBboxData = to_string(nName) + " " + to_string(dPtXCenNorm) + " " + to_string(dPtYCenNorm) + " " +
+                        to_string(dWidthNorm) + " " + to_string(dHeightNorm) + "\n";
+
+      // writing result
+      writeFile << strYoloBboxData;
+
+      // for debugging
+      // Point ptTl, ptBr;
+      // ptTl.x = nXmin;
+      // ptTl.y = nYmin;
+      // ptBr.x = nXmax;
+      // ptBr.y = nYmax;
+
+      // Rect rectBbox;
+      // rectBbox.x = nXmin;
+      // rectBbox.y = nYmin;
+      // rectBbox.width = nBboxWidth;
+      // rectBbox.height = nBboxHeight;
+
+      // circle(imgRaw2, ptBboxCenter, 2, colorStat_.scalBlue, 2, 8, 0);
+      // rectangle(imgRaw2, rectBbox, colorStat_.scalLime, 2);
+      // circle(imgRaw, ptTl, 2, colorStat_.scalBlue, 2, 8, 0);
+      // circle(imgRaw, ptBr, 2, colorStat_.scalLime, 2, 8, 0);
+      // rectangle(imgRaw, ptTl, ptBr, colorStat_.scalRed, 2);
+    }
+
+    // for debugging
+    // imshow("imgRaw", imgRaw);
+    // imshow("imgRaw2", imgRaw2);
+
+    // closing file
+    writeFile.close();
+
+    // pausing and destroying all imshow result
+    // waitKey(0);
+
+    // calculating size flag
+    bSizeCalcFlag = GenSizeCalcFlag(k, (int)(vecCvtImgFileNm.size()));
+  }
+
+  return;
+}
+
 // main loop: seg label converter (from RGB to label)
 void CvtSeg2Bbox::MainLoopSemanticSegLabelConverter()
 {
@@ -89,7 +249,7 @@ void CvtSeg2Bbox::MainLoopSemanticSegLabelConverter()
     // saving result
     string strSegLabelImgFilePath;
     strSegLabelImgFilePath = cfgParam_.strSegLabelImgFolderPath + strSegColorImgFileName + "." + cfgParam_.strImgExt;
-    
+
     imwrite(strSegLabelImgFilePath, imgLabel);
 
     // for debugging
