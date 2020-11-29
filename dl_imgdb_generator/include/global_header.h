@@ -10,6 +10,7 @@
 #include <vector>
 #include <dirent.h>
 #include <fstream>
+#include <random>
 
 // essential header for ROS-OpenCV operation
 #include <ros/ros.h>
@@ -31,6 +32,8 @@
 #define CITYDB_IMGFILE_RESIZER 1
 #define CITYDB_XMLFILE_GENERATOR 2
 #define CITYDB_XMLFILE_CHECKER 3
+#define KARIDB_SEMANTIC_SEGMENTATION_LABEL_CONVERTER 4
+#define ETRIDB_BBOX_DB_YOLO_CONVERTER 5
 
 // for kitty DB
 #define KITDB_IMGFILE_RESIZER 11
@@ -67,5 +70,19 @@ typedef struct
   float fObjLocM[3];
   float fRotAngRad;
 } KittyDB;
+
+typedef struct
+{
+  Point ptPixel;
+  uchar blue;
+  uchar green;
+  uchar red;
+} SelectRGB;
+
+typedef struct
+{
+  int nWidth;
+  int nHeight;
+} ImgSize;
 
 #endif

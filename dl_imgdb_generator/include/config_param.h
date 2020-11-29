@@ -53,6 +53,14 @@ public:
   string strXmlFolderPath;
   string strImgFileNmFwd;
   string strXmlFileNmFwd;
+  string strPetImgFolderNm;
+  string strPetImgFolderPath;
+  string strSegLabelImgFoldeNm;
+  string strSegLabelImgFolderPath;
+  string strSegColorImgFoldeNm;
+  string strSegColorImgFolderPath;
+  string strCvtPetMixImgFolderNm;
+  string strCvtPetMixImgFolderPath;
 
   string strKttPicType;
   string strKttTxtType;
@@ -69,6 +77,15 @@ public:
   string strKttXmlFolderPath;
   string strKttImgFileNmFwd;
   string strKttXmlFileNmFwd;
+
+  string strYoloLabelFolderNm;
+  string strYoloLabelFolderPath;
+
+  bool bPetMix;
+  int nTrialPetMix;
+  float fWidthRatio;
+  float fHeightRatio;
+  float fInnerRatio;
 
   int nKttFeatureCase;
   int nKttImgFileNmDigit;
@@ -93,8 +110,11 @@ public:
   vector<string> vecKttLabels;
   vector<AnnoDB> vecAnnoKttDB;
 
+  vector<AnnoDB> vecAnnoKariDB;
+
   vector<vector<BboxDB>> vecImgBboxDB;
   vector<vector<BboxDB>> vecPolygonBboxDB;
+  vector<vector<BboxDB>> vecPetBboxDB;
 
   AnnoDB vegetation;
   AnnoDB person;
@@ -113,6 +133,16 @@ public:
   AnnoDB kttPedestrian;
   AnnoDB kttPersonSit;
   AnnoDB kttCyclist;
+
+  AnnoDB building;
+  AnnoDB sky;
+  AnnoDB ground;
+  AnnoDB river;
+
+  int nOrderBuilding;
+  int nOrderSky;
+  int nOrderGround;
+  int nOrderRiver;
 
 private:
   bool ReadRosParams();

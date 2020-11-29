@@ -32,6 +32,11 @@ bool ConfigParam::ReadRosParams()
 
     // feature case
     ReadRosParam(nh, "/CityScapesDBConverter/feature", nFeatureCase);
+    ReadRosParam(nh, "/CityScapesDBConverter/use_pet_mixing", bPetMix);
+    ReadRosParam(nh, "/CityScapesDBConverter/trial_pet_mixing", nTrialPetMix);
+    ReadRosParam(nh, "/CityScapesDBConverter/mix_width_ratio", fWidthRatio);
+    ReadRosParam(nh, "/CityScapesDBConverter/mix_height_ratio", fHeightRatio);
+    ReadRosParam(nh, "/CityScapesDBConverter/mix_inner_ratio", fInnerRatio);
 
     // folder name and picture file type
     ReadRosParam(nh, "/CityScapesDBfolder/raw", strRawFolderNm);
@@ -39,6 +44,10 @@ bool ConfigParam::ReadRosParams()
     ReadRosParam(nh, "/CityScapesDBfolder/color_label", strAnnoFolderNm);
     ReadRosParam(nh, "/CityScapesDBfolder/polygon_data", strPolygonFolderNm);
     ReadRosParam(nh, "/CityScapesDBfolder/xml_label", strXmlFolderNm);
+    ReadRosParam(nh, "/CityScapesDBfolder/pet_mix", strPetImgFolderNm);
+    ReadRosParam(nh, "/CityScapesDBfolder/seg_color_img", strSegColorImgFoldeNm);
+    ReadRosParam(nh, "/CityScapesDBfolder/seg_label_img", strSegLabelImgFoldeNm);
+    ReadRosParam(nh, "/CityScapesDBfolder/pet_mix_img", strCvtPetMixImgFolderNm);
     ReadRosParam(nh, "/CityScapesDBfolder/imgfile_type", strPicType);
     ReadRosParam(nh, "/CityScapesDBfolder/polygonfile_type", strPolygonType);
     ReadRosParam(nh, "/CityScapesDBfolder/imgfile_extension", strImgExt);
@@ -55,6 +64,13 @@ bool ConfigParam::ReadRosParams()
     strAnnoFolderPath = strHomeName + strAnnoFolderNm + strPicType;
     strPolygonFolderPath = strHomeName + strPolygonFolderNm + strPolygonType;
     strXmlFolderPath = strHomeName + strXmlFolderNm;
+    strPetImgFolderPath = strHomeName + strPetImgFolderNm;
+    strSegLabelImgFolderPath = strHomeName + strSegLabelImgFoldeNm;
+    strSegColorImgFolderPath = strHomeName + strSegColorImgFoldeNm;
+    strCvtPetMixImgFolderPath = strHomeName + strCvtPetMixImgFolderNm;
+
+    ReadRosParam(nh, "/CityScapesDBfolder/yolo_label", strYoloLabelFolderNm);
+    strYoloLabelFolderPath = strHomeName + strYoloLabelFolderNm;
 
     strImgFileNmFwd = strXmlFileNmFwd;
     nImgFileNmDigit = nXmlFileNmDigit;
@@ -205,6 +221,43 @@ bool ConfigParam::ReadRosParams()
     for (auto i = 0; i < vecAnnoKttDB.size(); i++)
     {
       ROS_INFO("[%d]%s", i, vecAnnoDB[i].strLabel.c_str());
+    }
+    ROS_INFO(" ");
+
+    ReadRosParam(nh, "/LabelKariDB/building/name", building.strLabel);
+    ReadRosParam(nh, "/LabelKariDB/building/order", nOrderBuilding);
+    ReadRosParam(nh, "/LabelKariDB/building/R", building.nRGB[0]);
+    ReadRosParam(nh, "/LabelKariDB/building/G", building.nRGB[1]);
+    ReadRosParam(nh, "/LabelKariDB/building/B", building.nRGB[2]);
+    vecAnnoKariDB.push_back(building);
+
+    ReadRosParam(nh, "/LabelKariDB/sky/name", sky.strLabel);
+    ReadRosParam(nh, "/LabelKariDB/sky/order", nOrderSky);
+    ReadRosParam(nh, "/LabelKariDB/sky/R", sky.nRGB[0]);
+    ReadRosParam(nh, "/LabelKariDB/sky/G", sky.nRGB[1]);
+    ReadRosParam(nh, "/LabelKariDB/sky/B", sky.nRGB[2]);
+    vecAnnoKariDB.push_back(sky);
+
+    ReadRosParam(nh, "/LabelKariDB/ground/name", ground.strLabel);
+    ReadRosParam(nh, "/LabelKariDB/ground/order", nOrderGround);
+    ReadRosParam(nh, "/LabelKariDB/ground/R", ground.nRGB[0]);
+    ReadRosParam(nh, "/LabelKariDB/ground/G", ground.nRGB[1]);
+    ReadRosParam(nh, "/LabelKariDB/ground/B", ground.nRGB[2]);
+    vecAnnoKariDB.push_back(ground);
+
+    ReadRosParam(nh, "/LabelKariDB/river/name", river.strLabel);
+    ReadRosParam(nh, "/LabelKariDB/river/order", nOrderRiver);
+    ReadRosParam(nh, "/LabelKariDB/river/R", river.nRGB[0]);
+    ReadRosParam(nh, "/LabelKariDB/river/G", river.nRGB[1]);
+    ReadRosParam(nh, "/LabelKariDB/river/B", river.nRGB[2]);
+    vecAnnoKariDB.push_back(river);
+
+    // for debugging
+    ROS_INFO("kari:labelSize:%d", (int)(vecAnnoKariDB.size()));
+    for (auto i = 0; i < vecAnnoKariDB.size(); i++)
+    {
+      ROS_INFO("[%d]%s:RGB(%d,%d,%d)", i, vecAnnoKariDB[i].strLabel.c_str(), vecAnnoKariDB[i].nRGB[0],
+               vecAnnoKariDB[i].nRGB[1], vecAnnoKariDB[i].nRGB[2]);
     }
     ROS_INFO(" ");
   }

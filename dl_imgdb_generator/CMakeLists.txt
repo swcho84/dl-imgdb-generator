@@ -27,17 +27,13 @@ find_package(TinyXML REQUIRED)
 find_package(nlohmann_json 3.2.0 REQUIRED)
 find_package(dlib REQUIRED)
 find_package(Boost REQUIRED COMPONENTS system)
-find_package(OpenCV 4 REQUIRED
+find_package(OpenCV 4.2.0 REQUIRED
   COMPONENTS
     opencv_core
     opencv_imgproc
     opencv_imgcodecs
     opencv_highgui
     opencv_videoio
-    opencv_flann
-    opencv_video
-    opencv_calib3d
-    opencv_features2d
   CONFIG
 )
 
@@ -161,6 +157,7 @@ include_directories(
   ${JSON_INCLUDE_DIRS}
   ${TinyXML_INCLUDE_DIRS}
   /usr/include
+  /usr/local/include
 )
 
 link_directories(${BOOST_LIBRARY_DIRS} /usr/local/lib /usr/lib)

@@ -30,7 +30,7 @@ void CvtKtt2Bbox::MainLoopBboxChecker()
   for (size_t k = 0; k < vecCvtImgFileNm.size(); k++)
   {
     // for debugging
-    ROS_INFO("Processing_xmlCheck(%d,%d)", (int)(k), (int)(vecCvtImgFileNm.size()));    
+    ROS_INFO("Processing_xmlCheck(%d,%d)", (int)(k), (int)(vecCvtImgFileNm.size()));
 
     // assigning the raw image
     Mat imgRaw = imread(vecCvtImgFileNm[k]);
@@ -315,18 +315,15 @@ void CvtKtt2Bbox::MainLoopBboxGenerator()
         {
           // applying the selected label
           string strSelectedLabelPolygon;
-          if ((vecKittyDB[i][kk].strLabel == "Pedestrian") ||
-              (vecKittyDB[i][kk].strLabel == "Person_sitting"))
+          if ((vecKittyDB[i][kk].strLabel == "Pedestrian") || (vecKittyDB[i][kk].strLabel == "Person_sitting"))
             strSelectedLabelPolygon = "person";
           else if (vecKittyDB[i][kk].strLabel == "Cyclist")
             strSelectedLabelPolygon = "two_wheel_vehicle";
-          else if ((vecKittyDB[i][kk].strLabel == "Car") ||
-                  (vecKittyDB[i][kk].strLabel == "Van") ||
-                  (vecKittyDB[i][kk].strLabel == "Truck"))
+          else if ((vecKittyDB[i][kk].strLabel == "Car") || (vecKittyDB[i][kk].strLabel == "Van") ||
+                   (vecKittyDB[i][kk].strLabel == "Truck"))
             strSelectedLabelPolygon = "four_wheel_vehicle";
           else
           {
-            
           }
 
           TiXmlElement* pElem5 = new TiXmlElement("object");
@@ -424,7 +421,7 @@ void CvtKtt2Bbox::MainLoopImgResizer()
     // making the filename  using stringstream, with the numbering rule
     stringstream strStreamImgFileName;
     strStreamImgFileName << cfgParam_.strKttImgFileNmFwd;
-    strStreamImgFileName << std::setfill('0') << std::setw(cfgParam_.nKttImgFileNmDigit) << i;
+    strStreamImgFileName << std::setfill('0') << std::setw(cfgParam_.nKttImgFileNmDigit) << (i);
     strStreamImgFileName << "." + cfgParam_.strKttImgExt;
 
     // making the full file path
