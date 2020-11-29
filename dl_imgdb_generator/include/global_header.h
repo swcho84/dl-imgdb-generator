@@ -39,7 +39,6 @@
 #define KITDB_IMGFILE_RESIZER 11
 #define KITDB_XMLFILE_GENERATOR 22
 #define KITDB_XMLFILE_CHECKER 33
-#define KITDB_XMLFILE_GENERATOR_V2 44
 
 using namespace std;
 using namespace ros;

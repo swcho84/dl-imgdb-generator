@@ -90,7 +90,6 @@ LabelKariDB:
 # 11: img file resizer
 # 22: xml file generator
 # 33: xml file checker
-# 44: xml file generator v2
 KittyDBConverter:
   feature: 11
 
@@ -118,7 +117,7 @@ KittyDBfolder:
 # 5: txt file generator from xml file for yolo
 CityScapesDBConverter:
   feature: 5
-  use_pet_mixing: true
+  use_pet_mixing: false
   trial_pet_mixing: 3000
   mix_width_ratio: 0.1
   mix_height_ratio: 0.25
