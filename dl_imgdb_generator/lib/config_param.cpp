@@ -31,6 +31,93 @@ bool ConfigParam::ReadRosParams()
     strHomeName = getenv("HOME");
 
     // feature case
+    ReadRosParam(nh, "/KdarpaDBConverter/feature", nKdarpaFeatureCase);
+    ReadRosParam(nh, "/KdarpaDBConverter/file_name_fwd", strKdarpaImgFileNmFwd);
+    ReadRosParam(nh, "/KdarpaDBConverter/file_name_num_digit", nKdarpaImgFileNmDigit);
+    ReadRosParam(nh, "/KdarpaDBConverter/cvtimg_width", nKdarpaWidthRef);
+    ReadRosParam(nh, "/KdarpaDBConverter/cvtimg_height", nKdarpaHeightRef);
+    nKdarpaXmlFileNmDigit = nKdarpaImgFileNmDigit;
+    strKdarpaXmlFileNmFwd = strKdarpaImgFileNmFwd;
+
+    // folder name and picture file type
+    ReadRosParam(nh, "/KdarpaDBfolder/type", strRawFolderNm);
+    ReadRosParam(nh, "/KdarpaDBfolder/targetSrc", strRawFolderNm);
+    ReadRosParam(nh, "/KdarpaDBfolder/imgSrc", strRawFolderNm);
+    ReadRosParam(nh, "/KdarpaDBfolder/xmlSrc", strRawFolderNm);
+    ReadRosParam(nh, "/KdarpaDBfolder/txtSrc", strRawFolderNm);
+    ReadRosParam(nh, "/KdarpaDBfolder/targetDst", strRawFolderNm);
+    ReadRosParam(nh, "/KdarpaDBfolder/imgDst", strRawFolderNm);
+    ReadRosParam(nh, "/KdarpaDBfolder/xmlDst", strRawFolderNm);
+
+    // folder path, raw and annotated images
+    strKdarpaTarSrcPath = strHomeName + strKdarpaTarSrcNm + strKdarpaType;
+    strKdarpaImgSrcPath = strKdarpaTarSrcPath + strKdarpaImgSrcNm;
+    strKdarpaXmlSrcPath = strKdarpaTarSrcPath + strKdarpaXmlSrcNm;
+    strKdarpaTxtSrcPath = strKdarpaTarSrcPath + strKdarpaTxtSrcNm;
+    strKdarpaTarDstPath = strHomeName + strKdarpaTarDstNm + strKdarpaType;
+    strKdarpaImgDstPath = strKdarpaTarDstPath + strKdarpaImgDstNm;
+    strKdarpaXmlDstPath = strKdarpaTarDstPath + strKdarpaXmlDstNm;
+
+    // label DB, for Kdarpa
+    vecKdarpaLabels.clear();
+    vecKdarpaAnnoDB.clear();
+    ReadRosParam(nh, "/LabelKdarpaDB/dummy", kdarpaDummy.strLabel);
+    kdarpaDummy.nRGB[0] = colorStat_.scalBlack.val[0];
+    kdarpaDummy.nRGB[1] = colorStat_.scalBlack.val[1];    
+    kdarpaDummy.nRGB[2] = colorStat_.scalBlack.val[2];
+    vecKdarpaLabels.push_back(kdarpaDummy.strLabel);
+    vecKdarpaAnnoDB.push_back(kdarpaDummy);    
+
+    ReadRosParam(nh, "/LabelKdarpaDB/dog", kdarpaDog.strLabel);
+    kdarpaDog.nRGB[0] = colorStat_.scalBlue.val[0];
+    kdarpaDog.nRGB[1] = colorStat_.scalBlue.val[1];    
+    kdarpaDog.nRGB[2] = colorStat_.scalBlue.val[2];
+    vecKdarpaLabels.push_back(kdarpaDog.strLabel);
+    vecKdarpaAnnoDB.push_back(kdarpaDog);    
+
+    ReadRosParam(nh, "/LabelKdarpaDB/soldier", kdarpaSoldier.strLabel);
+    kdarpaSoldier.nRGB[0] = colorStat_.scalLime.val[0];
+    kdarpaSoldier.nRGB[1] = colorStat_.scalLime.val[1];    
+    kdarpaSoldier.nRGB[2] = colorStat_.scalLime.val[2];
+    vecKdarpaLabels.push_back(kdarpaSoldier.strLabel);
+    vecKdarpaAnnoDB.push_back(kdarpaSoldier);          
+
+    ReadRosParam(nh, "/LabelKdarpaDB/radiationMark", kdarpaRadiationMark.strLabel);
+    kdarpaRadiationMark.nRGB[0] = colorStat_.scalRed.val[0];
+    kdarpaRadiationMark.nRGB[1] = colorStat_.scalRed.val[1];    
+    kdarpaRadiationMark.nRGB[2] = colorStat_.scalRed.val[2];
+    vecKdarpaLabels.push_back(kdarpaRadiationMark.strLabel);
+    vecKdarpaAnnoDB.push_back(kdarpaRadiationMark);    
+
+    ReadRosParam(nh, "/LabelKdarpaDB/biochemMark", kdarpaBiochemMark.strLabel);
+    kdarpaBiochemMark.nRGB[0] = colorStat_.scalYellow.val[0];
+    kdarpaBiochemMark.nRGB[1] = colorStat_.scalYellow.val[1];    
+    kdarpaBiochemMark.nRGB[2] = colorStat_.scalYellow.val[2];
+    vecKdarpaLabels.push_back(kdarpaBiochemMark.strLabel);
+    vecKdarpaAnnoDB.push_back(kdarpaBiochemMark);    
+
+    ReadRosParam(nh, "/LabelKdarpaDB/exitMark", kdarpaExitMark.strLabel);
+    kdarpaExitMark.nRGB[0] = colorStat_.scalGreen.val[0];
+    kdarpaExitMark.nRGB[1] = colorStat_.scalGreen.val[1];    
+    kdarpaExitMark.nRGB[2] = colorStat_.scalGreen.val[2];
+    vecKdarpaLabels.push_back(kdarpaExitMark.strLabel);
+    vecKdarpaAnnoDB.push_back(kdarpaExitMark);        
+
+    ReadRosParam(nh, "/LabelKdarpaDB/endMark", kdarpaEndMark.strLabel);
+    kdarpaEndMark.nRGB[0] = colorStat_.scalNavy.val[0];
+    kdarpaEndMark.nRGB[1] = colorStat_.scalNavy.val[1];    
+    kdarpaEndMark.nRGB[2] = colorStat_.scalNavy.val[2];
+    vecKdarpaLabels.push_back(kdarpaEndMark.strLabel);
+    vecKdarpaAnnoDB.push_back(kdarpaEndMark);    
+
+    ReadRosParam(nh, "/LabelKdarpaDB/startMark", kdarpaStartMark.strLabel);
+    kdarpaStartMark.nRGB[0] = colorStat_.scalMaroon.val[0];
+    kdarpaStartMark.nRGB[1] = colorStat_.scalMaroon.val[1];    
+    kdarpaStartMark.nRGB[2] = colorStat_.scalMaroon.val[2];
+    vecKdarpaLabels.push_back(kdarpaStartMark.strLabel);
+    vecKdarpaAnnoDB.push_back(kdarpaStartMark);  
+
+    // feature case
     ReadRosParam(nh, "/CityScapesDBConverter/feature", nFeatureCase);
     ReadRosParam(nh, "/CityScapesDBConverter/use_pet_mixing", bPetMix);
     ReadRosParam(nh, "/CityScapesDBConverter/trial_pet_mixing", nTrialPetMix);

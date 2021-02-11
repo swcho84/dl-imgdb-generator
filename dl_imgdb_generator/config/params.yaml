@@ -53,14 +53,6 @@ LabelsCityScapesDB:
     G: 11
     B: 32
 
-LabelsKittyDB:
-  car: "Car"
-  van: "Van"
-  truck: "Truck"
-  pedestrian: "Pedestrian"
-  person_sit: "Person_sitting"
-  cyclist: "Cyclist"
-
 LabelKariDB:
   building:
     name: "building"
@@ -85,7 +77,45 @@ LabelKariDB:
     order: 4
     R: 80
     G: 80
-    B: 0
+    B: 0    
+
+LabelsKittyDB:
+  car: "Car"
+  van: "Van"
+  truck: "Truck"
+  pedestrian: "Pedestrian"
+  person_sit: "Person_sitting"
+  cyclist: "Cyclist"
+
+LabelKdarpaDB:
+  dummy: "none"
+  dog: "dog"
+  soldier: "soldier"
+  radiationMark: "radiation_mark"
+  biochemMark: "biochem_mark"
+  exitMark: "exit_mark"
+  endMark: "end_mark"
+  startMark: "start_mark"
+
+# 11: img file resizer
+# 22: xml file generator
+# 33: xml file checker
+KdarpaDBConverter:
+  feature: 11
+  file_name_fwd: "kdarpa_obj_train_"
+  file_name_num_digit: 6
+  cvtimg_width: 640
+  cvtimg_height: 480    
+
+KdarpaDBfolder:
+  type: "/train"
+  targetSrc: "/Competition_ObjectDetection/done_v1"
+  imgSrc: "/images"
+  xmlSrc: "/annotations"
+  txtSrc: "/labels"
+  targetDst: "/Competition_ObjectDetection/done_v2"
+  imgDst: "/images"
+  xmlDst: "/labels"
 
 # 11: img file resizer
 # 22: xml file generator

@@ -81,11 +81,33 @@ public:
   string strYoloLabelFolderNm;
   string strYoloLabelFolderPath;
 
+  string strKdarpaImgFileNmFwd;
+  string strKdarpaXmlFileNmFwd;
+  string strKdarpaType;
+  string strKdarpaTarSrcNm;
+  string strKdarpaTarSrcPath;
+  string strKdarpaImgSrcNm;
+  string strKdarpaImgSrcPath;
+  string strKdarpaXmlSrcNm;
+  string strKdarpaXmlSrcPath;
+  string strKdarpaTxtSrcNm;
+  string strKdarpaTxtSrcPath;
+  string strKdarpaTarDstNm;
+  string strKdarpaTarDstPath;
+  string strKdarpaImgDstNm;
+  string strKdarpaImgDstPath;
+  string strKdarpaXmlDstNm;
+  string strKdarpaXmlDstPath;
+
   bool bPetMix;
   int nTrialPetMix;
   float fWidthRatio;
   float fHeightRatio;
   float fInnerRatio;
+
+  int nKdarpaFeatureCase;
+  int nKdarpaImgFileNmDigit;
+  int nKdarpaXmlFileNmDigit;
 
   int nKttFeatureCase;
   int nKttImgFileNmDigit;
@@ -101,8 +123,13 @@ public:
 
   int nWidthRef;
   int nHeightRef;
+  int nKdarpaWidthRef;
+  int nKdarpaHeightRef;
   int nKttWidthRef;
   int nKttHeightRef;
+
+  vector<string> vecKdarpaLabels;
+  vector<AnnoDB> vecKdarpaAnnoDB;
 
   vector<string> vecLabels;
   vector<AnnoDB> vecAnnoDB;
@@ -115,6 +142,15 @@ public:
   vector<vector<BboxDB>> vecImgBboxDB;
   vector<vector<BboxDB>> vecPolygonBboxDB;
   vector<vector<BboxDB>> vecPetBboxDB;
+
+  AnnoDB kdarpaDummy;
+  AnnoDB kdarpaDog;
+  AnnoDB kdarpaSoldier;
+  AnnoDB kdarpaRadiationMark;
+  AnnoDB kdarpaBiochemMark;
+  AnnoDB kdarpaExitMark;
+  AnnoDB kdarpaEndMark;
+  AnnoDB kdarpaStartMark;
 
   AnnoDB vegetation;
   AnnoDB person;
@@ -146,6 +182,8 @@ public:
 
 private:
   bool ReadRosParams();
+
+  ColorStatus colorStat_;
 };
 
 #endif  // ROSCV_TEST_CONFIG_PARAM_H
