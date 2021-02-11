@@ -98,6 +98,11 @@ public:
   string strKdarpaImgDstPath;
   string strKdarpaXmlDstNm;
   string strKdarpaXmlDstPath;
+  string strKdarpaPicType;
+  string strKdarpaTxtType;
+  string strKdarpaXmlType;
+  string strKdarpaImgExt;
+  string strKdarpaXmlExt;
 
   bool bPetMix;
   int nTrialPetMix;

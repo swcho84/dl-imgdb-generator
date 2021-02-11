@@ -40,6 +40,11 @@
 #define KITDB_XMLFILE_GENERATOR 22
 #define KITDB_XMLFILE_CHECKER 33
 
+// for kdarpa DB
+#define KDARPADB_IMGFILE_RESIZER 11
+#define KDARPADB_XMLFILE_GENERATOR 22
+#define KDARPADB_XMLFILE_CHECKER 33
+
 using namespace std;
 using namespace ros;
 using namespace cv;
@@ -70,6 +75,13 @@ typedef struct
   float fObjLocM[3];
   float fRotAngRad;
 } KittyDB;
+
+typedef struct
+{
+  string strLabel;
+  int nBbox[4];
+  int nRGB[3];
+} KdarpaDB;
 
 typedef struct
 {

@@ -173,6 +173,10 @@ add_executable(cvt_kitty2bbox_node src/main_CvtKitty2Bbox.cpp lib/CvtKitty2Bbox.
 target_link_libraries(cvt_kitty2bbox_node ${catkin_LIBRARIES} ${OpenCV_LIBRARIES} ${OpenCV_LIBS} ${DLIB_LIBRARIES} ${JSON_LIBS} ${TinyXML_LIBRARIES} ${BOOST_LIBRARY_DIRS} dlib nlohmann_json::nlohmann_json)
 add_dependencies(cvt_kitty2bbox_node ${catkin_EXPORTED_TARGETS})
 
+add_executable(cvt_kdarpa2bbox_node src/main_CvtKdarpa2Bbox.cpp lib/CvtKdarpa2Bbox.cpp include/CvtKdarpa2Bbox.h include/global_header.h lib/config_param.cpp include/config_param.h include/colormat.h)
+target_link_libraries(cvt_kdarpa2bbox_node ${catkin_LIBRARIES} ${OpenCV_LIBRARIES} ${OpenCV_LIBS} ${DLIB_LIBRARIES} ${JSON_LIBS} ${TinyXML_LIBRARIES} ${BOOST_LIBRARY_DIRS} dlib nlohmann_json::nlohmann_json)
+add_dependencies(cvt_kdarpa2bbox_node ${catkin_EXPORTED_TARGETS})
+
 ## Add cmake target dependencies of the library
 ## as an example, code may need to be generated before libraries
 ## either from message generation or dynamic reconfigure

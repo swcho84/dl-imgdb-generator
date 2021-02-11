@@ -6,6 +6,8 @@
         "string_view": "cpp",
         "typeindex": "cpp",
         "typeinfo": "cpp",
-        "iosfwd": "cpp"
+        "iosfwd": "cpp",
+        "sstream": "cpp",
+        "strstream": "cpp"
     }
 }
