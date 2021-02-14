@@ -101,13 +101,13 @@ LabelKdarpaDB:
 # 22: xml file generator
 # 33: xml file checker
 KdarpaDBConverter:
-  feature: 33
+  feature: 22
   imgfile_type: "*.jpg"
   txtfile_type: "*.txt"
   xmlfile_type: "*.xml"
   imgfile_extension: "png"
   xmlfile_extension: "xml"    
-  file_name_fwd: "kdarpa_obj_test_"  # "kdarpa_obj_train_"
+  file_name_fwd: "kdarpa_obj_test_"  # "kdarpa_obj_train_" "kdarpa_obj_test_"
   file_name_num_digit: 6
   cvtimg_width: 640
   cvtimg_height: 480

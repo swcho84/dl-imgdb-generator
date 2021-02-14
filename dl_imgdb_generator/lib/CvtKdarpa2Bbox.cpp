@@ -171,50 +171,59 @@ void CvtKdarpa2Bbox::MainLoopBboxGenerator()
         vecCurrImgXmlInfo[i].nRGB[1] = cfgParam_.kdarpaDog.nRGB[1];
         vecCurrImgXmlInfo[i].nRGB[2] = cfgParam_.kdarpaDog.nRGB[2];
       }
-      else if ((vecCurrImgXmlInfo[i].strLabel == "soldier_linear") || (vecCurrImgXmlInfo[i].strLabel == "soldier_poi") ||
-              (vecCurrImgXmlInfo[i].strLabel == "special_soldier_linear") ||
-              (vecCurrImgXmlInfo[i].strLabel == "special_soldier_poi") ||
-              (vecCurrImgXmlInfo[i].strLabel == "dispatch_soldier_linear") ||
-              (vecCurrImgXmlInfo[i].strLabel == "dispatch_soldier_poi") ||
-              (vecCurrImgXmlInfo[i].strLabel == "female_soldier_linear") ||
-              (vecCurrImgXmlInfo[i].strLabel == "female_soldier_poi") ||
-              (vecCurrImgXmlInfo[i].strLabel == "female_special_soldier_linear") ||
-              (vecCurrImgXmlInfo[i].strLabel == "female_special_soldier_poi"))
+      else if ((vecCurrImgXmlInfo[i].strLabel == "soldier_linear") ||
+               (vecCurrImgXmlInfo[i].strLabel == "soldier_poi") ||
+               (vecCurrImgXmlInfo[i].strLabel == "special_soldier_linear") ||
+               (vecCurrImgXmlInfo[i].strLabel == "special_soldier_poi") ||
+               (vecCurrImgXmlInfo[i].strLabel == "dispatch_soldier_linear") ||
+               (vecCurrImgXmlInfo[i].strLabel == "dispatch_soldier_poi") ||
+               (vecCurrImgXmlInfo[i].strLabel == "female_soldier_linear") ||
+               (vecCurrImgXmlInfo[i].strLabel == "female_soldier_poi") ||
+               (vecCurrImgXmlInfo[i].strLabel == "female_special_soldier_linear") ||
+               (vecCurrImgXmlInfo[i].strLabel == "female_special_soldier_poi"))
       {
         vecCurrImgXmlInfo[i].strLabel = cfgParam_.kdarpaSoldier.strLabel;
         vecCurrImgXmlInfo[i].nRGB[0] = cfgParam_.kdarpaSoldier.nRGB[0];
         vecCurrImgXmlInfo[i].nRGB[1] = cfgParam_.kdarpaSoldier.nRGB[1];
         vecCurrImgXmlInfo[i].nRGB[2] = cfgParam_.kdarpaSoldier.nRGB[2];
       }
-      else if ((vecCurrImgXmlInfo[i].strLabel == "radiation_mark_linear") || (vecCurrImgXmlInfo[i].strLabel == "radiation_mark_poi"))
+      else if ((vecCurrImgXmlInfo[i].strLabel == "radiation_mark_linear") || (vecCurrImgXmlInfo[i].strLabel == "radiati"
+                                                                                                               "on_"
+                                                                                                               "mark_"
+                                                                                                               "poi"))
       {
         vecCurrImgXmlInfo[i].strLabel = cfgParam_.kdarpaRadiationMark.strLabel;
         vecCurrImgXmlInfo[i].nRGB[0] = cfgParam_.kdarpaRadiationMark.nRGB[0];
         vecCurrImgXmlInfo[i].nRGB[1] = cfgParam_.kdarpaRadiationMark.nRGB[1];
         vecCurrImgXmlInfo[i].nRGB[2] = cfgParam_.kdarpaRadiationMark.nRGB[2];
       }
-      else if ((vecCurrImgXmlInfo[i].strLabel == "biochem_mark_linear") || (vecCurrImgXmlInfo[i].strLabel == "biochem_mark_poi"))
+      else if ((vecCurrImgXmlInfo[i].strLabel == "biochem_mark_linear") || (vecCurrImgXmlInfo[i].strLabel == "biochem_"
+                                                                                                             "mark_"
+                                                                                                             "poi"))
       {
         vecCurrImgXmlInfo[i].strLabel = cfgParam_.kdarpaBiochemMark.strLabel;
         vecCurrImgXmlInfo[i].nRGB[0] = cfgParam_.kdarpaBiochemMark.nRGB[0];
         vecCurrImgXmlInfo[i].nRGB[1] = cfgParam_.kdarpaBiochemMark.nRGB[1];
         vecCurrImgXmlInfo[i].nRGB[2] = cfgParam_.kdarpaBiochemMark.nRGB[2];
       }
-      else if ((vecCurrImgXmlInfo[i].strLabel == "exit_mark_linear") || (vecCurrImgXmlInfo[i].strLabel == "exit_mark_poi"))
+      else if ((vecCurrImgXmlInfo[i].strLabel == "exit_mark_linear") || (vecCurrImgXmlInfo[i].strLabel == "exit_mark_"
+                                                                                                          "poi"))
       {
         vecCurrImgXmlInfo[i].strLabel = cfgParam_.kdarpaExitMark.strLabel;
         vecCurrImgXmlInfo[i].nRGB[0] = cfgParam_.kdarpaExitMark.nRGB[0];
         vecCurrImgXmlInfo[i].nRGB[1] = cfgParam_.kdarpaExitMark.nRGB[1];
         vecCurrImgXmlInfo[i].nRGB[2] = cfgParam_.kdarpaExitMark.nRGB[2];
       }
-      else if ((vecCurrImgXmlInfo[i].strLabel == "end_mark_linear") || (vecCurrImgXmlInfo[i].strLabel == "end_mark_project"))
+      else if ((vecCurrImgXmlInfo[i].strLabel == "end_mark_linear") || (vecCurrImgXmlInfo[i].strLabel == "end_mark_"
+                                                                                                         "project"))
       {
         vecCurrImgXmlInfo[i].strLabel = cfgParam_.kdarpaEndMark.strLabel;
         vecCurrImgXmlInfo[i].nRGB[0] = cfgParam_.kdarpaEndMark.nRGB[0];
         vecCurrImgXmlInfo[i].nRGB[1] = cfgParam_.kdarpaEndMark.nRGB[1];
         vecCurrImgXmlInfo[i].nRGB[2] = cfgParam_.kdarpaEndMark.nRGB[2];
       }
-      else if ((vecCurrImgXmlInfo[i].strLabel == "start_mark_linear") || (vecCurrImgXmlInfo[i].strLabel == "start_mark_project"))
+      else if ((vecCurrImgXmlInfo[i].strLabel == "start_mark_linear") || (vecCurrImgXmlInfo[i].strLabel == "start_mark_"
+                                                                                                           "project"))
       {
         vecCurrImgXmlInfo[i].strLabel = cfgParam_.kdarpaStartMark.strLabel;
         vecCurrImgXmlInfo[i].nRGB[0] = cfgParam_.kdarpaStartMark.nRGB[0];
@@ -229,8 +238,9 @@ void CvtKdarpa2Bbox::MainLoopBboxGenerator()
         vecCurrImgXmlInfo[i].nRGB[2] = cfgParam_.kdarpaDummy.nRGB[2];
       }
 
-      ROS_INFO("dst::label(%s):tl(%d,%d),br(%d,%d)", vecCurrImgXmlInfo[i].strLabel.c_str(), vecCurrImgXmlInfo[i].nBbox[0],
-              vecCurrImgXmlInfo[i].nBbox[1], vecCurrImgXmlInfo[i].nBbox[2], vecCurrImgXmlInfo[i].nBbox[3]);
+      ROS_INFO("dst::label(%s):tl(%d,%d),br(%d,%d)", vecCurrImgXmlInfo[i].strLabel.c_str(),
+               vecCurrImgXmlInfo[i].nBbox[0], vecCurrImgXmlInfo[i].nBbox[1], vecCurrImgXmlInfo[i].nBbox[2],
+               vecCurrImgXmlInfo[i].nBbox[3]);
       rectangle(imgResized, Point(vecCurrImgXmlInfo[i].nBbox[0], vecCurrImgXmlInfo[i].nBbox[1]),
                 Point(vecCurrImgXmlInfo[i].nBbox[2], vecCurrImgXmlInfo[i].nBbox[3]),
                 Scalar(vecCurrImgXmlInfo[i].nRGB[2], vecCurrImgXmlInfo[i].nRGB[1], vecCurrImgXmlInfo[i].nRGB[0]), 2);
@@ -241,6 +251,11 @@ void CvtKdarpa2Bbox::MainLoopBboxGenerator()
     strStreamFileName << cfgParam_.strKdarpaXmlFileNmFwd;
     strStreamFileName << std::setfill('0') << std::setw(cfgParam_.nKdarpaXmlFileNmDigit) << k;
     strStreamFileName << "." + cfgParam_.strKdarpaXmlExt;
+
+    stringstream strStreamFileVisualName;
+    strStreamFileVisualName << cfgParam_.strKdarpaXmlFileNmFwd;
+    strStreamFileVisualName << std::setfill('0') << std::setw(cfgParam_.nKdarpaXmlFileNmDigit) << k;
+    strStreamFileVisualName << "." + cfgParam_.strKdarpaImgExt;
 
     // making the full file path
     string strXmlFile;
@@ -260,7 +275,7 @@ void CvtKdarpa2Bbox::MainLoopBboxGenerator()
     pRoot->LinkEndChild(pElem0);
 
     TiXmlElement* pElem1 = new TiXmlElement("filename");
-    TiXmlText* txtElem1 = new TiXmlText(strStreamFileName.str());
+    TiXmlText* txtElem1 = new TiXmlText(strStreamFileVisualName.str());
     pElem1->LinkEndChild(txtElem1);
     pRoot->LinkEndChild(pElem1);
 
@@ -354,10 +369,10 @@ void CvtKdarpa2Bbox::MainLoopBboxGenerator()
     docXmlDst.SaveFile(strXmlFile);
 
     // calculating size flag
-    bSizeCalcFlag = GenSizeCalcFlag(k, (int)(vecImgFileNm.size()));    
+    bSizeCalcFlag = GenSizeCalcFlag(k, (int)(vecImgFileNm.size()));
 
     // for debugging
-    // imshow("imgResized", imgResized);            
+    // imshow("imgResized", imgResized);
 
     // pausing and destroying all imshow result
     // waitKey(0);
