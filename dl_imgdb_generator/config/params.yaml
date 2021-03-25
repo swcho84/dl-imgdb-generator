@@ -101,24 +101,24 @@ LabelKdarpaDB:
 # 22: xml file generator
 # 33: xml file checker
 KdarpaDBConverter:
-  feature: 22
+  feature: 11
   imgfile_type: "*.jpg"
   txtfile_type: "*.txt"
   xmlfile_type: "*.xml"
   imgfile_extension: "png"
   xmlfile_extension: "xml"    
-  file_name_fwd: "kdarpa_obj_test_"  # "kdarpa_obj_train_" "kdarpa_obj_test_"
+  file_name_fwd: "kdarpa_obj_tryout_"  # "kdarpa_obj_train_" "kdarpa_obj_test_"
   file_name_num_digit: 6
   cvtimg_width: 640
   cvtimg_height: 480
 
 KdarpaDBfolder:
   type: "/test"
-  targetSrc: "/Competition_ObjectDetection/done_v1"
+  targetSrc: "/Competition_ObjectDetection/during_tryout/src" #"/Competition_ObjectDetection/before_tryout/done_v1"
   imgSrc: "/images"
   xmlSrc: "/annotations"
   txtSrc: "/labels"
-  targetDst: "/Competition_ObjectDetection/done_v2"
+  targetDst: "/Competition_ObjectDetection/during_tryout/dst" #"/Competition_ObjectDetection/before_tryout/done_v2"
   imgDst: "/images"
   xmlDst: "/labels"
 
@@ -151,7 +151,7 @@ KittyDBfolder:
 # 4: seg label converter (from RGB to label)
 # 5: txt file generator from xml file for yolo
 CityScapesDBConverter:
-  feature: 5
+  feature: 1
   use_pet_mixing: false
   trial_pet_mixing: 3000
   mix_width_ratio: 0.1
@@ -159,8 +159,8 @@ CityScapesDBConverter:
   mix_inner_ratio: 0.1
 
 CityScapesDBfolder:
-  raw: "/v4.0_additional_data/img/"              # "/v4.0_additional_data/img/" "/v4.0_5000ea/img/"  "/cityscapeDBsmall/raw/"   /Research_DB/raw_etriDB/v1.0/ETRI_cityscapeDB/raw/
-  cvtimg: "/v4.0_additional_data/img/"            # "/v4.0_additional_data/img/" "/v4.0_5000ea/img/"  "/cityscapeDBsmall/cvtimg/"    /Research_DB/raw_etriDB/v1.0/ETRI_cityscapeDB/raw_vga/
+  raw: "/FHD_src/"              # "/v4.0_additional_data/img/" "/v4.0_5000ea/img/"  "/cityscapeDBsmall/raw/"   /Research_DB/raw_etriDB/v1.0/ETRI_cityscapeDB/raw/
+  cvtimg: "/VGA_dst/"            # "/v4.0_additional_data/img/" "/v4.0_5000ea/img/"  "/cityscapeDBsmall/cvtimg/"    /Research_DB/raw_etriDB/v1.0/ETRI_cityscapeDB/raw_vga/
   color_label: "/Research_DB/raw_etriDB/v1.0/ETRI_cityscapeDB/color_label/"   #"/cityscapeDBsmall/color_label/"
   polygon_data: "/Research_DB/raw_etriDB/v1.0/ETRI_cityscapeDB/polygon/"      #"/cityscapeDBsmall/polygon/"
   xml_label: "/v4.0_additional_data/label/"       # "/v4.0_additional_data/label/" "/v4.0_5000ea/label/"  "/cityscapeDBsmall/xml_label/"
@@ -174,7 +174,7 @@ CityScapesDBfolder:
   xmlfile_type: "*.xml"
   imgfile_extension: "png"
   xmlfile_extension: "xml"
-  file_name_fwd: "etridb_ca_"
+  file_name_fwd: "kari_db_test_"
   file_name_num_digit: 6
   cvtimg_width: 640
   cvtimg_height: 480  
