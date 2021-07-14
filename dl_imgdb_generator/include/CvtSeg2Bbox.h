@@ -1,5 +1,5 @@
-#ifndef ROSCV_TEST_CVTSEG2BBOX_H
-#define ROSCV_TEST_CVTSEG2BBOX_H
+#ifndef DL_IMBDB_GENERATOR_CVTSEG2BBOX_H
+#define DL_IMBDB_GENERATOR_CVTSEG2BBOX_H
 
 #include "global_header.h"
 #include "config_param.h"

@@ -40,6 +40,11 @@
 #define KITDB_XMLFILE_GENERATOR 22
 #define KITDB_XMLFILE_CHECKER 33
 
+// for opensource DB
+#define OPENDB_IMGFILE_RESIZER 111
+#define OPENDB_XMLFILE_GENERATOR 222
+#define OPENDB_XMLFILE_CHECKER 333
+
 using namespace std;
 using namespace ros;
 using namespace cv;

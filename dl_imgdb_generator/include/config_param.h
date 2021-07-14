@@ -1,5 +1,5 @@
-#ifndef ROSCV_TEST_CONFIG_PARAM_H
-#define ROSCV_TEST_CONFIG_PARAM_H
+#ifndef DL_IMBDB_GENERATOR_CONFIG_PARAM_H
+#define DL_IMBDB_GENERATOR_CONFIG_PARAM_H
 
 #include "global_header.h"
 
@@ -90,6 +90,8 @@ public:
   int nKttFeatureCase;
   int nKttImgFileNmDigit;
   int nKttXmlFileNmDigit;
+
+  int nOpDbFeatureCase;
 
   int nFeatureCase;
   int nImgFileNmDigit;

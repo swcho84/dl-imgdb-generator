@@ -1,5 +1,5 @@
-#ifndef ROSCV_TEST_COLORMAT_H
-#define ROSCV_TEST_COLORMAT_H
+#ifndef DL_IMBDB_GENERATOR_COLORMAT_H
+#define DL_IMBDB_GENERATOR_COLORMAT_H
 
 // using vector type data
 #include <iostream>
