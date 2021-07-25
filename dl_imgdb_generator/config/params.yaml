@@ -1,7 +1,74 @@
 LabelOpenDb2Bbox:
-  drone: "drone"
-  bird: "bird"
+  label:
+    noObj:
+      name: "no_obj"
+      order: 0
+      color: "gray"  
+    drone:
+      name: "drone"
+      order: 1
+      color: "red"
+    dji_phantom:
+      name: "dji_phantom"
+      order: 2
+      color: "lime"        
+    dji_mavic:
+      name: "dji_mavic"
+      order: 3
+      color: "blue"        
+    dji_m600:
+      name: "dji_m600"
+      order: 4
+      color: "yellow"        
+    dji_matrice:
+      name: "dji_matrice"
+      order: 5
+      color: "cyan"        
+    dji_inspire:
+      name: "dji_inspire"
+      order: 6
+      color: "green"        
+    ar_drone:
+      name: "ar_drone"
+      order: 7
+      color: "magneta"        
+    dji_agras:
+      name: "dji_agras"
+      order: 8
+      color: "silver"
+    bird:
+      name: "bird"
+      order: 9
+      color: "white"
 
+# 11: img file resizer
+# 22: xml file generator
+# 33: xml file checker
+OpenDb2BboxConverter:
+  feature: 333
+
+# default: (label) (x_left_top) (y_left_top) (width) (height)
+# case1: normalized w.r.t the image size, (label) (x_cen) (y_cen) (width) (height)
+# case2: (label) (ptYLt) (ptXLt) (ptYRb) (ptXRb)
+OpenDb2BboxFolder:
+  src:
+    image: "/anti_drone_db/opendb/drone_view_db/arranged/drone_bird_db/img_folders/00_01_52_to_00_01_58/"
+    txt_label: "/anti_drone_db/opendb/drone_view_db/arranged/drone_bird_db/label_folders/00_01_52_to_00_01_58/"
+    txt_calc_case: 0
+    imgfile_type: "*.png"
+    txtfile_type: "*.txt"
+    txtfile_ext: "txt"
+    imgfile_ext: "png"
+  res:  
+    image: "/anti_drone_db/done/imgs/"
+    xml_label: "/anti_drone_db/done/labels/"
+    cvtimg_width: 640
+    cvtimg_height: 480
+    xmlfile_ext: "xml"
+    imgfile_ext: "png"
+    file_name_fwd: "kari_antidrone_db_"
+    file_name_num_digit: 6
+    offset_num: 0
 
 LabelsKittyDB:
   car: "Car"

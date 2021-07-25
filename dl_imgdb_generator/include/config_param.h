@@ -36,6 +36,7 @@ public:
   void ReadRosParam(ros::NodeHandle& nh, const string& key, string& val);
 
   string strHomeName;
+
   string strPicType;
   string strPolygonType;
   string strXmlType;
@@ -45,22 +46,44 @@ public:
   string strCvtImgFolderPath;
   string strRawFolderNm;
   string strRawFolderPath;
+
   string strAnnoFolderNm;
   string strAnnoFolderPath;
+
   string strPolygonFolderNm;
   string strPolygonFolderPath;
+
   string strXmlFolderNm;
   string strXmlFolderPath;
   string strImgFileNmFwd;
   string strXmlFileNmFwd;
-  string strPetImgFolderNm;
-  string strPetImgFolderPath;
+
   string strSegLabelImgFoldeNm;
   string strSegLabelImgFolderPath;
   string strSegColorImgFoldeNm;
   string strSegColorImgFolderPath;
+
+  string strPetImgFolderNm;
+  string strPetImgFolderPath;
   string strCvtPetMixImgFolderNm;
   string strCvtPetMixImgFolderPath;
+
+  string strOpenDBImgSrcFolderNm;
+  string strOpenDBImgSrcFolderPath;
+  string strOpenDBLabelSrcFolderNm;
+  string strOpenDBLabelSrcFolderPath;
+  string strOpenDBImgResFolderNm;
+  string strOpenDBImgResFolderPath;
+  string strOpenDBLabelResFolderNm;
+  string strOpenDBLabelResFolderPath;
+  string strOpenDBImgResFileNmFwd;
+  string strOpenDBLabelResFileNmFwd;
+  string strOpenDBImgSrcExt;
+  string strOpenDBTxtSrcExt;
+  string strOpenDBImgSrcType;
+  string strOpenDBTxtSrcType;
+  string strOpenDBImgResExt;
+  string strOpenDBXmlResExt;
 
   string strKttPicType;
   string strKttTxtType;
@@ -92,6 +115,12 @@ public:
   int nKttXmlFileNmDigit;
 
   int nOpDbFeatureCase;
+  int nOpDbTxtCalcCase;
+  int nOpDbWidthRef;
+  int nOpDbHeightRef;
+  int nOpDbImgResFileNmDigit;
+  int nOpDbXmlResFileNmDigit;
+  int nOpDbOffsetNum;
 
   int nFeatureCase;
   int nImgFileNmDigit;
@@ -106,6 +135,8 @@ public:
   int nKttWidthRef;
   int nKttHeightRef;
 
+  vector<OpenDroneDBlabel> vecOpDbLabels;
+
   vector<string> vecLabels;
   vector<AnnoDB> vecAnnoDB;
 
@@ -117,6 +148,8 @@ public:
   vector<vector<BboxDB>> vecImgBboxDB;
   vector<vector<BboxDB>> vecPolygonBboxDB;
   vector<vector<BboxDB>> vecPetBboxDB;
+
+  OpenDroneDBlabel opDbLabel;
 
   AnnoDB vegetation;
   AnnoDB person;

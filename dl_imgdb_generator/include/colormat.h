@@ -16,6 +16,7 @@
 using namespace std;
 using namespace cv;
 
+enum ColorInfo { BLUE, LIME, RED, YELLOW, CYAN, MAGNETA, SILVER, NAVY, GREEN, MAROON, OLIVE, TEAL, PURPLE, GRAY, BLACK, WHITE } ;
 class ColorStatus
 {
 public:
@@ -107,10 +108,125 @@ public:
                        (int)(mBGRcolor_comb.at<float>(14, 2)));
     scalWhite = Scalar((int)(mBGRcolor_comb.at<float>(15, 0)), (int)(mBGRcolor_comb.at<float>(15, 1)),
                        (int)(mBGRcolor_comb.at<float>(15, 2)));
+
+    MapColorStatus();                       
   }
   ~ColorStatus()
   {
   }
+  void MapColorStatus()
+  {
+    mapColorInfo["blue"] = ColorInfo::BLUE;
+    mapColorInfo["lime"] = ColorInfo::LIME;
+    mapColorInfo["red"] = ColorInfo::RED;
+    mapColorInfo["yellow"] = ColorInfo::YELLOW;
+    mapColorInfo["cyan"] = ColorInfo::CYAN;
+    mapColorInfo["magneta"] = ColorInfo::MAGNETA;
+    mapColorInfo["silver"] = ColorInfo::SILVER;
+    mapColorInfo["navy"] = ColorInfo::NAVY;   
+    mapColorInfo["green"] = ColorInfo::GREEN;   
+    mapColorInfo["maroon"] = ColorInfo::MAROON;   
+    mapColorInfo["olive"] = ColorInfo::OLIVE;   
+    mapColorInfo["teal"] = ColorInfo::TEAL;   
+    mapColorInfo["purple"] = ColorInfo::PURPLE; 
+    mapColorInfo["gray"] = ColorInfo::GRAY; 
+    mapColorInfo["black"] = ColorInfo::BLACK;     
+    mapColorInfo["white"] = ColorInfo::WHITE;                                   
+  }
+  Scalar GetColorStatus(int nColorInfo)
+  {
+    Scalar res;
+    switch (nColorInfo)
+    {
+      case BLUE: 
+      {
+        res = scalBlue;
+        break;
+      }
+      case LIME: 
+      {
+        res = scalLime;        
+        break;
+      }
+      case RED: 
+      {
+        res = scalRed;
+        break;
+      }
+      case YELLOW: 
+      {
+        res = scalYellow;        
+        break;
+      }   
+      case CYAN: 
+      {
+        res = scalCyan;        
+        break;
+      }   
+      case MAGNETA: 
+      {
+        res = scalMagneta;
+        break;
+      }
+      case SILVER: 
+      {
+        res = scalSilver;
+        break;
+      }
+      case NAVY: 
+      {
+        res = scalNavy;
+        break;
+      }  
+      case GREEN: 
+      {
+        res = scalGreen;
+        break;
+      }  
+      case MAROON: 
+      {
+        res = scalMaroon;
+        break;
+      }  
+      case OLIVE: 
+      {
+        res = scalOlive;
+        break;
+      }  
+      case TEAL: 
+      {
+        res = scalTeal;
+        break;
+      }   
+      case PURPLE: 
+      {
+        res = scalPurple;
+        break;
+      }  
+      case GRAY: 
+      {
+        res = scalGray;
+        break;
+      }  
+      case BLACK: 
+      {
+        res = scalBlack;
+        break;
+      }
+      case WHITE: 
+      {
+        res = scalWhite;
+        break;
+      }
+      default: 
+      {
+        res = scalWhite;
+        break;
+      }
+    }
+    return res;
+  }
+
 
   // color combinations, BGR
   Mat mBGRcolor_comb;
@@ -132,6 +248,8 @@ public:
   Scalar scalGray;
   Scalar scalBlack;
   Scalar scalWhite;
+
+  map<std::string, ColorInfo> mapColorInfo;
 };
 
 #endif

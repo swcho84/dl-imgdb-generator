@@ -26,7 +26,10 @@ private:
   ConfigParam cfgParam_;
   ColorStatus colorStat_;
 
+  vector<vector<OpenDroneDB>> vecOpDrDBs;
+
   bool GenSizeCalcFlag(int nSize, int nTotal);
+  BboxStdInfo CalcBboxInfoXmlType(OpenDroneDB opDrDB, int nTypeFlag, Size szImgSrc, Size szImgRes);
 
   int nHeight;
   int nWidth;

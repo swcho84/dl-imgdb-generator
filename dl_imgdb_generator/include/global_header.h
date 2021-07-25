@@ -54,6 +54,31 @@ using json = nlohmann::json;
 
 typedef struct
 {
+  int nPtXLt;
+  int nPtYLt;
+  int nPtXRb;
+  int nPtYRb;
+  int nBboxWidth;
+  int nBboxHeight;
+} BboxStdInfo;
+
+typedef struct
+{
+  string strLabel;
+  int nLabel;
+  string strColor;
+} OpenDroneDBlabel;
+
+typedef struct
+{
+  OpenDroneDBlabel droneLabel;
+  int nLabel;
+  float fBboxSrc[4];
+  BboxStdInfo bboxStdInfo;
+} OpenDroneDB;
+
+typedef struct
+{
   string strLabel;
   int nRGB[3];
 } AnnoDB;
