@@ -104,6 +104,8 @@ public:
   int nKttWidthRef;
   int nKttHeightRef;
 
+  int nOffsetNumRef;
+
   vector<string> vecLabels;
   vector<AnnoDB> vecAnnoDB;
 

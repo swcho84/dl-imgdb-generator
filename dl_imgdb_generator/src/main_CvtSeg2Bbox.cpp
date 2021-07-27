@@ -72,6 +72,12 @@ int main(int argc, char** argv)
         seg2Bbox.MainLoopBboxYoloLabelConverter();
         break;
       }
+      case ETRIDB_BBOX_DB_XML_CONVERTER:
+      {
+        ROS_INFO("Feature: bbox label converter for etriDB (from YOLO to Pascal VOC xml");
+        seg2Bbox.MainLoopXmlBboxGenerator();
+        break;
+      }
       default:
       {
         ROS_INFO("Please check your parameter..");
