@@ -1,4 +1,4 @@
-#include "CvtSeg2Bbox.h"
+#include "CvtOpenDb2Bbox.h"
 
 using namespace std;
 using namespace ros;
@@ -18,7 +18,7 @@ void SigIntHandler(int param)
 int main(int argc, char** argv)
 {
   // Set up ROS.
-  init(argc, argv, "convert_cityscapes_segDB_to_bboxDB");
+  init(argc, argv, "convert_specified_openDB_to_bboxDB");
   NodeHandle nh("");
 
   // reading ros params
@@ -30,8 +30,8 @@ int main(int argc, char** argv)
   }
 
   // converting annotated segmentation DB to bboxs with SIGINT handler
-  ROS_INFO("DB generator using cityscapeDB");
-  CvtSeg2Bbox seg2Bbox(cfg);
+  ROS_INFO("DB generator using specified openDB");
+  CvtOpenDb2Bbox opDb2Bbox(cfg);
   signal(SIGINT, SigIntHandler);
 
   // Tell ROS how fast to run this node.
@@ -40,42 +40,24 @@ int main(int argc, char** argv)
   // Main loop.
   while (ok())
   {
-    switch (cfg.nFeatureCase)
+    switch (cfg.nOpDbFeatureCase)
     {
-      case CITYDB_IMGFILE_RESIZER:  // img file resizer
+      case OPENDB_IMGFILE_RESIZER:  // img file resizer
       {
         ROS_INFO("Feature: img file resizer");
-        seg2Bbox.MainLoopImgResizer();
+        opDb2Bbox.MainLoopImgResizer();
         break;
       }
-      case CITYDB_XMLFILE_GENERATOR:  // xml file generator
+      case OPENDB_XMLFILE_GENERATOR:  // xml file generator
       {
         ROS_INFO("Feature: xml file generator");
-        seg2Bbox.MainLoopBboxGenerator();
+        opDb2Bbox.MainLoopBboxGenerator();
         break;
       }
-      case CITYDB_XMLFILE_CHECKER:  // xml file checker
+      case OPENDB_XMLFILE_CHECKER:  // xml file checker
       {
         ROS_INFO("Feature: xml file checker");
-        seg2Bbox.MainLoopBboxChecker();
-        break;
-      }
-      case KARIDB_SEMANTIC_SEGMENTATION_LABEL_CONVERTER:
-      {
-        ROS_INFO("Feature: semantic segmentation label converter for kariDB");
-        seg2Bbox.MainLoopSemanticSegLabelConverter();
-        break;
-      }
-      case ETRIDB_BBOX_DB_YOLO_CONVERTER:
-      {
-        ROS_INFO("Feature: bbox label converter for etriDB (from Pascal VOC xml to YOLO");
-        seg2Bbox.MainLoopBboxYoloLabelConverter();
-        break;
-      }
-      case ETRIDB_BBOX_DB_XML_CONVERTER:
-      {
-        ROS_INFO("Feature: bbox label converter for etriDB (from YOLO to Pascal VOC xml");
-        seg2Bbox.MainLoopXmlBboxGenerator();
+        opDb2Bbox.MainLoopBboxChecker();
         break;
       }
       default:
@@ -86,15 +68,15 @@ int main(int argc, char** argv)
     }
 
     // breaking loop
-    if (seg2Bbox.GetSizeCalcFlag())
+    if (opDb2Bbox.GetSizeCalcFlag())
       break;
 
     spinOnce();
     loopRate.sleep();
   }
 
-  seg2Bbox.~CvtSeg2Bbox();
-  ROS_INFO("Work Done: convert_cityscapes_segDB_to_bboxDB");
+  opDb2Bbox.~CvtOpenDb2Bbox();
+  ROS_INFO("Work Done: convert_specified_openDB_to_bboxDB");
 
   return 0;
 }  // end main()

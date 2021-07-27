@@ -1,3 +1,133 @@
+LabelOpenDb2Bbox:
+  label:
+    noObj:
+      name: "no_obj"
+      order: 0
+      color: "gray"  
+    drone:
+      name: "drone"
+      order: 1
+      color: "red"
+    dji_phantom:
+      name: "dji_phantom"
+      order: 2
+      color: "lime"        
+    dji_mavic:
+      name: "dji_mavic"
+      order: 3
+      color: "blue"        
+    dji_m600:
+      name: "dji_m600"
+      order: 4
+      color: "yellow"        
+    dji_matrice:
+      name: "dji_matrice"
+      order: 5
+      color: "cyan"        
+    dji_inspire:
+      name: "dji_inspire"
+      order: 6
+      color: "green"        
+    ar_drone:
+      name: "ar_drone"
+      order: 7
+      color: "magneta"        
+    dji_agras:
+      name: "dji_agras"
+      order: 8
+      color: "silver"
+    bird:
+      name: "bird"
+      order: 9
+      color: "white"
+
+# 11: img file resizer
+# 22: xml file generator
+# 33: xml file checker
+OpenDb2BboxConverter:
+  feature: 111
+
+# default: (label) (x_left_top) (y_left_top) (width) (height)
+# case1: normalized w.r.t the image size, (label) (x_cen) (y_cen) (width) (height)
+# case2: (label) (ptYLt) (ptXLt) (ptYRb) (ptXRb)
+# case3: normalized w.r.t the image size, (label) (ptXLt) (ptYLt) (width) (height)
+OpenDb2BboxFolder: 
+  src:
+    image: "/" # "/anti_drone_db/opendb/drone_view_db/arranged/Fixed_wing_drone_detection_DB/imgs/" # "/anti_drone_db/opendb/drone_view_db/arranged/drone_plane_db/imgs/planes/" # "/anti_drone_db/opendb/drone_view_db/arranged/drone_dji_phantom_small_db/img_folders/" # "/anti_drone_db/opendb/drone_view_db/arranged/drone_largeimgs_db/img_folders/" # "/anti_drone_db/opendb/drone_view_db/arranged/drone_image_label/img_folders/" # "/anti_drone_db/opendb/drone_view_db/arranged/drone_dji_phantom_small_db/img_folders/" # "/anti_drone_db/opendb/drone_view_db/arranged/drone_bird_db/img_folders/"
+    txt_label: "/" # "/anti_drone_db/opendb/drone_view_db/arranged/drone_plane_db/labels/planes/" # "/anti_drone_db/opendb/drone_view_db/arranged/drone_dji_phantom_small_db/label_folders/" # "/anti_drone_db/opendb/drone_view_db/arranged/drone_image_label/label_folders/" # "/anti_drone_db/opendb/drone_view_db/arranged/drone_dji_phantom_small_db/label_folders/" # "/anti_drone_db/opendb/drone_view_db/arranged/drone_bird_db/label_folders/"
+    txt_calc_case: 2
+    imgfile_type: "/*.jpg" # "/*.jpg" # "/*.png"
+    txtfile_type: "/*.txt"
+    txtfile_ext: "txt"
+    imgfile_ext: "png" # "jpg" # "png"
+  res:
+    image: "/" # "/anti_drone_db/done6/imgs/" # "/anti_drone_db/done5/imgs/" # "/anti_drone_db/done4/imgs/" # "/anti_drone_db/done3/imgs/" # "/anti_drone_db/done2/imgs/" # "/anti_drone_db/done/imgs/"
+    xml_label: "/" # "/anti_drone_db/done6/labels/" # "/anti_drone_db/done5/labels/" # "/anti_drone_db/done4/labels/" # "/anti_drone_db/done3/labels/" # "/anti_drone_db/done2/labels/" # "/anti_drone_db/done/labels/"
+    cvtimg_width: 640
+    cvtimg_height: 480
+    xmlfile_ext: "xml"
+    imgfile_ext: "png"
+    file_name_fwd: "kari_antidrone_db_"
+    file_name_num_digit: 6
+    offset_num: 220844 # 123047 # 88446 # 85782 # 83567
+
+LabelsKittyDB:
+  car: "Car"
+  van: "Van"
+  truck: "Truck"
+  pedestrian: "Pedestrian"
+  person_sit: "Person_sitting"
+  cyclist: "Cyclist"
+
+LabelKariDB:
+  building:
+    name: "building"
+    order: 1
+    R: 80
+    G: 0
+    B: 0
+  sky:
+    name: "sky"
+    order: 2
+    R: 0
+    G: 0
+    B: 80
+  ground:
+    name: "ground"
+    order: 3
+    R: 0
+    G: 80
+    B: 0
+  river:
+    name: "river"
+    order: 4
+    R: 80
+    G: 80
+    B: 0
+
+# 11: img file resizer
+# 22: xml file generator
+# 33: xml file checker
+KittyDBConverter:
+  feature: 11
+
+#"/Research_DB/workdone_etriDB/v1.0/img/"
+#"/Research_DB/workdone_etriDB/v1.0/label/"
+KittyDBfolder:
+  image: "/LandingPadImgs/before_converted/" #"/kittyDBsmall/image/"  "/Research_DB/raw_etriDB/v1.0/ETRI_kittyDB/image/"
+  label: "/jumper_only_data/labels/" #"/kittyDBsmall/label/"
+  cvtimg: "/LandingPadImgs/after_converted/" #"/kittyDBsmall/cvtimg/"
+  xml_label: "/jumper_only_data/xml_labels/" #"/kittyDBsmall/xml_label/"
+  imgfile_type: "*.jpg"
+  txtfile_type: "*.txt"
+  xmlfile_type: "*.xml"
+  imgfile_extension: "png"
+  xmlfile_extension: "xml"  
+  file_name_fwd: "kaist_antidrone_db_"
+  file_name_num_digit: 6
+  cvtimg_width: 640
+  cvtimg_height: 480
+
 LabelsCityScapesDB:
   cannyThresh: 100
   morphThresh: 5
@@ -51,45 +181,40 @@ LabelsCityScapesDB:
     name: "bicycle"    
     R: 119
     G: 11
-    B: 32
+    B: 32  
 
-LabelsKittyDB:
-  car: "Car"
-  van: "Van"
-  truck: "Truck"
-  pedestrian: "Pedestrian"
-  person_sit: "Person_sitting"
-  cyclist: "Cyclist"
-
-KittyDBfolder:
-  image: "/kittyDBsmall/image/"
-  label: "/kittyDBsmall/label/"
-  cvtimg: "/kittyDBsmall/cvtimage/"
-  xml_label: "/kittyDBsmall/xml_label/"
-  imgfile_type: "*.png"
-  txtfile_type: "*.txt"
-  xmlfile_type: "*.xml"
-  imgfile_extension: "png"
-  xmlfile_extension: "xml"  
-  file_name_fwd: "etridb_ca_"
-  file_name_num_digit: 6
-
-# 1: xml file generator
-# 2: xml file checker
+# 1: img file resizer
+# 2: xml file generator
+# 3: xml file checker
+# 4: seg label converter (from RGB to label)
+# 5: txt file generator from xml file to yolo
+# 6: txt file generator from yolo file to xml
 CityScapesDBConverter:
-  feature: 2
+  feature: 3
+  use_pet_mixing: false
+  trial_pet_mixing: 3000
+  mix_width_ratio: 0.1
+  mix_height_ratio: 0.25
+  mix_inner_ratio: 0.1
 
 CityScapesDBfolder:
-  raw: "/cityscapeDBsmall/raw/"
-  rawDB: "/cityscapeDBsmall/rawDB/"  
-  color_label: "/cityscapeDBsmall/color_label/"
-  polygon_data: "/cityscapeDBsmall/polygon/"
-  xml_label: "/cityscapeDBsmall/xml_label/"
+  raw: "/v4.0_additional_data/img/"              # "/v4.0_additional_data/img/" "/v4.0_5000ea/img/"  "/cityscapeDBsmall/raw/"   /Research_DB/raw_etriDB/v1.0/ETRI_cityscapeDB/raw/
+  cvtimg: "/MoraiImgLabelDataHandler/img/" # "/v4.0_additional_data/img/"            # "/v4.0_additional_data/img/" "/v4.0_5000ea/img/"  "/cityscapeDBsmall/cvtimg/"    /Research_DB/raw_etriDB/v1.0/ETRI_cityscapeDB/raw_vga/
+  color_label: "/Research_DB/raw_etriDB/v1.0/ETRI_cityscapeDB/color_label/"   #"/cityscapeDBsmall/color_label/"
+  polygon_data: "/Research_DB/raw_etriDB/v1.0/ETRI_cityscapeDB/polygon/"      #"/cityscapeDBsmall/polygon/"
+  xml_label: "/MoraiImgLabelDataHandler/label/" # "/v4.0_additional_data/label/"       # "/v4.0_additional_data/label/" "/v4.0_5000ea/label/"  "/cityscapeDBsmall/xml_label/"
+  pet_mix: "/Research_DB/raw_etriDB/v1.0/ETRI_cityscapeDB/pet_db/"            # pet imgs
+  seg_color_img: "/label_img/rgb_label/"                                      # /path/to/seg/color/img
+  seg_label_img: "/label_img/seg_label/"                                      # /path/to/seg/label/img
+  pet_mix_img: "/Research_DB/raw_etriDB/v1.0/ETRI_cityscapeDB/raw_pet_vga/"
+  yolo_label: "/MoraiImgLabelDataHandler/yolo_label/" # "/v4.0_additional_data/yolo_label/"
   imgfile_type: "*.png"
   polygonfile_type: "*.json"
   xmlfile_type: "*.xml"
+  imgfile_extension: "png"
   xmlfile_extension: "xml"
   file_name_fwd: "etridb_ca_"
   file_name_num_digit: 6
-
-       
+  cvtimg_width: 640
+  cvtimg_height: 480
+  file_name_offset_number: 9958

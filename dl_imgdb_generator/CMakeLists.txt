@@ -26,20 +26,14 @@ find_package(catkin REQUIRED COMPONENTS
 find_package(TinyXML REQUIRED)
 find_package(nlohmann_json 3.2.0 REQUIRED)
 find_package(dlib REQUIRED)
-find_package(Boost REQUIRED COMPONENTS system)
-find_package(OpenCV 4.2 REQUIRED
+find_package(Boost REQUIRED COMPONENTS system filesystem)
+find_package(OpenCV 4.2.0 REQUIRED
   COMPONENTS
     opencv_core
     opencv_imgproc
     opencv_imgcodecs
     opencv_highgui
     opencv_videoio
-    opencv_flann
-    opencv_tracking
-    opencv_video
-    opencv_xphoto
-    opencv_calib3d
-    opencv_features2d
   CONFIG
 )
 
@@ -163,6 +157,7 @@ include_directories(
   ${JSON_INCLUDE_DIRS}
   ${TinyXML_INCLUDE_DIRS}
   /usr/include
+  /usr/local/include
 )
 
 link_directories(${BOOST_LIBRARY_DIRS} /usr/local/lib /usr/lib)
@@ -177,6 +172,10 @@ add_dependencies(cvt_seg2bbox_node ${catkin_EXPORTED_TARGETS})
 add_executable(cvt_kitty2bbox_node src/main_CvtKitty2Bbox.cpp lib/CvtKitty2Bbox.cpp include/CvtKitty2Bbox.h include/global_header.h lib/config_param.cpp include/config_param.h include/colormat.h)
 target_link_libraries(cvt_kitty2bbox_node ${catkin_LIBRARIES} ${OpenCV_LIBRARIES} ${OpenCV_LIBS} ${DLIB_LIBRARIES} ${JSON_LIBS} ${TinyXML_LIBRARIES} ${BOOST_LIBRARY_DIRS} dlib nlohmann_json::nlohmann_json)
 add_dependencies(cvt_kitty2bbox_node ${catkin_EXPORTED_TARGETS})
+
+add_executable(cvt_opendb2bbox_node src/main_CvtOpenDb2Bbox.cpp lib/CvtOpenDb2Bbox.cpp include/CvtOpenDb2Bbox.h include/global_header.h lib/config_param.cpp include/config_param.h include/colormat.h)
+target_link_libraries(cvt_opendb2bbox_node ${catkin_LIBRARIES} ${OpenCV_LIBRARIES} ${OpenCV_LIBS} ${DLIB_LIBRARIES} ${JSON_LIBS} ${TinyXML_LIBRARIES} ${BOOST_LIBRARY_DIRS} dlib nlohmann_json::nlohmann_json)
+add_dependencies(cvt_opendb2bbox_node ${catkin_EXPORTED_TARGETS})
 
 ## Add cmake target dependencies of the library
 ## as an example, code may need to be generated before libraries

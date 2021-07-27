@@ -1,5 +1,5 @@
-#ifndef ROSCV_TEST_CONFIG_PARAM_H
-#define ROSCV_TEST_CONFIG_PARAM_H
+#ifndef DL_IMBDB_GENERATOR_CONFIG_PARAM_H
+#define DL_IMBDB_GENERATOR_CONFIG_PARAM_H
 
 #include "global_header.h"
 
@@ -36,21 +36,54 @@ public:
   void ReadRosParam(ros::NodeHandle& nh, const string& key, string& val);
 
   string strHomeName;
+
   string strPicType;
   string strPolygonType;
   string strXmlType;
+  string strImgExt;
   string strXmlExt;
-  string strRawDbFolderNm;
-  string strRawDbFolderPath;
+  string strCvtImgFolderNm;
+  string strCvtImgFolderPath;
   string strRawFolderNm;
   string strRawFolderPath;
+
   string strAnnoFolderNm;
   string strAnnoFolderPath;
+
   string strPolygonFolderNm;
   string strPolygonFolderPath;
+
   string strXmlFolderNm;
   string strXmlFolderPath;
+  string strImgFileNmFwd;
   string strXmlFileNmFwd;
+
+  string strSegLabelImgFoldeNm;
+  string strSegLabelImgFolderPath;
+  string strSegColorImgFoldeNm;
+  string strSegColorImgFolderPath;
+
+  string strPetImgFolderNm;
+  string strPetImgFolderPath;
+  string strCvtPetMixImgFolderNm;
+  string strCvtPetMixImgFolderPath;
+
+  string strOpenDBImgSrcFolderNm;
+  string strOpenDBImgSrcFolderPath;
+  string strOpenDBLabelSrcFolderNm;
+  string strOpenDBLabelSrcFolderPath;
+  string strOpenDBImgResFolderNm;
+  string strOpenDBImgResFolderPath;
+  string strOpenDBLabelResFolderNm;
+  string strOpenDBLabelResFolderPath;
+  string strOpenDBImgResFileNmFwd;
+  string strOpenDBLabelResFileNmFwd;
+  string strOpenDBImgSrcExt;
+  string strOpenDBTxtSrcExt;
+  string strOpenDBImgSrcType;
+  string strOpenDBTxtSrcType;
+  string strOpenDBImgResExt;
+  string strOpenDBXmlResExt;
 
   string strKttPicType;
   string strKttTxtType;
@@ -66,25 +99,62 @@ public:
   string strKttXmlFolderNm;
   string strKttXmlFolderPath;
   string strKttImgFileNmFwd;
-  string strKttXmlFileNmFwd;  
+  string strKttXmlFileNmFwd;
 
-  int nKttImgFileNmDigit;  
-  int nKttXmlFileNmDigit;  
+  string strYoloLabelFolderNm;
+  string strYoloLabelFolderPath;
+
+  bool bPetMix;
+  int nTrialPetMix;
+  float fWidthRatio;
+  float fHeightRatio;
+  float fInnerRatio;
+
+  int nKttFeatureCase;
+  int nKttImgFileNmDigit;
+  int nKttXmlFileNmDigit;
+
+  int nOpDbFeatureCase;
+  int nOpDbTxtCalcCase;
+  int nOpDbWidthRef;
+  int nOpDbHeightRef;
+  int nOpDbImgResFileNmDigit;
+  int nOpDbXmlResFileNmDigit;
+  int nOpDbOffsetNum;
 
   int nFeatureCase;
+  int nImgFileNmDigit;
   int nXmlFileNmDigit;
+
   int nCannyThresh;
   int nMorphThresh;
   int nPolyDPThesh;
 
+  int nWidthRef;
+  int nHeightRef;
+  int nKttWidthRef;
+  int nKttHeightRef;
+
+  vector<string> vecStrOpenDBImgSrcFolderPath;
+  vector<string> vecStrOpenDBLabelSrcFolderPath;
+
+  vector<OpenDroneDBlabel> vecOpDbLabels;
+
+  int nOffsetNumRef;
+
   vector<string> vecLabels;
   vector<AnnoDB> vecAnnoDB;
 
-  vector<string> vecKttLabels;  
-  vector<AnnoDB> vecAnnoKttDB;  
-  
+  vector<string> vecKttLabels;
+  vector<AnnoDB> vecAnnoKttDB;
+
+  vector<AnnoDB> vecAnnoKariDB;
+
   vector<vector<BboxDB>> vecImgBboxDB;
-  vector<vector<BboxDB>> vecPolygonBboxDB;  
+  vector<vector<BboxDB>> vecPolygonBboxDB;
+  vector<vector<BboxDB>> vecPetBboxDB;
+
+  OpenDroneDBlabel opDbLabel;
 
   AnnoDB vegetation;
   AnnoDB person;
@@ -104,9 +174,18 @@ public:
   AnnoDB kttPersonSit;
   AnnoDB kttCyclist;
 
+  AnnoDB building;
+  AnnoDB sky;
+  AnnoDB ground;
+  AnnoDB river;
+
+  int nOrderBuilding;
+  int nOrderSky;
+  int nOrderGround;
+  int nOrderRiver;
+
 private:
   bool ReadRosParams();
-
 };
 
 #endif  // ROSCV_TEST_CONFIG_PARAM_H
