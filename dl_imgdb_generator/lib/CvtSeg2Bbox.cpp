@@ -549,7 +549,8 @@ void CvtSeg2Bbox::MainLoopBboxChecker()
     Mat imgRaw = imread(vecCvtImgFileNm[k]);
 
     // for debugging
-    ROS_INFO("[%d]file:%s", (int)(k), vecCvtImgFileNm[k].c_str());
+    ROS_INFO("[%d]imgfile:%s", (int)(k), vecCvtImgFileNm[k].c_str());
+    ROS_INFO("[%d]xmlfile:%s", (int)(k), vecXmlLabelFileNm[k].c_str());
 
     // loading xml file
     TiXmlDocument docXml;

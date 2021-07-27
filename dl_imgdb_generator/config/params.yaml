@@ -53,16 +53,16 @@ OpenDb2BboxConverter:
 # case3: normalized w.r.t the image size, (label) (ptXLt) (ptYLt) (width) (height)
 OpenDb2BboxFolder: 
   src:
-    image: "/anti_drone_db/opendb/drone_view_db/unarranged/usc_drone_dji_phantom_15229/" # "/anti_drone_db/opendb/drone_view_db/arranged/Fixed_wing_drone_detection_DB/imgs/" # "/anti_drone_db/opendb/drone_view_db/arranged/drone_plane_db/imgs/planes/" # "/anti_drone_db/opendb/drone_view_db/arranged/drone_dji_phantom_small_db/img_folders/" # "/anti_drone_db/opendb/drone_view_db/arranged/drone_largeimgs_db/img_folders/" # "/anti_drone_db/opendb/drone_view_db/arranged/drone_image_label/img_folders/" # "/anti_drone_db/opendb/drone_view_db/arranged/drone_dji_phantom_small_db/img_folders/" # "/anti_drone_db/opendb/drone_view_db/arranged/drone_bird_db/img_folders/"
-    txt_label: "/anti_drone_db/opendb/drone_view_db/arranged/Fixed_wing_drone_detection_DB/labels/" # "/anti_drone_db/opendb/drone_view_db/arranged/drone_plane_db/labels/planes/" # "/anti_drone_db/opendb/drone_view_db/arranged/drone_dji_phantom_small_db/label_folders/" # "/anti_drone_db/opendb/drone_view_db/arranged/drone_image_label/label_folders/" # "/anti_drone_db/opendb/drone_view_db/arranged/drone_dji_phantom_small_db/label_folders/" # "/anti_drone_db/opendb/drone_view_db/arranged/drone_bird_db/label_folders/"
+    image: "/" # "/anti_drone_db/opendb/drone_view_db/arranged/Fixed_wing_drone_detection_DB/imgs/" # "/anti_drone_db/opendb/drone_view_db/arranged/drone_plane_db/imgs/planes/" # "/anti_drone_db/opendb/drone_view_db/arranged/drone_dji_phantom_small_db/img_folders/" # "/anti_drone_db/opendb/drone_view_db/arranged/drone_largeimgs_db/img_folders/" # "/anti_drone_db/opendb/drone_view_db/arranged/drone_image_label/img_folders/" # "/anti_drone_db/opendb/drone_view_db/arranged/drone_dji_phantom_small_db/img_folders/" # "/anti_drone_db/opendb/drone_view_db/arranged/drone_bird_db/img_folders/"
+    txt_label: "/" # "/anti_drone_db/opendb/drone_view_db/arranged/drone_plane_db/labels/planes/" # "/anti_drone_db/opendb/drone_view_db/arranged/drone_dji_phantom_small_db/label_folders/" # "/anti_drone_db/opendb/drone_view_db/arranged/drone_image_label/label_folders/" # "/anti_drone_db/opendb/drone_view_db/arranged/drone_dji_phantom_small_db/label_folders/" # "/anti_drone_db/opendb/drone_view_db/arranged/drone_bird_db/label_folders/"
     txt_calc_case: 2
     imgfile_type: "/*.jpg" # "/*.jpg" # "/*.png"
     txtfile_type: "/*.txt"
     txtfile_ext: "txt"
     imgfile_ext: "png" # "jpg" # "png"
   res:
-    image: "/anti_drone_db/done_unarraged_db_part/needlabel_dji_phantom/" # "/anti_drone_db/done6/imgs/" # "/anti_drone_db/done5/imgs/" # "/anti_drone_db/done4/imgs/" # "/anti_drone_db/done3/imgs/" # "/anti_drone_db/done2/imgs/" # "/anti_drone_db/done/imgs/"
-    xml_label: "/anti_drone_db/done7/labels/" # "/anti_drone_db/done6/labels/" # "/anti_drone_db/done5/labels/" # "/anti_drone_db/done4/labels/" # "/anti_drone_db/done3/labels/" # "/anti_drone_db/done2/labels/" # "/anti_drone_db/done/labels/"
+    image: "/" # "/anti_drone_db/done6/imgs/" # "/anti_drone_db/done5/imgs/" # "/anti_drone_db/done4/imgs/" # "/anti_drone_db/done3/imgs/" # "/anti_drone_db/done2/imgs/" # "/anti_drone_db/done/imgs/"
+    xml_label: "/" # "/anti_drone_db/done6/labels/" # "/anti_drone_db/done5/labels/" # "/anti_drone_db/done4/labels/" # "/anti_drone_db/done3/labels/" # "/anti_drone_db/done2/labels/" # "/anti_drone_db/done/labels/"
     cvtimg_width: 640
     cvtimg_height: 480
     xmlfile_ext: "xml"
