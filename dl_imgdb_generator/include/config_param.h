@@ -135,6 +135,9 @@ public:
   int nKttWidthRef;
   int nKttHeightRef;
 
+  vector<string> vecStrOpenDBImgSrcFolderPath;
+  vector<string> vecStrOpenDBLabelSrcFolderPath;
+
   vector<OpenDroneDBlabel> vecOpDbLabels;
 
   vector<string> vecLabels;

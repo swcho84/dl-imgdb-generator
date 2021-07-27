@@ -11,6 +11,7 @@
 #include <dirent.h>
 #include <fstream>
 #include <random>
+#include <iterator>
 
 // essential header for ROS-OpenCV operation
 #include <ros/ros.h>
@@ -27,6 +28,7 @@
 
 // for using boost tokenizer
 #include <boost/tokenizer.hpp>
+#include <boost/filesystem.hpp>
 
 // for cityscape DB
 #define CITYDB_IMGFILE_RESIZER 1

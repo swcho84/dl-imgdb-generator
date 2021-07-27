@@ -2,6 +2,7 @@
 
 using namespace std;
 using namespace ros;
+using namespace boost::filesystem;
 
 ConfigParam::ConfigParam()
 {
@@ -54,8 +55,30 @@ bool ConfigParam::ReadRosParams()
     strOpenDBLabelResFileNmFwd = strOpenDBImgResFileNmFwd;
 
     // folder path, raw and annotated images
-    strOpenDBImgSrcFolderPath = strHomeName + strOpenDBImgSrcFolderNm + strOpenDBImgSrcType;
-    strOpenDBLabelSrcFolderPath = strHomeName + strOpenDBLabelSrcFolderNm + strOpenDBTxtSrcType;
+    strOpenDBImgSrcFolderPath = strHomeName + strOpenDBImgSrcFolderNm;
+    for (directory_iterator end, dir(strOpenDBImgSrcFolderPath); dir != end; dir++) 
+    {
+      const boost::filesystem::path &thisPath = dir->path();
+      string strTempPath = thisPath.c_str() + strOpenDBImgSrcType;
+      vecStrOpenDBImgSrcFolderPath.push_back(strTempPath);
+    }
+
+    strOpenDBLabelSrcFolderPath = strHomeName + strOpenDBLabelSrcFolderNm;
+    for (directory_iterator end, dir(strOpenDBLabelSrcFolderPath); dir != end; dir++) 
+    {
+      const boost::filesystem::path &thisPath = dir->path();
+      string strTempPath = thisPath.c_str() + strOpenDBTxtSrcType;
+      vecStrOpenDBLabelSrcFolderPath.push_back(strTempPath);
+    }
+
+    std::sort(vecStrOpenDBImgSrcFolderPath.begin(), vecStrOpenDBImgSrcFolderPath.end() );    
+    std::sort(vecStrOpenDBLabelSrcFolderPath.begin(), vecStrOpenDBLabelSrcFolderPath.end() );
+
+    for (auto i = 0; i < vecStrOpenDBLabelSrcFolderPath.size(); i++)
+    {
+      ROS_INFO("%s", vecStrOpenDBLabelSrcFolderPath[i].c_str());
+    }
+
     strOpenDBImgResFolderPath = strHomeName + strOpenDBImgResFolderNm;
     strOpenDBLabelResFolderPath = strHomeName + strOpenDBLabelResFolderNm;
 
