@@ -57,7 +57,8 @@ bool ConfigParam::ReadRosParams()
     ReadRosParam(nh, "/CityScapesDBfolder/file_name_num_digit", nXmlFileNmDigit);
     ReadRosParam(nh, "/CityScapesDBfolder/cvtimg_width", nWidthRef);
     ReadRosParam(nh, "/CityScapesDBfolder/cvtimg_height", nHeightRef);
-
+    ReadRosParam(nh, "/CityScapesDBfolder/file_name_offset_number", nOffsetNumRef);
+    
     // folder path, raw and annotated images
     strRawFolderPath = strHomeName + strRawFolderNm + strPicType;
     strCvtImgFolderPath = strHomeName + strCvtImgFolderNm;
