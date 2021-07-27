@@ -1,57 +1,75 @@
-LabelsCityScapesDB:
-  cannyThresh: 100
-  morphThresh: 5
-  polyDPThesh: 3
-  vegetation:
-    name: "vegetation"
-    R: 107
-    G: 142
-    B: 35
-  person:
-    name: "person"
-    R: 220
-    G: 20
-    B: 60
-  rider:
-    name: "rider"    
-    R: 255
-    G: 0
-    B: 0
-  car:
-    name: "car"    
-    R: 0
-    G: 0
-    B: 142
-  truck:
-    name: "truck"    
-    R: 0
-    G: 0
-    B: 70
-  bus:
-    name: "bus"    
-    R: 0
-    G: 60
-    B: 100
-  caravan:
-    name: "caravan"    
-    R: 0
-    G: 0
-    B: 90
-  trailer:
-    name: "trailer"    
-    R: 0
-    G: 0
-    B: 110
-  motorcycle:
-    name: "motorcycle"    
-    R: 0
-    G: 0
-    B: 230
-  bicycle:
-    name: "bicycle"    
-    R: 119
-    G: 11
-    B: 32
+LabelOpenDb2Bbox:
+  label:
+    noObj:
+      name: "no_obj"
+      order: 0
+      color: "gray"  
+    drone:
+      name: "drone"
+      order: 1
+      color: "red"
+    dji_phantom:
+      name: "dji_phantom"
+      order: 2
+      color: "lime"        
+    dji_mavic:
+      name: "dji_mavic"
+      order: 3
+      color: "blue"        
+    dji_m600:
+      name: "dji_m600"
+      order: 4
+      color: "yellow"        
+    dji_matrice:
+      name: "dji_matrice"
+      order: 5
+      color: "cyan"        
+    dji_inspire:
+      name: "dji_inspire"
+      order: 6
+      color: "green"        
+    ar_drone:
+      name: "ar_drone"
+      order: 7
+      color: "magneta"        
+    dji_agras:
+      name: "dji_agras"
+      order: 8
+      color: "silver"
+    bird:
+      name: "bird"
+      order: 9
+      color: "white"
+
+# 11: img file resizer
+# 22: xml file generator
+# 33: xml file checker
+OpenDb2BboxConverter:
+  feature: 111
+
+# default: (label) (x_left_top) (y_left_top) (width) (height)
+# case1: normalized w.r.t the image size, (label) (x_cen) (y_cen) (width) (height)
+# case2: (label) (ptYLt) (ptXLt) (ptYRb) (ptXRb)
+# case3: normalized w.r.t the image size, (label) (ptXLt) (ptYLt) (width) (height)
+OpenDb2BboxFolder: 
+  src:
+    image: "/anti_drone_db/opendb/drone_view_db/unarranged/usc_drone_dji_phantom_15229/" # "/anti_drone_db/opendb/drone_view_db/arranged/Fixed_wing_drone_detection_DB/imgs/" # "/anti_drone_db/opendb/drone_view_db/arranged/drone_plane_db/imgs/planes/" # "/anti_drone_db/opendb/drone_view_db/arranged/drone_dji_phantom_small_db/img_folders/" # "/anti_drone_db/opendb/drone_view_db/arranged/drone_largeimgs_db/img_folders/" # "/anti_drone_db/opendb/drone_view_db/arranged/drone_image_label/img_folders/" # "/anti_drone_db/opendb/drone_view_db/arranged/drone_dji_phantom_small_db/img_folders/" # "/anti_drone_db/opendb/drone_view_db/arranged/drone_bird_db/img_folders/"
+    txt_label: "/anti_drone_db/opendb/drone_view_db/arranged/Fixed_wing_drone_detection_DB/labels/" # "/anti_drone_db/opendb/drone_view_db/arranged/drone_plane_db/labels/planes/" # "/anti_drone_db/opendb/drone_view_db/arranged/drone_dji_phantom_small_db/label_folders/" # "/anti_drone_db/opendb/drone_view_db/arranged/drone_image_label/label_folders/" # "/anti_drone_db/opendb/drone_view_db/arranged/drone_dji_phantom_small_db/label_folders/" # "/anti_drone_db/opendb/drone_view_db/arranged/drone_bird_db/label_folders/"
+    txt_calc_case: 2
+    imgfile_type: "/*.jpg" # "/*.jpg" # "/*.png"
+    txtfile_type: "/*.txt"
+    txtfile_ext: "txt"
+    imgfile_ext: "png" # "jpg" # "png"
+  res:
+    image: "/anti_drone_db/done_unarraged_db_part/needlabel_dji_phantom/" # "/anti_drone_db/done6/imgs/" # "/anti_drone_db/done5/imgs/" # "/anti_drone_db/done4/imgs/" # "/anti_drone_db/done3/imgs/" # "/anti_drone_db/done2/imgs/" # "/anti_drone_db/done/imgs/"
+    xml_label: "/anti_drone_db/done7/labels/" # "/anti_drone_db/done6/labels/" # "/anti_drone_db/done5/labels/" # "/anti_drone_db/done4/labels/" # "/anti_drone_db/done3/labels/" # "/anti_drone_db/done2/labels/" # "/anti_drone_db/done/labels/"
+    cvtimg_width: 640
+    cvtimg_height: 480
+    xmlfile_ext: "xml"
+    imgfile_ext: "png"
+    file_name_fwd: "kari_antidrone_db_"
+    file_name_num_digit: 6
+    offset_num: 220844 # 123047 # 88446 # 85782 # 83567
 
 LabelsKittyDB:
   car: "Car"
@@ -109,6 +127,61 @@ KittyDBfolder:
   file_name_num_digit: 6
   cvtimg_width: 640
   cvtimg_height: 480
+
+LabelsCityScapesDB:
+  cannyThresh: 100
+  morphThresh: 5
+  polyDPThesh: 3
+  vegetation:
+    name: "vegetation"
+    R: 107
+    G: 142
+    B: 35
+  person:
+    name: "person"
+    R: 220
+    G: 20
+    B: 60
+  rider:
+    name: "rider"    
+    R: 255
+    G: 0
+    B: 0
+  car:
+    name: "car"    
+    R: 0
+    G: 0
+    B: 142
+  truck:
+    name: "truck"    
+    R: 0
+    G: 0
+    B: 70
+  bus:
+    name: "bus"    
+    R: 0
+    G: 60
+    B: 100
+  caravan:
+    name: "caravan"    
+    R: 0
+    G: 0
+    B: 90
+  trailer:
+    name: "trailer"    
+    R: 0
+    G: 0
+    B: 110
+  motorcycle:
+    name: "motorcycle"    
+    R: 0
+    G: 0
+    B: 230
+  bicycle:
+    name: "bicycle"    
+    R: 119
+    G: 11
+    B: 32  
 
 # 1: img file resizer
 # 2: xml file generator

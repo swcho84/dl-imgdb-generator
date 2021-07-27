@@ -2,6 +2,7 @@
 
 using namespace std;
 using namespace ros;
+using namespace boost::filesystem;
 
 ConfigParam::ConfigParam()
 {
@@ -29,6 +30,57 @@ bool ConfigParam::ReadRosParams()
 
     // general information
     strHomeName = getenv("HOME");
+
+    // open-source DB case
+    ReadRosParam(nh, "/OpenDb2BboxConverter/feature", nOpDbFeatureCase);
+
+    // folder name and picture file type
+    ReadRosParam(nh, "/OpenDb2BboxFolder/src/image", strOpenDBImgSrcFolderNm);
+    ReadRosParam(nh, "/OpenDb2BboxFolder/src/txt_label", strOpenDBLabelSrcFolderNm);
+    ReadRosParam(nh, "/OpenDb2BboxFolder/src/txt_calc_case", nOpDbTxtCalcCase);
+    ReadRosParam(nh, "/OpenDb2BboxFolder/src/txtfile_ext", strOpenDBTxtSrcExt);
+    ReadRosParam(nh, "/OpenDb2BboxFolder/src/imgfile_ext", strOpenDBImgSrcExt);
+    ReadRosParam(nh, "/OpenDb2BboxFolder/src/imgfile_type", strOpenDBImgSrcType);
+    ReadRosParam(nh, "/OpenDb2BboxFolder/src/txtfile_type", strOpenDBTxtSrcType);
+    ReadRosParam(nh, "/OpenDb2BboxFolder/res/image", strOpenDBImgResFolderNm);
+    ReadRosParam(nh, "/OpenDb2BboxFolder/res/xml_label", strOpenDBLabelResFolderNm);
+    ReadRosParam(nh, "/OpenDb2BboxFolder/res/cvtimg_width", nOpDbWidthRef);
+    ReadRosParam(nh, "/OpenDb2BboxFolder/res/cvtimg_height", nOpDbHeightRef);
+    ReadRosParam(nh, "/OpenDb2BboxFolder/res/xmlfile_ext", strOpenDBXmlResExt);
+    ReadRosParam(nh, "/OpenDb2BboxFolder/res/imgfile_ext", strOpenDBImgResExt);
+    ReadRosParam(nh, "/OpenDb2BboxFolder/res/file_name_fwd", strOpenDBImgResFileNmFwd);
+    ReadRosParam(nh, "/OpenDb2BboxFolder/res/file_name_num_digit", nOpDbImgResFileNmDigit);
+    ReadRosParam(nh, "/OpenDb2BboxFolder/res/offset_num", nOpDbOffsetNum);
+    nOpDbXmlResFileNmDigit = nOpDbImgResFileNmDigit;
+    strOpenDBLabelResFileNmFwd = strOpenDBImgResFileNmFwd;
+
+    // folder path, raw and annotated images
+    strOpenDBImgSrcFolderPath = strHomeName + strOpenDBImgSrcFolderNm;
+    for (directory_iterator end, dir(strOpenDBImgSrcFolderPath); dir != end; dir++) 
+    {
+      const boost::filesystem::path &thisPath = dir->path();
+      string strTempPath = thisPath.c_str() + strOpenDBImgSrcType;
+      vecStrOpenDBImgSrcFolderPath.push_back(strTempPath);
+    }
+
+    strOpenDBLabelSrcFolderPath = strHomeName + strOpenDBLabelSrcFolderNm;
+    for (directory_iterator end, dir(strOpenDBLabelSrcFolderPath); dir != end; dir++) 
+    {
+      const boost::filesystem::path &thisPath = dir->path();
+      string strTempPath = thisPath.c_str() + strOpenDBTxtSrcType;
+      vecStrOpenDBLabelSrcFolderPath.push_back(strTempPath);
+    }
+
+    std::sort(vecStrOpenDBImgSrcFolderPath.begin(), vecStrOpenDBImgSrcFolderPath.end() );    
+    std::sort(vecStrOpenDBLabelSrcFolderPath.begin(), vecStrOpenDBLabelSrcFolderPath.end() );
+
+    for (auto i = 0; i < vecStrOpenDBLabelSrcFolderPath.size(); i++)
+    {
+      ROS_INFO("%s", vecStrOpenDBLabelSrcFolderPath[i].c_str());
+    }
+
+    strOpenDBImgResFolderPath = strHomeName + strOpenDBImgResFolderNm;
+    strOpenDBLabelResFolderPath = strHomeName + strOpenDBLabelResFolderNm;
 
     // feature case
     ReadRosParam(nh, "/CityScapesDBConverter/feature", nFeatureCase);
@@ -102,6 +154,58 @@ bool ConfigParam::ReadRosParams()
 
     strKttImgFileNmFwd = strKttXmlFileNmFwd;
     nKttImgFileNmDigit = nKttXmlFileNmDigit;
+
+    // label DB, for open-source
+    vecOpDbLabels.clear();
+    ReadRosParam(nh, "/LabelOpenDb2Bbox/label/noObj/name", opDbLabel.strLabel);
+    ReadRosParam(nh, "/LabelOpenDb2Bbox/label/noObj/order", opDbLabel.nLabel);
+    ReadRosParam(nh, "/LabelOpenDb2Bbox/label/noObj/color", opDbLabel.strColor);
+    vecOpDbLabels.push_back(opDbLabel);
+
+    ReadRosParam(nh, "/LabelOpenDb2Bbox/label/drone/name", opDbLabel.strLabel);
+    ReadRosParam(nh, "/LabelOpenDb2Bbox/label/drone/order", opDbLabel.nLabel);
+    ReadRosParam(nh, "/LabelOpenDb2Bbox/label/drone/color", opDbLabel.strColor);
+    vecOpDbLabels.push_back(opDbLabel);
+
+    ReadRosParam(nh, "/LabelOpenDb2Bbox/label/dji_phantom/name", opDbLabel.strLabel);
+    ReadRosParam(nh, "/LabelOpenDb2Bbox/label/dji_phantom/order", opDbLabel.nLabel);
+    ReadRosParam(nh, "/LabelOpenDb2Bbox/label/dji_phantom/color", opDbLabel.strColor);
+    vecOpDbLabels.push_back(opDbLabel);
+
+    ReadRosParam(nh, "/LabelOpenDb2Bbox/label/dji_mavic/name", opDbLabel.strLabel);
+    ReadRosParam(nh, "/LabelOpenDb2Bbox/label/dji_mavic/order", opDbLabel.nLabel);
+    ReadRosParam(nh, "/LabelOpenDb2Bbox/label/dji_mavic/color", opDbLabel.strColor);
+    vecOpDbLabels.push_back(opDbLabel);
+
+    ReadRosParam(nh, "/LabelOpenDb2Bbox/label/dji_m600/name", opDbLabel.strLabel);
+    ReadRosParam(nh, "/LabelOpenDb2Bbox/label/dji_m600/order", opDbLabel.nLabel);
+    ReadRosParam(nh, "/LabelOpenDb2Bbox/label/dji_m600/color", opDbLabel.strColor);
+    vecOpDbLabels.push_back(opDbLabel);
+
+    ReadRosParam(nh, "/LabelOpenDb2Bbox/label/dji_matrice/name", opDbLabel.strLabel);
+    ReadRosParam(nh, "/LabelOpenDb2Bbox/label/dji_matrice/order", opDbLabel.nLabel);
+    ReadRosParam(nh, "/LabelOpenDb2Bbox/label/dji_matrice/color", opDbLabel.strColor);
+    vecOpDbLabels.push_back(opDbLabel);
+
+    ReadRosParam(nh, "/LabelOpenDb2Bbox/label/dji_inspire/name", opDbLabel.strLabel);
+    ReadRosParam(nh, "/LabelOpenDb2Bbox/label/dji_inspire/order", opDbLabel.nLabel);
+    ReadRosParam(nh, "/LabelOpenDb2Bbox/label/dji_inspire/color", opDbLabel.strColor);
+    vecOpDbLabels.push_back(opDbLabel);
+
+    ReadRosParam(nh, "/LabelOpenDb2Bbox/label/ar_drone/name", opDbLabel.strLabel);
+    ReadRosParam(nh, "/LabelOpenDb2Bbox/label/ar_drone/order", opDbLabel.nLabel);
+    ReadRosParam(nh, "/LabelOpenDb2Bbox/label/ar_drone/color", opDbLabel.strColor);
+    vecOpDbLabels.push_back(opDbLabel);
+
+    ReadRosParam(nh, "/LabelOpenDb2Bbox/label/dji_agras/name", opDbLabel.strLabel);
+    ReadRosParam(nh, "/LabelOpenDb2Bbox/label/dji_agras/order", opDbLabel.nLabel);
+    ReadRosParam(nh, "/LabelOpenDb2Bbox/label/dji_agras/color", opDbLabel.strColor);
+    vecOpDbLabels.push_back(opDbLabel);
+
+    ReadRosParam(nh, "/LabelOpenDb2Bbox/label/bird/name", opDbLabel.strLabel);
+    ReadRosParam(nh, "/LabelOpenDb2Bbox/label/bird/order", opDbLabel.nLabel);
+    ReadRosParam(nh, "/LabelOpenDb2Bbox/label/bird/color", opDbLabel.strColor);
+    vecOpDbLabels.push_back(opDbLabel);
 
     // label DB, for kitty
     vecKttLabels.clear();
@@ -207,6 +311,15 @@ bool ConfigParam::ReadRosParams()
     ReadRosParam(nh, "/LabelsCityScapesDB/bicycle/B", bicycle.nRGB[2]);
     vecLabels.push_back(bicycle.strLabel);
     vecAnnoDB.push_back(bicycle);
+
+    // for debugging
+    ROS_INFO("open-source:labelSize:%d", (int)(vecOpDbLabels.size()));
+    for (auto i = 0; i < vecOpDbLabels.size(); i++)
+    {
+      ROS_INFO("[%d]%s:Order(%d),RGB(%s)", i, vecOpDbLabels[i].strLabel.c_str(), vecOpDbLabels[i].nLabel,
+               vecOpDbLabels[i].strColor.c_str());
+    }
+    ROS_INFO(" ");
 
     // for debugging
     ROS_INFO("cityscape:labelSize:%d", (int)(vecLabels.size()));
