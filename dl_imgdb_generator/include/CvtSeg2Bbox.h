@@ -18,6 +18,7 @@ public:
   void MainLoopBboxChecker();
   void MainLoopSemanticSegLabelConverter();
   void MainLoopBboxYoloLabelConverter();
+  void MainLoopXmlBboxGenerator();
   bool GetSizeCalcFlag();
 
   bool bSizeCalcFlag;
@@ -41,6 +42,7 @@ private:
   Mat GetImgMix(Mat imgInput, vector<SelectRGB> vecInput, Point ptInput, string strCmd);
   vector<Rect> GetTargetRect(Mat imgInput);
   static bool sortArea(cv::Rect rect1, cv::Rect rect2);
+  BboxStdInfo CalcBboxInfoXmlType(YoloDB src, Size szImgSrc, Size szImgRes);
 
   int nHeight;
   int nWidth;
@@ -62,6 +64,8 @@ private:
   Mat imgMixed_;
 
   vector<Rect> vecRectTarget_;
+
+  vector<vector<YoloDB>> vecYoloDBs_;
 };
 
 #endif

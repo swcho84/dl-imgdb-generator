@@ -140,6 +140,8 @@ public:
 
   vector<OpenDroneDBlabel> vecOpDbLabels;
 
+  int nOffsetNumRef;
+
   vector<string> vecLabels;
   vector<AnnoDB> vecAnnoDB;
 

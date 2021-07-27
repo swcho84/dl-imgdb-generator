@@ -36,6 +36,7 @@
 #define CITYDB_XMLFILE_CHECKER 3
 #define KARIDB_SEMANTIC_SEGMENTATION_LABEL_CONVERTER 4
 #define ETRIDB_BBOX_DB_YOLO_CONVERTER 5
+#define ETRIDB_BBOX_DB_XML_CONVERTER 6
 
 // for kitty DB
 #define KITDB_IMGFILE_RESIZER 11
@@ -90,6 +91,24 @@ typedef struct
   string strLabel;
   vector<Rect> vecBbox;
 } BboxDB;
+
+typedef struct
+{
+  int nPtXLt;
+  int nPtYLt;
+  int nPtXRb;
+  int nPtYRb;
+  int nBboxWidth;
+  int nBboxHeight;
+} BboxStdInfo;
+
+typedef struct
+{
+  string strLabel;
+  int nLabel;
+  float fBbox[4];
+  BboxStdInfo bboxStdInfo;
+} YoloDB;
 
 typedef struct
 {

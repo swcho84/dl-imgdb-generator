@@ -114,16 +114,16 @@ KittyDBConverter:
 #"/Research_DB/workdone_etriDB/v1.0/img/"
 #"/Research_DB/workdone_etriDB/v1.0/label/"
 KittyDBfolder:
-  image: "/jumper_only_data/JPEGImages/" #"/kittyDBsmall/image/"  "/Research_DB/raw_etriDB/v1.0/ETRI_kittyDB/image/"
+  image: "/LandingPadImgs/before_converted/" #"/kittyDBsmall/image/"  "/Research_DB/raw_etriDB/v1.0/ETRI_kittyDB/image/"
   label: "/jumper_only_data/labels/" #"/kittyDBsmall/label/"
-  cvtimg: "/jumper_only_data/raw_imgs/" #"/kittyDBsmall/cvtimg/"
+  cvtimg: "/LandingPadImgs/after_converted/" #"/kittyDBsmall/cvtimg/"
   xml_label: "/jumper_only_data/xml_labels/" #"/kittyDBsmall/xml_label/"
   imgfile_type: "*.jpg"
   txtfile_type: "*.txt"
   xmlfile_type: "*.xml"
   imgfile_extension: "png"
   xmlfile_extension: "xml"  
-  file_name_fwd: "etridb_ca_"
+  file_name_fwd: "kaist_antidrone_db_"
   file_name_num_digit: 6
   cvtimg_width: 640
   cvtimg_height: 480
@@ -187,9 +187,10 @@ LabelsCityScapesDB:
 # 2: xml file generator
 # 3: xml file checker
 # 4: seg label converter (from RGB to label)
-# 5: txt file generator from xml file for yolo
+# 5: txt file generator from xml file to yolo
+# 6: txt file generator from yolo file to xml
 CityScapesDBConverter:
-  feature: 5
+  feature: 3
   use_pet_mixing: false
   trial_pet_mixing: 3000
   mix_width_ratio: 0.1
@@ -198,15 +199,15 @@ CityScapesDBConverter:
 
 CityScapesDBfolder:
   raw: "/v4.0_additional_data/img/"              # "/v4.0_additional_data/img/" "/v4.0_5000ea/img/"  "/cityscapeDBsmall/raw/"   /Research_DB/raw_etriDB/v1.0/ETRI_cityscapeDB/raw/
-  cvtimg: "/v4.0_additional_data/img/"            # "/v4.0_additional_data/img/" "/v4.0_5000ea/img/"  "/cityscapeDBsmall/cvtimg/"    /Research_DB/raw_etriDB/v1.0/ETRI_cityscapeDB/raw_vga/
+  cvtimg: "/MoraiImgLabelDataHandler/img/" # "/v4.0_additional_data/img/"            # "/v4.0_additional_data/img/" "/v4.0_5000ea/img/"  "/cityscapeDBsmall/cvtimg/"    /Research_DB/raw_etriDB/v1.0/ETRI_cityscapeDB/raw_vga/
   color_label: "/Research_DB/raw_etriDB/v1.0/ETRI_cityscapeDB/color_label/"   #"/cityscapeDBsmall/color_label/"
   polygon_data: "/Research_DB/raw_etriDB/v1.0/ETRI_cityscapeDB/polygon/"      #"/cityscapeDBsmall/polygon/"
-  xml_label: "/v4.0_additional_data/label/"       # "/v4.0_additional_data/label/" "/v4.0_5000ea/label/"  "/cityscapeDBsmall/xml_label/"
+  xml_label: "/MoraiImgLabelDataHandler/label/" # "/v4.0_additional_data/label/"       # "/v4.0_additional_data/label/" "/v4.0_5000ea/label/"  "/cityscapeDBsmall/xml_label/"
   pet_mix: "/Research_DB/raw_etriDB/v1.0/ETRI_cityscapeDB/pet_db/"            # pet imgs
   seg_color_img: "/label_img/rgb_label/"                                      # /path/to/seg/color/img
   seg_label_img: "/label_img/seg_label/"                                      # /path/to/seg/label/img
   pet_mix_img: "/Research_DB/raw_etriDB/v1.0/ETRI_cityscapeDB/raw_pet_vga/"
-  yolo_label: "/v4.0_additional_data/yolo_label/"
+  yolo_label: "/MoraiImgLabelDataHandler/yolo_label/" # "/v4.0_additional_data/yolo_label/"
   imgfile_type: "*.png"
   polygonfile_type: "*.json"
   xmlfile_type: "*.xml"
@@ -215,6 +216,5 @@ CityScapesDBfolder:
   file_name_fwd: "etridb_ca_"
   file_name_num_digit: 6
   cvtimg_width: 640
-  cvtimg_height: 480  
-
-       
+  cvtimg_height: 480
+  file_name_offset_number: 9958

@@ -17,6 +17,272 @@ CvtSeg2Bbox::~CvtSeg2Bbox()
 {
 }
 
+// main loop: bbox label converter (from YOLO txt to Pascal VOC xml)
+void CvtSeg2Bbox::MainLoopXmlBboxGenerator()
+{
+  vector<String> vecTxtFileNm;
+  glob(cfgParam_.strYoloLabelFolderPath, vecTxtFileNm, true);
+
+  vector<String> vecImgFileNm;
+  glob(cfgParam_.strCvtImgFolderPath, vecImgFileNm, true);
+
+  // for debugging
+  ROS_INFO("Processing_labelFolder:%s", cfgParam_.strYoloLabelFolderPath.c_str());
+  ROS_INFO("Processing_imgFolder:%s", cfgParam_.strCvtImgFolderPath.c_str());
+
+  // browsing annotated images recursively
+  vecYoloDBs_.clear();
+  for (size_t i = 0; i < vecTxtFileNm.size(); i++)
+  {
+    // assigning the raw image
+    Mat imgRaw = imread(vecImgFileNm[i]);
+
+    ROS_INFO("Processing_label:%s", vecTxtFileNm[i].c_str());
+    ROS_INFO("Processing_img:%s", vecImgFileNm[i].c_str());      
+
+    // image width and height info.
+    Size szImgRaw;
+    Size szImgRes;
+    szImgRaw.height = imgRaw.rows;
+    szImgRaw.width = imgRaw.cols;
+    szImgRes.height = cfgParam_.nHeightRef;
+    szImgRes.width = cfgParam_.nWidthRef;
+
+    // reading txt file
+    ifstream openFile(vecTxtFileNm[i]);
+    if (openFile.is_open())
+    {
+      // parsing opensource DB label into vector-list type
+      string strLine;
+      vector<YoloDB> tempYoloDbVec;
+
+      // parsing line-by-line
+      while (getline(openFile, strLine))
+      {
+        istringstream strStrmLine(strLine);
+        string strToken;
+        int nFlag = 0;
+        YoloDB yoloDB;
+
+        // parsing space-by-space
+        while (getline(strStrmLine, strToken, ' '))
+        {
+          switch (nFlag)
+          {
+            case 0:
+            {
+              yoloDB.nLabel = atoi(strToken.c_str());
+              switch (yoloDB.nLabel)
+              {
+                case 0:
+                {
+                  yoloDB.strLabel = "person";
+                  break;
+                }
+                case 1:
+                {
+                  yoloDB.strLabel = "four_wheel_vehicle";
+                  break;
+                }   
+                case 2:
+                {
+                  yoloDB.strLabel = "two_wheel_vehicle";
+                  break;
+                }
+                case 3:
+                {
+                  yoloDB.strLabel = "stroller";
+                  break;
+                }
+                case 4:
+                {
+                  yoloDB.strLabel = "pet";
+                  break;
+                }                                           
+                case 5:
+                {
+                  yoloDB.strLabel = "post_office_symbol";
+                  break;
+                }
+                case 6:
+                {
+                  yoloDB.strLabel = "postman_vest";
+                  break;
+                }                                
+                default:
+                {
+                  yoloDB.strLabel = "person";
+                  break;
+                }                             
+              }      
+              break;
+            }
+            case 1:
+            {
+              yoloDB.fBbox[0] = (atof(strToken.c_str()));
+              break;
+            }
+            case 2:
+            {
+              yoloDB.fBbox[1] = (atof(strToken.c_str()));
+              break;
+            }
+            case 3:
+            {
+              yoloDB.fBbox[2] = (atof(strToken.c_str()));
+              break;
+            }
+            case 4:
+            {
+              yoloDB.fBbox[3] = (atof(strToken.c_str()));
+              break;
+            }
+          }
+          nFlag++;
+        }
+
+        // converting the bbox info from opensource to xml type
+        yoloDB.bboxStdInfo = CalcBboxInfoXmlType(yoloDB, szImgRaw, szImgRes);
+        ROS_INFO("(%d,%d,%d,%d)", yoloDB.bboxStdInfo.nPtXLt, yoloDB.bboxStdInfo.nPtYLt, yoloDB.bboxStdInfo.nPtXRb,
+                yoloDB.bboxStdInfo.nPtYRb);
+
+        // saving parsing result w.r.t space
+        tempYoloDbVec.push_back(yoloDB);
+      }
+
+      // saving parsing result w.r.t line
+      vecYoloDBs_.push_back(tempYoloDbVec);
+      openFile.close();
+    }
+
+    // for debugging
+    ROS_INFO("Processing_xmlGen(%d,%d)", (int)(i), (int)(vecTxtFileNm.size()));
+
+    // making the filename  using stringstream, with the numbering rule
+    stringstream strStreamXmlFileName;
+    strStreamXmlFileName << cfgParam_.strXmlFileNmFwd;
+    strStreamXmlFileName << std::setfill('0') << std::setw(cfgParam_.nXmlFileNmDigit)
+                        << (i + cfgParam_.nOffsetNumRef);
+    strStreamXmlFileName << "." + cfgParam_.strXmlExt;
+
+    // making the full file path
+    string strCvtXmlFile;
+    strCvtXmlFile = cfgParam_.strXmlFolderPath + strStreamXmlFileName.str();
+
+    // declarating xml file
+    TiXmlDocument docXml;
+
+    // w.r.t pascal VOC xml file
+    TiXmlElement* pRoot = new TiXmlElement("annotation");
+    docXml.LinkEndChild(pRoot);
+
+    TiXmlElement* pElem0 = new TiXmlElement("folder");
+    TiXmlText* txtElem0 = new TiXmlText("VOC2017");
+    pElem0->LinkEndChild(txtElem0);
+    pRoot->LinkEndChild(pElem0);
+
+    TiXmlElement* pElem1 = new TiXmlElement("filename");
+    TiXmlText* txtElem1 = new TiXmlText(strStreamXmlFileName.str());
+    pElem1->LinkEndChild(txtElem1);
+    pRoot->LinkEndChild(pElem1);
+
+    TiXmlElement* pElem2 = new TiXmlElement("source");
+    TiXmlElement* pElem21 = new TiXmlElement("database");
+    TiXmlText* txtElem21 = new TiXmlText("ETRI collision avoidance DB");
+    pElem21->LinkEndChild(txtElem21);
+    TiXmlElement* pElem22 = new TiXmlElement("annotation");
+    TiXmlText* txtElem22 = new TiXmlText("PASCAL VOC2017");
+    pElem22->LinkEndChild(txtElem22);
+    pElem2->LinkEndChild(pElem21);
+    pElem2->LinkEndChild(pElem22);
+    pRoot->LinkEndChild(pElem2);
+
+    TiXmlElement* pElem3 = new TiXmlElement("owner");
+    TiXmlElement* pElem31 = new TiXmlElement("institute");
+    TiXmlText* txtElem31 = new TiXmlText("ETRI");
+    pElem31->LinkEndChild(txtElem31);
+    TiXmlElement* pElem32 = new TiXmlElement("name");
+    TiXmlText* txtElem32 = new TiXmlText("Dr. Eunhye Kim");
+    pElem32->LinkEndChild(txtElem32);
+    pElem3->LinkEndChild(pElem31);
+    pElem3->LinkEndChild(pElem32);
+    pRoot->LinkEndChild(pElem3);
+
+    TiXmlElement* pElem4 = new TiXmlElement("size");
+    TiXmlElement* pElem41 = new TiXmlElement("width");
+    TiXmlText* txtElem41 = new TiXmlText(to_string(cfgParam_.nWidthRef));
+    pElem41->LinkEndChild(txtElem41);
+    TiXmlElement* pElem42 = new TiXmlElement("height");
+    TiXmlText* txtElem42 = new TiXmlText(to_string(cfgParam_.nHeightRef));
+    pElem42->LinkEndChild(txtElem42);
+    TiXmlElement* pElem43 = new TiXmlElement("depth");
+    TiXmlText* txtElem43 = new TiXmlText("3");
+    pElem43->LinkEndChild(txtElem43);
+    pElem4->LinkEndChild(pElem41);
+    pElem4->LinkEndChild(pElem42);
+    pElem4->LinkEndChild(pElem43);
+    pRoot->LinkEndChild(pElem4);
+
+    TiXmlElement* pElem5 = new TiXmlElement("segmented");
+    TiXmlText* txtElem5 = new TiXmlText("0");
+    pElem5->LinkEndChild(txtElem5);
+    pRoot->LinkEndChild(pElem5);
+
+    // making xml file
+    for (auto kk = 0; kk < vecYoloDBs_[i].size(); kk++)
+    {
+      TiXmlElement* pElem5 = new TiXmlElement("object");
+      TiXmlElement* pElem51 = new TiXmlElement("name");
+      TiXmlText* txtElem51 = new TiXmlText(vecYoloDBs_[i][kk].strLabel);
+      pElem51->LinkEndChild(txtElem51);
+      TiXmlElement* pElem52 = new TiXmlElement("pose");
+      TiXmlText* txtElem52 = new TiXmlText("Left");
+      pElem52->LinkEndChild(txtElem52);
+      TiXmlElement* pElem53 = new TiXmlElement("truncated");
+      TiXmlText* txtElem53 = new TiXmlText("1");
+      pElem53->LinkEndChild(txtElem53);
+      TiXmlElement* pElem54 = new TiXmlElement("difficult");
+      TiXmlText* txtElem54 = new TiXmlText("0");
+      pElem54->LinkEndChild(txtElem54);
+
+      TiXmlElement* pElem55 = new TiXmlElement("bndbox");
+      TiXmlElement* pElem551 = new TiXmlElement("xmin");
+      TiXmlText* txtElem551 = new TiXmlText(to_string(vecYoloDBs_[i][kk].bboxStdInfo.nPtXLt));
+      pElem551->LinkEndChild(txtElem551);
+      TiXmlElement* pElem552 = new TiXmlElement("ymin");
+      TiXmlText* txtElem552 = new TiXmlText(to_string(vecYoloDBs_[i][kk].bboxStdInfo.nPtYLt));
+      pElem552->LinkEndChild(txtElem552);
+      TiXmlElement* pElem553 = new TiXmlElement("xmax");
+      TiXmlText* txtElem553 = new TiXmlText(to_string(vecYoloDBs_[i][kk].bboxStdInfo.nPtXRb));
+      pElem553->LinkEndChild(txtElem553);
+      TiXmlElement* pElem554 = new TiXmlElement("ymax");
+      TiXmlText* txtElem554 = new TiXmlText(to_string(vecYoloDBs_[i][kk].bboxStdInfo.nPtYRb));
+      pElem554->LinkEndChild(txtElem554);
+      pElem55->LinkEndChild(pElem551);
+      pElem55->LinkEndChild(pElem552);
+      pElem55->LinkEndChild(pElem553);
+      pElem55->LinkEndChild(pElem554);
+
+      pElem5->LinkEndChild(pElem51);
+      pElem5->LinkEndChild(pElem52);
+      pElem5->LinkEndChild(pElem53);
+      pElem5->LinkEndChild(pElem54);
+      pElem5->LinkEndChild(pElem55);
+      pRoot->LinkEndChild(pElem5);
+    }
+
+    // saving xml file
+    docXml.SaveFile(strCvtXmlFile);
+
+    // calculating size flag
+    bSizeCalcFlag = GenSizeCalcFlag(i, (int)(vecTxtFileNm.size()));   
+  }
+
+ 
+
+  return;
+}
+
 // main loop: bbox label converter (from Pascal VOC xml to YOLO txt)
 void CvtSeg2Bbox::MainLoopBboxYoloLabelConverter()
 {
@@ -1381,6 +1647,28 @@ Mat CvtSeg2Bbox::GetImgTargetResized(Mat imgTarget, ImgSize imgTargetSize, ImgSi
   else
     imgTarget.copyTo(result);
   return result;
+}
+
+// calculating the bbox info from opensource to xml
+// default: (label) (x_left_top) (y_left_top) (width) (height)
+// case1: normalized w.r.t the image size, (label) (x_cen) (y_cen) (width) (height)
+// case2: (label) (ptYLt) (ptXLt) (ptYRb) (ptXRb)
+BboxStdInfo CvtSeg2Bbox::CalcBboxInfoXmlType(YoloDB src, Size szImgSrc, Size szImgRes)
+{
+  BboxStdInfo res;
+  res.nPtXLt = (int)(((((src.fBbox[0]) * (float)(szImgSrc.width)) -
+                        ((src.fBbox[2]) * (float)(szImgSrc.width) * (0.5f))) /
+                      (szImgSrc.width)) *
+                      (szImgRes.width));
+  res.nPtYLt = (int)(((((src.fBbox[1]) * (float)(szImgSrc.height)) -
+                        ((src.fBbox[3]) * (float)(szImgSrc.height) * (0.5f))) /
+                      (szImgSrc.height)) *
+                      (szImgRes.height));
+  res.nPtXRb = (res.nPtXLt) + (int)((src.fBbox[2]) * (float)(szImgRes.width));
+  res.nPtYRb = (res.nPtYLt) + (int)((src.fBbox[3]) * (float)(szImgRes.height));
+  res.nBboxWidth = (int)((src.fBbox[2]) * (float)(szImgRes.width));
+  res.nBboxHeight = (int)((src.fBbox[3]) * (float)(szImgRes.height));
+  return res;
 }
 
 // getting the size information of the image
