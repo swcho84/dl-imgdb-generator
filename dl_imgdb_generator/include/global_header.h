@@ -94,16 +94,6 @@ typedef struct
 
 typedef struct
 {
-  int nPtXLt;
-  int nPtYLt;
-  int nPtXRb;
-  int nPtYRb;
-  int nBboxWidth;
-  int nBboxHeight;
-} BboxStdInfo;
-
-typedef struct
-{
   string strLabel;
   int nLabel;
   float fBbox[4];
