@@ -72,7 +72,8 @@ void CvtOpenDb2Bbox::MainLoopBboxChecker()
       {
         if ((label) == (cfgParam_.vecOpDbLabels[i].strLabel))
         {
-          rectangle(imgRaw, ptTl, ptBr, colorStat_.GetColorStatus(colorStat_.mapColorInfo[cfgParam_.vecOpDbLabels[i].strColor]), 2);
+          rectangle(imgRaw, ptTl, ptBr,
+                    colorStat_.GetColorStatus(colorStat_.mapColorInfo[cfgParam_.vecOpDbLabels[i].strColor]), 2);
           break;
         }
       }
@@ -114,7 +115,7 @@ void CvtOpenDb2Bbox::MainLoopBboxGenerator()
       Mat imgRaw = imread(vecImgFileNm[i]);
 
       ROS_INFO("Processing_label:%s", vecTxtFileNm[i].c_str());
-      ROS_INFO("Processing_img:%s", vecImgFileNm[i].c_str());      
+      ROS_INFO("Processing_img:%s", vecImgFileNm[i].c_str());
 
       // image width and height info.
       Size szImgRaw;
@@ -164,32 +165,32 @@ void CvtOpenDb2Bbox::MainLoopBboxGenerator()
                 // if (((int)(j)) == 0)
                 // {
                 //   opDrDB.droneLabel = cfgParam_.vecOpDbLabels[6];
-                //   opDrDB.nLabel = 6;                  
+                //   opDrDB.nLabel = 6;
                 // }
                 // else if (((int)(j)) == 1)
                 // {
                 //   opDrDB.droneLabel = cfgParam_.vecOpDbLabels[4];
-                //   opDrDB.nLabel = 4;                  
+                //   opDrDB.nLabel = 4;
                 // }
                 // else if (((int)(j)) == 2)
                 // {
                 //   opDrDB.droneLabel = cfgParam_.vecOpDbLabels[5];
-                //   opDrDB.nLabel = 5;                  
+                //   opDrDB.nLabel = 5;
                 // }
                 // else if (((int)(j)) == 3)
                 // {
                 //   opDrDB.droneLabel = cfgParam_.vecOpDbLabels[3];
-                //   opDrDB.nLabel = 3;                  
-                // }                     
+                //   opDrDB.nLabel = 3;
+                // }
                 // else if (((int)(j)) == 4)
                 // {
                 //   opDrDB.droneLabel = cfgParam_.vecOpDbLabels[2];
-                //   opDrDB.nLabel = 2;                  
-                // }                
+                //   opDrDB.nLabel = 2;
+                // }
                 // else if (((int)(j)) == 5)
                 // {
                 //   opDrDB.droneLabel = cfgParam_.vecOpDbLabels[1];
-                //   opDrDB.nLabel = 1;                  
+                //   opDrDB.nLabel = 1;
                 // }
                 // else
                 // {
@@ -224,7 +225,7 @@ void CvtOpenDb2Bbox::MainLoopBboxGenerator()
           // converting the bbox info from opensource to xml type
           opDrDB.bboxStdInfo = CalcBboxInfoXmlType(opDrDB, cfgParam_.nOpDbTxtCalcCase, szImgRaw, szImgRes);
           ROS_INFO("(%d,%d,%d,%d)", opDrDB.bboxStdInfo.nPtXLt, opDrDB.bboxStdInfo.nPtYLt, opDrDB.bboxStdInfo.nPtXRb,
-                  opDrDB.bboxStdInfo.nPtYRb);
+                   opDrDB.bboxStdInfo.nPtYRb);
 
           // saving parsing result w.r.t space
           tempOpDrDbVec.push_back(opDrDB);
@@ -242,7 +243,7 @@ void CvtOpenDb2Bbox::MainLoopBboxGenerator()
       stringstream strStreamXmlFileName;
       strStreamXmlFileName << cfgParam_.strOpenDBLabelResFileNmFwd;
       strStreamXmlFileName << std::setfill('0') << std::setw(cfgParam_.nOpDbXmlResFileNmDigit)
-                          << (i + cfgParam_.nOpDbOffsetNum + nOffset);
+                           << (i + cfgParam_.nOpDbOffsetNum + nOffset);
       strStreamXmlFileName << "." + cfgParam_.strOpenDBXmlResExt;
 
       // making the full file path
@@ -362,7 +363,7 @@ void CvtOpenDb2Bbox::MainLoopBboxGenerator()
     nOffset += (int)(vecTxtFileNm.size());
 
     // calculating size flag
-    bSizeCalcFlag = GenSizeCalcFlag(j, (int)(cfgParam_.vecStrOpenDBLabelSrcFolderPath.size()));    
+    bSizeCalcFlag = GenSizeCalcFlag(j, (int)(cfgParam_.vecStrOpenDBLabelSrcFolderPath.size()));
   }
 
   return;
@@ -378,8 +379,8 @@ void CvtOpenDb2Bbox::MainLoopImgResizer()
   for (auto j = 0; cfgParam_.vecStrOpenDBImgSrcFolderPath.size(); j++)
   {
     vector<String> vecImgFileNm;
-    glob(cfgParam_.vecStrOpenDBImgSrcFolderPath[j], vecImgFileNm, true);    
-    
+    glob(cfgParam_.vecStrOpenDBImgSrcFolderPath[j], vecImgFileNm, true);
+
     // for debugging
     ROS_INFO("Processing_imgFolder:%s", cfgParam_.vecStrOpenDBImgSrcFolderPath[j].c_str());
     for (size_t i = 0; i < vecImgFileNm.size(); i++)
@@ -402,7 +403,7 @@ void CvtOpenDb2Bbox::MainLoopImgResizer()
       stringstream strStreamImgFileName;
       strStreamImgFileName << cfgParam_.strOpenDBImgResFileNmFwd;
       strStreamImgFileName << std::setfill('0') << std::setw(cfgParam_.nOpDbImgResFileNmDigit)
-                          << (i + (cfgParam_.nOpDbOffsetNum) + nOffset);
+                           << (i + (cfgParam_.nOpDbOffsetNum) + nOffset);
       strStreamImgFileName << "." + cfgParam_.strOpenDBImgResExt;
 
       // making the full file path
@@ -419,12 +420,12 @@ void CvtOpenDb2Bbox::MainLoopImgResizer()
       // pausing and destroying all imshow result
       // waitKey(0);
     }
-    
+
     // calculating the offset number
     nOffset += (int)(vecImgFileNm.size());
 
     // calculating size flag
-    bSizeCalcFlag = GenSizeCalcFlag(j, (int)(cfgParam_.vecStrOpenDBImgSrcFolderPath.size()));    
+    bSizeCalcFlag = GenSizeCalcFlag(j, (int)(cfgParam_.vecStrOpenDBImgSrcFolderPath.size()));
   }
 
   return;
@@ -467,18 +468,14 @@ BboxStdInfo CvtOpenDb2Bbox::CalcBboxInfoXmlType(OpenDroneDB src, int nTypeFlag, 
     }
     case 3:  // yolo txt type, (left_top)
     {
-      res.nPtXLt = (int)(((((src.fBboxSrc[0]) * (float)(szImgSrc.width))) /
-                          (szImgSrc.width)) *
-                         (szImgRes.width));
-      res.nPtYLt = (int)(((((src.fBboxSrc[1]) * (float)(szImgSrc.height))) /
-                          (szImgSrc.height)) *
-                         (szImgRes.height));
+      res.nPtXLt = (int)(((((src.fBboxSrc[0]) * (float)(szImgSrc.width))) / (szImgSrc.width)) * (szImgRes.width));
+      res.nPtYLt = (int)(((((src.fBboxSrc[1]) * (float)(szImgSrc.height))) / (szImgSrc.height)) * (szImgRes.height));
       res.nPtXRb = (res.nPtXLt) + (int)((src.fBboxSrc[2]) * (float)(szImgRes.width));
       res.nPtYRb = (res.nPtYLt) + (int)((src.fBboxSrc[3]) * (float)(szImgRes.height));
       res.nBboxWidth = (int)((src.fBboxSrc[2]) * (float)(szImgRes.width));
       res.nBboxHeight = (int)((src.fBboxSrc[3]) * (float)(szImgRes.height));
       break;
-    }    
+    }
     default:  // default type
     {
       res.nPtXLt = (int)(((src.fBboxSrc[0]) / ((float)(szImgSrc.width))) * ((float)(szImgRes.width)));

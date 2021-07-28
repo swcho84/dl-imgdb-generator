@@ -38,7 +38,7 @@ void CvtSeg2Bbox::MainLoopXmlBboxGenerator()
     Mat imgRaw = imread(vecImgFileNm[i]);
 
     ROS_INFO("Processing_label:%s", vecTxtFileNm[i].c_str());
-    ROS_INFO("Processing_img:%s", vecImgFileNm[i].c_str());      
+    ROS_INFO("Processing_img:%s", vecImgFileNm[i].c_str());
 
     // image width and height info.
     Size szImgRaw;
@@ -83,7 +83,7 @@ void CvtSeg2Bbox::MainLoopXmlBboxGenerator()
                 {
                   yoloDB.strLabel = "four_wheel_vehicle";
                   break;
-                }   
+                }
                 case 2:
                 {
                   yoloDB.strLabel = "two_wheel_vehicle";
@@ -98,7 +98,7 @@ void CvtSeg2Bbox::MainLoopXmlBboxGenerator()
                 {
                   yoloDB.strLabel = "pet";
                   break;
-                }                                           
+                }
                 case 5:
                 {
                   yoloDB.strLabel = "post_office_symbol";
@@ -108,13 +108,13 @@ void CvtSeg2Bbox::MainLoopXmlBboxGenerator()
                 {
                   yoloDB.strLabel = "postman_vest";
                   break;
-                }                                
+                }
                 default:
                 {
                   yoloDB.strLabel = "person";
                   break;
-                }                             
-              }      
+                }
+              }
               break;
             }
             case 1:
@@ -144,7 +144,7 @@ void CvtSeg2Bbox::MainLoopXmlBboxGenerator()
         // converting the bbox info from opensource to xml type
         yoloDB.bboxStdInfo = CalcBboxInfoXmlType(yoloDB, szImgRaw, szImgRes);
         ROS_INFO("(%d,%d,%d,%d)", yoloDB.bboxStdInfo.nPtXLt, yoloDB.bboxStdInfo.nPtYLt, yoloDB.bboxStdInfo.nPtXRb,
-                yoloDB.bboxStdInfo.nPtYRb);
+                 yoloDB.bboxStdInfo.nPtYRb);
 
         // saving parsing result w.r.t space
         tempYoloDbVec.push_back(yoloDB);
@@ -161,8 +161,7 @@ void CvtSeg2Bbox::MainLoopXmlBboxGenerator()
     // making the filename  using stringstream, with the numbering rule
     stringstream strStreamXmlFileName;
     strStreamXmlFileName << cfgParam_.strXmlFileNmFwd;
-    strStreamXmlFileName << std::setfill('0') << std::setw(cfgParam_.nXmlFileNmDigit)
-                        << (i + cfgParam_.nOffsetNumRef);
+    strStreamXmlFileName << std::setfill('0') << std::setw(cfgParam_.nXmlFileNmDigit) << (i + cfgParam_.nOffsetNumRef);
     strStreamXmlFileName << "." + cfgParam_.strXmlExt;
 
     // making the full file path
@@ -275,10 +274,8 @@ void CvtSeg2Bbox::MainLoopXmlBboxGenerator()
     docXml.SaveFile(strCvtXmlFile);
 
     // calculating size flag
-    bSizeCalcFlag = GenSizeCalcFlag(i, (int)(vecTxtFileNm.size()));   
+    bSizeCalcFlag = GenSizeCalcFlag(i, (int)(vecTxtFileNm.size()));
   }
-
- 
 
   return;
 }
@@ -1657,14 +1654,14 @@ Mat CvtSeg2Bbox::GetImgTargetResized(Mat imgTarget, ImgSize imgTargetSize, ImgSi
 BboxStdInfo CvtSeg2Bbox::CalcBboxInfoXmlType(YoloDB src, Size szImgSrc, Size szImgRes)
 {
   BboxStdInfo res;
-  res.nPtXLt = (int)(((((src.fBbox[0]) * (float)(szImgSrc.width)) -
-                        ((src.fBbox[2]) * (float)(szImgSrc.width) * (0.5f))) /
-                      (szImgSrc.width)) *
-                      (szImgRes.width));
-  res.nPtYLt = (int)(((((src.fBbox[1]) * (float)(szImgSrc.height)) -
-                        ((src.fBbox[3]) * (float)(szImgSrc.height) * (0.5f))) /
-                      (szImgSrc.height)) *
-                      (szImgRes.height));
+  res.nPtXLt =
+      (int)(((((src.fBbox[0]) * (float)(szImgSrc.width)) - ((src.fBbox[2]) * (float)(szImgSrc.width) * (0.5f))) /
+             (szImgSrc.width)) *
+            (szImgRes.width));
+  res.nPtYLt =
+      (int)(((((src.fBbox[1]) * (float)(szImgSrc.height)) - ((src.fBbox[3]) * (float)(szImgSrc.height) * (0.5f))) /
+             (szImgSrc.height)) *
+            (szImgRes.height));
   res.nPtXRb = (res.nPtXLt) + (int)((src.fBbox[2]) * (float)(szImgRes.width));
   res.nPtYRb = (res.nPtYLt) + (int)((src.fBbox[3]) * (float)(szImgRes.height));
   res.nBboxWidth = (int)((src.fBbox[2]) * (float)(szImgRes.width));

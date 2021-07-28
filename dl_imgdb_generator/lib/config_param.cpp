@@ -56,23 +56,23 @@ bool ConfigParam::ReadRosParams()
 
     // folder path, raw and annotated images
     strOpenDBImgSrcFolderPath = strHomeName + strOpenDBImgSrcFolderNm;
-    for (directory_iterator end, dir(strOpenDBImgSrcFolderPath); dir != end; dir++) 
+    for (directory_iterator end, dir(strOpenDBImgSrcFolderPath); dir != end; dir++)
     {
-      const boost::filesystem::path &thisPath = dir->path();
+      const boost::filesystem::path& thisPath = dir->path();
       string strTempPath = thisPath.c_str() + strOpenDBImgSrcType;
       vecStrOpenDBImgSrcFolderPath.push_back(strTempPath);
     }
 
     strOpenDBLabelSrcFolderPath = strHomeName + strOpenDBLabelSrcFolderNm;
-    for (directory_iterator end, dir(strOpenDBLabelSrcFolderPath); dir != end; dir++) 
+    for (directory_iterator end, dir(strOpenDBLabelSrcFolderPath); dir != end; dir++)
     {
-      const boost::filesystem::path &thisPath = dir->path();
+      const boost::filesystem::path& thisPath = dir->path();
       string strTempPath = thisPath.c_str() + strOpenDBTxtSrcType;
       vecStrOpenDBLabelSrcFolderPath.push_back(strTempPath);
     }
 
-    std::sort(vecStrOpenDBImgSrcFolderPath.begin(), vecStrOpenDBImgSrcFolderPath.end() );    
-    std::sort(vecStrOpenDBLabelSrcFolderPath.begin(), vecStrOpenDBLabelSrcFolderPath.end() );
+    std::sort(vecStrOpenDBImgSrcFolderPath.begin(), vecStrOpenDBImgSrcFolderPath.end());
+    std::sort(vecStrOpenDBLabelSrcFolderPath.begin(), vecStrOpenDBLabelSrcFolderPath.end());
 
     for (auto i = 0; i < vecStrOpenDBLabelSrcFolderPath.size(); i++)
     {
@@ -110,7 +110,7 @@ bool ConfigParam::ReadRosParams()
     ReadRosParam(nh, "/CityScapesDBfolder/cvtimg_width", nWidthRef);
     ReadRosParam(nh, "/CityScapesDBfolder/cvtimg_height", nHeightRef);
     ReadRosParam(nh, "/CityScapesDBfolder/file_name_offset_number", nOffsetNumRef);
-    
+
     // folder path, raw and annotated images
     strRawFolderPath = strHomeName + strRawFolderNm + strPicType;
     strCvtImgFolderPath = strHomeName + strCvtImgFolderNm;

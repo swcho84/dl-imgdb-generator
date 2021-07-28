@@ -16,7 +16,25 @@
 using namespace std;
 using namespace cv;
 
-enum ColorInfo { BLUE, LIME, RED, YELLOW, CYAN, MAGNETA, SILVER, NAVY, GREEN, MAROON, OLIVE, TEAL, PURPLE, GRAY, BLACK, WHITE } ;
+enum ColorInfo
+{
+  BLUE,
+  LIME,
+  RED,
+  YELLOW,
+  CYAN,
+  MAGNETA,
+  SILVER,
+  NAVY,
+  GREEN,
+  MAROON,
+  OLIVE,
+  TEAL,
+  PURPLE,
+  GRAY,
+  BLACK,
+  WHITE
+};
 class ColorStatus
 {
 public:
@@ -109,7 +127,7 @@ public:
     scalWhite = Scalar((int)(mBGRcolor_comb.at<float>(15, 0)), (int)(mBGRcolor_comb.at<float>(15, 1)),
                        (int)(mBGRcolor_comb.at<float>(15, 2)));
 
-    MapColorStatus();                       
+    MapColorStatus();
   }
   ~ColorStatus()
   {
@@ -123,102 +141,102 @@ public:
     mapColorInfo["cyan"] = ColorInfo::CYAN;
     mapColorInfo["magneta"] = ColorInfo::MAGNETA;
     mapColorInfo["silver"] = ColorInfo::SILVER;
-    mapColorInfo["navy"] = ColorInfo::NAVY;   
-    mapColorInfo["green"] = ColorInfo::GREEN;   
-    mapColorInfo["maroon"] = ColorInfo::MAROON;   
-    mapColorInfo["olive"] = ColorInfo::OLIVE;   
-    mapColorInfo["teal"] = ColorInfo::TEAL;   
-    mapColorInfo["purple"] = ColorInfo::PURPLE; 
-    mapColorInfo["gray"] = ColorInfo::GRAY; 
-    mapColorInfo["black"] = ColorInfo::BLACK;     
-    mapColorInfo["white"] = ColorInfo::WHITE;                                   
+    mapColorInfo["navy"] = ColorInfo::NAVY;
+    mapColorInfo["green"] = ColorInfo::GREEN;
+    mapColorInfo["maroon"] = ColorInfo::MAROON;
+    mapColorInfo["olive"] = ColorInfo::OLIVE;
+    mapColorInfo["teal"] = ColorInfo::TEAL;
+    mapColorInfo["purple"] = ColorInfo::PURPLE;
+    mapColorInfo["gray"] = ColorInfo::GRAY;
+    mapColorInfo["black"] = ColorInfo::BLACK;
+    mapColorInfo["white"] = ColorInfo::WHITE;
   }
   Scalar GetColorStatus(int nColorInfo)
   {
     Scalar res;
     switch (nColorInfo)
     {
-      case BLUE: 
+      case BLUE:
       {
         res = scalBlue;
         break;
       }
-      case LIME: 
+      case LIME:
       {
-        res = scalLime;        
+        res = scalLime;
         break;
       }
-      case RED: 
+      case RED:
       {
         res = scalRed;
         break;
       }
-      case YELLOW: 
+      case YELLOW:
       {
-        res = scalYellow;        
+        res = scalYellow;
         break;
-      }   
-      case CYAN: 
+      }
+      case CYAN:
       {
-        res = scalCyan;        
+        res = scalCyan;
         break;
-      }   
-      case MAGNETA: 
+      }
+      case MAGNETA:
       {
         res = scalMagneta;
         break;
       }
-      case SILVER: 
+      case SILVER:
       {
         res = scalSilver;
         break;
       }
-      case NAVY: 
+      case NAVY:
       {
         res = scalNavy;
         break;
-      }  
-      case GREEN: 
+      }
+      case GREEN:
       {
         res = scalGreen;
         break;
-      }  
-      case MAROON: 
+      }
+      case MAROON:
       {
         res = scalMaroon;
         break;
-      }  
-      case OLIVE: 
+      }
+      case OLIVE:
       {
         res = scalOlive;
         break;
-      }  
-      case TEAL: 
+      }
+      case TEAL:
       {
         res = scalTeal;
         break;
-      }   
-      case PURPLE: 
+      }
+      case PURPLE:
       {
         res = scalPurple;
         break;
-      }  
-      case GRAY: 
+      }
+      case GRAY:
       {
         res = scalGray;
         break;
-      }  
-      case BLACK: 
+      }
+      case BLACK:
       {
         res = scalBlack;
         break;
       }
-      case WHITE: 
+      case WHITE:
       {
         res = scalWhite;
         break;
       }
-      default: 
+      default:
       {
         res = scalWhite;
         break;
@@ -226,7 +244,6 @@ public:
     }
     return res;
   }
-
 
   // color combinations, BGR
   Mat mBGRcolor_comb;
