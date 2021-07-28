@@ -143,11 +143,15 @@ void CvtSeg2Bbox::MainLoopXmlBboxGenerator()
 
         // converting the bbox info from opensource to xml type
         yoloDB.bboxStdInfo = CalcBboxInfoXmlType(yoloDB, szImgRaw, szImgRes);
-        ROS_INFO("(%d,%d,%d,%d)", yoloDB.bboxStdInfo.nPtXLt, yoloDB.bboxStdInfo.nPtYLt, yoloDB.bboxStdInfo.nPtXRb,
-                 yoloDB.bboxStdInfo.nPtYRb);
 
         // saving parsing result w.r.t space
-        tempYoloDbVec.push_back(yoloDB);
+        if (((yoloDB.bboxStdInfo.nPtXLt != 0) && ((yoloDB.bboxStdInfo.nPtYLt != 0))) &&
+            ((yoloDB.bboxStdInfo.nPtXRb != 638) && ((yoloDB.bboxStdInfo.nPtYRb != 478))))
+        {
+          ROS_INFO("(%d,%d,%d,%d)", yoloDB.bboxStdInfo.nPtXLt, yoloDB.bboxStdInfo.nPtYLt, yoloDB.bboxStdInfo.nPtXRb,
+                   yoloDB.bboxStdInfo.nPtYRb);
+          tempYoloDbVec.push_back(yoloDB);
+        }
       }
 
       // saving parsing result w.r.t line
@@ -583,7 +587,7 @@ void CvtSeg2Bbox::MainLoopBboxChecker()
       ptBr.x = nXmax;
       ptBr.y = nYmax;
 
-      rectangle(imgRaw, ptTl, ptBr, colorStat_.scalRed, 2);
+      rectangle(imgRaw, ptTl, ptBr, colorStat_.GetColorStatus(GetColorCode(label)), 2);
 
       // for debugging
       ROS_INFO("label(%s):tl(%d,%d),br(%d,%d)", label, nXmin, nYmin, nXmax, nYmax);
@@ -1662,10 +1666,18 @@ BboxStdInfo CvtSeg2Bbox::CalcBboxInfoXmlType(YoloDB src, Size szImgSrc, Size szI
       (int)(((((src.fBbox[1]) * (float)(szImgSrc.height)) - ((src.fBbox[3]) * (float)(szImgSrc.height) * (0.5f))) /
              (szImgSrc.height)) *
             (szImgRes.height));
+  res.nPtXLt = cfgParam_.sat(res.nPtXLt, 0, szImgRes.width);
+  res.nPtYLt = cfgParam_.sat(res.nPtYLt, 0, szImgRes.height);
+
   res.nPtXRb = (res.nPtXLt) + (int)((src.fBbox[2]) * (float)(szImgRes.width));
   res.nPtYRb = (res.nPtYLt) + (int)((src.fBbox[3]) * (float)(szImgRes.height));
+  res.nPtXRb = cfgParam_.sat(res.nPtXRb, 0, szImgRes.width);
+  res.nPtYRb = cfgParam_.sat(res.nPtYRb, 0, szImgRes.height);
+
   res.nBboxWidth = (int)((src.fBbox[2]) * (float)(szImgRes.width));
   res.nBboxHeight = (int)((src.fBbox[3]) * (float)(szImgRes.height));
+  res.nBboxWidth = cfgParam_.sat(res.nBboxWidth, 0, szImgRes.width);
+  res.nBboxHeight = cfgParam_.sat(res.nBboxHeight, 0, szImgRes.height);
   return res;
 }
 
@@ -1691,4 +1703,26 @@ bool CvtSeg2Bbox::sortArea(cv::Rect rect1, cv::Rect rect2)
   int nArea1 = rect1.width * rect1.height;
   int nArea2 = rect2.width * rect2.height;
   return (nArea1 > nArea2);
+}
+
+int CvtSeg2Bbox::GetColorCode(string strLabel)
+{
+  int nName = 0;
+  if (strLabel == "person")
+    nName = 0;
+  else if (strLabel == "four_wheel_vehicle")
+    nName = 1;
+  else if (strLabel == "two_wheel_vehicle")
+    nName = 2;
+  else if (strLabel == "stroller")
+    nName = 3;
+  else if (strLabel == "pet")
+    nName = 4;
+  else if (strLabel == "post_office_symbol")
+    nName = 5;
+  else if (strLabel == "postman_vest")
+    nName = 6;
+  else
+    nName = 0;
+  return nName;
 }

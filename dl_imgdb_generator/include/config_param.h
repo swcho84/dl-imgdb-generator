@@ -34,6 +34,9 @@ public:
   void ReadRosParam(ros::NodeHandle& nh, const string& key, bool& val);
   void ReadRosParam(ros::NodeHandle& nh, const string& key, int32_t& val);
   void ReadRosParam(ros::NodeHandle& nh, const string& key, string& val);
+  int sat(int nVal, int nMin, int nMax);
+  float sat(float fVal, float fMin, float fMax);
+  double sat(double dVal, double dMin, double dMax);
 
   string strHomeName;
 

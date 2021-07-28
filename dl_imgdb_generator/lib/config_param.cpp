@@ -420,3 +420,39 @@ void ConfigParam::ReadRosParam(ros::NodeHandle& nh, const string& key, string& v
   if (val.empty())
     throw RosParamNotFoundException(key);
 }
+
+int ConfigParam::sat(int nVal, int nMin, int nMax)
+{
+  int nRes = 0;
+  if (nVal > nMax)
+    nRes = nMax;
+  else if (nVal < nMin)
+    nRes = nMin;
+  else
+    nRes = nVal;
+  return nRes;
+}
+
+float ConfigParam::sat(float fVal, float fMin, float fMax)
+{
+  float fRes = 0.0f;
+  if (fVal > fMax)
+    fRes = fMax;
+  else if (fVal < fMin)
+    fRes = fMin;
+  else
+    fRes = fVal;
+  return fRes;
+}
+
+double ConfigParam::sat(double dVal, double dMin, double dMax)
+{
+  double dRes = 0.0;
+  if (dVal > dMax)
+    dRes = dMax;
+  else if (dVal < dMin)
+    dRes = dMin;
+  else
+    dRes = dVal;
+  return dRes;
+}

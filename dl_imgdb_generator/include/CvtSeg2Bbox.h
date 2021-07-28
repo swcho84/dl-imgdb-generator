@@ -43,6 +43,7 @@ private:
   vector<Rect> GetTargetRect(Mat imgInput);
   static bool sortArea(cv::Rect rect1, cv::Rect rect2);
   BboxStdInfo CalcBboxInfoXmlType(YoloDB src, Size szImgSrc, Size szImgRes);
+  int GetColorCode(string strLabel);
 
   int nHeight;
   int nWidth;
