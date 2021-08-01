@@ -1,5 +1,5 @@
-#ifndef DL_IMBDB_GENERATOR_COLORMAT_H
-#define DL_IMBDB_GENERATOR_COLORMAT_H
+#ifndef JOYSTICK_101_COLORMAT_H
+#define JOYSTICK_101_COLORMAT_H
 
 // using vector type data
 #include <iostream>
