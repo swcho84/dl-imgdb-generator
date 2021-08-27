@@ -81,6 +81,8 @@ public:
   string strOpenDBLabelResFolderPath;
   string strOpenDBImgResFileNmFwd;
   string strOpenDBLabelResFileNmFwd;
+  string strOpenDBYoloLabelFolderNm;
+  string strOpenDBYoloLabelFolderPath;  
   string strOpenDBImgSrcExt;
   string strOpenDBTxtSrcExt;
   string strOpenDBImgSrcType;

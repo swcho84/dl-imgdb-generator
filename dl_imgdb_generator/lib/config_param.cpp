@@ -44,6 +44,7 @@ bool ConfigParam::ReadRosParams()
     ReadRosParam(nh, "/OpenDb2BboxFolder/src/txtfile_type", strOpenDBTxtSrcType);
     ReadRosParam(nh, "/OpenDb2BboxFolder/res/image", strOpenDBImgResFolderNm);
     ReadRosParam(nh, "/OpenDb2BboxFolder/res/xml_label", strOpenDBLabelResFolderNm);
+    ReadRosParam(nh, "/OpenDb2BboxFolder/res/yolo_label", strOpenDBYoloLabelFolderNm);    
     ReadRosParam(nh, "/OpenDb2BboxFolder/res/cvtimg_width", nOpDbWidthRef);
     ReadRosParam(nh, "/OpenDb2BboxFolder/res/cvtimg_height", nOpDbHeightRef);
     ReadRosParam(nh, "/OpenDb2BboxFolder/res/xmlfile_ext", strOpenDBXmlResExt);
@@ -51,6 +52,7 @@ bool ConfigParam::ReadRosParams()
     ReadRosParam(nh, "/OpenDb2BboxFolder/res/file_name_fwd", strOpenDBImgResFileNmFwd);
     ReadRosParam(nh, "/OpenDb2BboxFolder/res/file_name_num_digit", nOpDbImgResFileNmDigit);
     ReadRosParam(nh, "/OpenDb2BboxFolder/res/offset_num", nOpDbOffsetNum);
+
     nOpDbXmlResFileNmDigit = nOpDbImgResFileNmDigit;
     strOpenDBLabelResFileNmFwd = strOpenDBImgResFileNmFwd;
 
@@ -81,6 +83,10 @@ bool ConfigParam::ReadRosParams()
 
     strOpenDBImgResFolderPath = strHomeName + strOpenDBImgResFolderNm;
     strOpenDBLabelResFolderPath = strHomeName + strOpenDBLabelResFolderNm;
+    strOpenDBYoloLabelFolderPath = strHomeName + strOpenDBYoloLabelFolderNm;
+    ROS_INFO("%s", strOpenDBImgResFolderPath.c_str());
+    ROS_INFO("%s", strOpenDBLabelResFolderPath.c_str());
+    ROS_INFO("%s", strOpenDBYoloLabelFolderPath.c_str());
 
     // feature case
     ReadRosParam(nh, "/CityScapesDBConverter/feature", nFeatureCase);

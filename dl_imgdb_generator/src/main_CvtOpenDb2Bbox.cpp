@@ -60,6 +60,12 @@ int main(int argc, char** argv)
         opDb2Bbox.MainLoopBboxChecker();
         break;
       }
+      case OPENDB_XMLFILE_YOLO_CONVERTER:  // xml file checker
+      {
+        ROS_INFO("Feature: converter from xml file to yolo file");
+        opDb2Bbox.MainLoopBboxYoloLabelConverter();
+        break;
+      }      
       default:
       {
         ROS_INFO("Please check your parameter..");

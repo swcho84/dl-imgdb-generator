@@ -47,6 +47,7 @@
 #define OPENDB_IMGFILE_RESIZER 111
 #define OPENDB_XMLFILE_GENERATOR 222
 #define OPENDB_XMLFILE_CHECKER 333
+#define OPENDB_XMLFILE_YOLO_CONVERTER 444
 
 using namespace std;
 using namespace ros;
