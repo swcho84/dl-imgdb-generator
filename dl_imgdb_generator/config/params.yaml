@@ -200,23 +200,23 @@ CityScapesDBConverter:
   mix_inner_ratio: 0.1
 
 CityScapesDBfolder:
-  raw: "/LandingPadDB/pablo_drone_db/visdrone_aerial_view_db_done/img/"              # "/v4.0_additional_data/img/" "/v4.0_5000ea/img/"  "/cityscapeDBsmall/raw/"   /Research_DB/raw_etriDB/v1.0/ETRI_cityscapeDB/raw/
-  cvtimg: "/anti_drone_db/kari_antidrone_db_v1.0/img/" # "/LandingPadDB/h_type/img/" # "/LandingPadDB/pablo_type/img/" # "/MoraiImgLabelDataHandler/img/" # "/v4.0_additional_data/img/"            # "/v4.0_additional_data/img/" "/v4.0_5000ea/img/"  "/cityscapeDBsmall/cvtimg/"    /Research_DB/raw_etriDB/v1.0/ETRI_cityscapeDB/raw_vga/
+  raw: "/Documents/LandingPadDB_raw/pablo_drone_db/visdrone_aerial_view_db_done/img/"              # "/v4.0_additional_data/img/" "/v4.0_5000ea/img/"  "/cityscapeDBsmall/raw/"   /Research_DB/raw_etriDB/v1.0/ETRI_cityscapeDB/raw/
+  cvtimg: "/Documents/LandingPadDB_raw/v_type/img/" # "/LandingPadDB/h_type/img/" # "/LandingPadDB/pablo_type/img/" # "/MoraiImgLabelDataHandler/img/" # "/v4.0_additional_data/img/"            # "/v4.0_additional_data/img/" "/v4.0_5000ea/img/"  "/cityscapeDBsmall/cvtimg/"    /Research_DB/raw_etriDB/v1.0/ETRI_cityscapeDB/raw_vga/
   color_label: "/Research_DB/raw_etriDB/v1.0/ETRI_cityscapeDB/color_label/"   #"/cityscapeDBsmall/color_label/"
   polygon_data: "/Research_DB/raw_etriDB/v1.0/ETRI_cityscapeDB/polygon/"      #"/cityscapeDBsmall/polygon/"
-  xml_label: "/anti_drone_db/kari_antidrone_db_v1.0/label/" # "/LandingPadDB/h_type/label/" # "/LandingPadDB/pablo_type/label/" # "/MoraiImgLabelDataHandler/label/" # "/v4.0_additional_data/label/"       # "/v4.0_additional_data/label/" "/v4.0_5000ea/label/"  "/cityscapeDBsmall/xml_label/"
+  xml_label: "/Documents/LandingPadDB_raw/v_type/label/" # "/LandingPadDB/h_type/label/" # "/LandingPadDB/pablo_type/label/" # "/MoraiImgLabelDataHandler/label/" # "/v4.0_additional_data/label/"       # "/v4.0_additional_data/label/" "/v4.0_5000ea/label/"  "/cityscapeDBsmall/xml_label/"
   pet_mix: "/Research_DB/raw_etriDB/v1.0/ETRI_cityscapeDB/pet_db/"            # pet imgs
   seg_color_img: "/label_img/rgb_label/"                                      # /path/to/seg/color/img
   seg_label_img: "/label_img/seg_label/"                                      # /path/to/seg/label/img
   pet_mix_img: "/Research_DB/raw_etriDB/v1.0/ETRI_cityscapeDB/raw_pet_vga/"
-  yolo_label: "/anti_drone_db/kari_antidrone_db_v1.0/yolo_label/" # "/LandingPadDB/pablo_type/yolo_label/" # "/LandingPadDB/h_type/yolo_label/" # "/EtriDB_enhanced/db_enhanced/v2.0_converted/yolo_label/" # "/v4.0_additional_data/yolo_label/"
+  yolo_label: "/Documents/LandingPadDB_raw/v_type/yolo_label/" # "/LandingPadDB/pablo_type/yolo_label/" # "/LandingPadDB/h_type/yolo_label/" # "/EtriDB_enhanced/db_enhanced/v2.0_converted/yolo_label/" # "/v4.0_additional_data/yolo_label/"
   imgfile_type: "*.png"
   polygonfile_type: "*.json"
   xmlfile_type: "*.xml"
   imgfile_extension: "png"
   xmlfile_extension: "xml"
-  file_name_fwd: "kari_antidrone_db_"
+  file_name_fwd: "cbuam_autoland_db_vtype_"
   file_name_num_digit: 6
   cvtimg_width: 640
   cvtimg_height: 480
-  file_name_offset_number: 301326 # 25568  # 100763
+  file_name_offset_number: 0 # 25568  # 100763

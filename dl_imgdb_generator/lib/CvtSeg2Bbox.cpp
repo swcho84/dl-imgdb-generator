@@ -412,24 +412,24 @@ void CvtSeg2Bbox::MainLoopBboxYoloLabelConverter()
 
       // for yolo label, etriDB
       // calculating the label info.
-      int nName = 99;
-      string strLabel = label;
-      if (strLabel == "person")
-        nName = 0;
-      else if (strLabel == "four_wheel_vehicle")
-        nName = 1;
-      else if (strLabel == "two_wheel_vehicle")
-        nName = 2;
-      else if (strLabel == "stroller")
-        nName = 3;
-      else if (strLabel == "pet")
-        nName = 4;
-      else if (strLabel == "post_office_symbol")
-        nName = 5;
-      else if (strLabel == "postman_vest")
-        nName = 6;
-      else
-        nName = 99;
+      // int nName = 99;
+      // string strLabel = label;
+      // if (strLabel == "person")
+      //   nName = 0;
+      // else if (strLabel == "four_wheel_vehicle")
+      //   nName = 1;
+      // else if (strLabel == "two_wheel_vehicle")
+      //   nName = 2;
+      // else if (strLabel == "stroller")
+      //   nName = 3;
+      // else if (strLabel == "pet")
+      //   nName = 4;
+      // else if (strLabel == "post_office_symbol")
+      //   nName = 5;
+      // else if (strLabel == "postman_vest")
+      //   nName = 6;
+      // else
+      //   nName = 99;
 
       // // for yolo label, htype
       // // calculating the label info.
@@ -451,7 +451,38 @@ void CvtSeg2Bbox::MainLoopBboxYoloLabelConverter()
       // else if (strLabel == "pablo_logo")
       //   nName = 1;
       // else
-      //   nName = 99;							
+      //   nName = 99;
+
+      // for yolo label, vtype
+      // calculating the label info.
+      int nName = 99;
+      string strLabel = label;
+      if (strLabel == "v_land_pad")
+        nName = 0;
+      else if (strLabel == "v_words")
+        nName = 1;
+      else if (strLabel == "red_zone")
+        nName = 2;
+      else if (strLabel == "green_zone")
+        nName = 3;
+      else if (strLabel == "red_circle")
+        nName = 4;
+      else if (strLabel == "dark_red_circle")
+        nName = 5;
+      else if (strLabel == "orange_circle")
+        nName = 6;
+      else if (strLabel == "yellow_circle")
+        nName = 7;
+      else if (strLabel == "dark_yellow_circle")
+        nName = 8;
+      else if (strLabel == "dark_green_circle")
+        nName = 9;
+      else if (strLabel == "green_circle")
+        nName = 10;
+      else if (strLabel == "lime_circle")
+        nName = 11;
+      else
+        nName = 99;      
 
       // calculating the bbox center
       Point ptBboxCenter;
