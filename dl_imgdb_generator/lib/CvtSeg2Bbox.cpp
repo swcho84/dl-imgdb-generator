@@ -22,9 +22,11 @@ void CvtSeg2Bbox::MainLoopXmlBboxGenerator()
 {
   vector<String> vecTxtFileNm;
   glob(cfgParam_.strYoloLabelFolderPath, vecTxtFileNm, true);
+  sort(vecTxtFileNm.begin(), vecTxtFileNm.end());
 
   vector<String> vecImgFileNm;
   glob(cfgParam_.strCvtImgFolderPath, vecImgFileNm, true);
+	sort(vecImgFileNm.begin(), vecImgFileNm.end());
 
   // for debugging
   ROS_INFO("Processing_labelFolder:%s", cfgParam_.strYoloLabelFolderPath.c_str());
@@ -74,6 +76,7 @@ void CvtSeg2Bbox::MainLoopXmlBboxGenerator()
               yoloDB.nLabel = atoi(strToken.c_str());
               switch (yoloDB.nLabel)
               {
+								// standard label for etridb
                 case 0:
                 {
                   yoloDB.strLabel = "person";
@@ -114,6 +117,52 @@ void CvtSeg2Bbox::MainLoopXmlBboxGenerator()
                   yoloDB.strLabel = "person";
                   break;
                 }
+								// coco db label for etridb
+                // case 0:
+                // {
+                //   yoloDB.strLabel = "person";
+                //   break;
+                // }
+                // case 1:
+                // {
+                //   yoloDB.strLabel = "two_wheel_vehicle";
+                //   break;
+                // }
+                // case 2:
+                // {
+                //   yoloDB.strLabel = "four_wheel_vehicle";
+                //   break;
+                // }
+                // case 3:
+                // {
+                //   yoloDB.strLabel = "two_wheel_vehicle";
+                //   break;
+                // }
+                // case 4:
+                // {
+                //   yoloDB.strLabel = "four_wheel_vehicle";
+                //   break;
+                // }
+                // case 5:
+                // {
+                //   yoloDB.strLabel = "four_wheel_vehicle";
+                //   break;
+                // }
+                // case 6:
+                // {
+                //   yoloDB.strLabel = "pet";
+                //   break;
+                // }
+                // case 7:
+                // {
+                //   yoloDB.strLabel = "pet";
+                //   break;
+                // }								
+                // default:
+                // {
+                //   yoloDB.strLabel = "person";
+                //   break;
+                // }
               }
               break;
             }
@@ -191,7 +240,7 @@ void CvtSeg2Bbox::MainLoopXmlBboxGenerator()
 
     TiXmlElement* pElem2 = new TiXmlElement("source");
     TiXmlElement* pElem21 = new TiXmlElement("database");
-    TiXmlText* txtElem21 = new TiXmlText("ETRI collision avoidance DB");
+    TiXmlText* txtElem21 = new TiXmlText("Pablo drone aerial view DB");
     pElem21->LinkEndChild(txtElem21);
     TiXmlElement* pElem22 = new TiXmlElement("annotation");
     TiXmlText* txtElem22 = new TiXmlText("PASCAL VOC2017");
@@ -202,10 +251,10 @@ void CvtSeg2Bbox::MainLoopXmlBboxGenerator()
 
     TiXmlElement* pElem3 = new TiXmlElement("owner");
     TiXmlElement* pElem31 = new TiXmlElement("institute");
-    TiXmlText* txtElem31 = new TiXmlText("ETRI");
+    TiXmlText* txtElem31 = new TiXmlText("CJU");
     pElem31->LinkEndChild(txtElem31);
     TiXmlElement* pElem32 = new TiXmlElement("name");
-    TiXmlText* txtElem32 = new TiXmlText("Dr. Eunhye Kim");
+    TiXmlText* txtElem32 = new TiXmlText("Dr. Sungwook Cho");
     pElem32->LinkEndChild(txtElem32);
     pElem3->LinkEndChild(pElem31);
     pElem3->LinkEndChild(pElem32);
@@ -292,6 +341,8 @@ void CvtSeg2Bbox::MainLoopBboxYoloLabelConverter()
   vector<String> vecXmlLabelFileNm;
   glob(cfgParam_.strCvtImgFolderPath, vecCvtImgFileNm, true);
   glob(cfgParam_.strXmlFolderPath + cfgParam_.strXmlType, vecXmlLabelFileNm, true);
+	sort(vecCvtImgFileNm.begin(), vecCvtImgFileNm.end());
+	sort(vecXmlLabelFileNm.begin(), vecXmlLabelFileNm.end());
 
   // browsing annotated images recursively
   for (size_t k = 0; k < vecCvtImgFileNm.size(); k++)
@@ -359,7 +410,7 @@ void CvtSeg2Bbox::MainLoopBboxYoloLabelConverter()
       // for debugging
       ROS_INFO("label(%s):tl(%d,%d),br(%d,%d)", label, nXmin, nYmin, nXmax, nYmax);
 
-      // for yolo label
+      // for yolo label, etriDB
       // calculating the label info.
       int nName = 99;
       string strLabel = label;
@@ -379,6 +430,28 @@ void CvtSeg2Bbox::MainLoopBboxYoloLabelConverter()
         nName = 6;
       else
         nName = 99;
+
+      // // for yolo label, htype
+      // // calculating the label info.
+      // int nName = 99;
+      // string strLabel = label;
+      // if (strLabel == "h_land_pad")
+      //   nName = 0;
+      // else if (strLabel == "h_word")
+      //   nName = 1;
+      // else
+      //   nName = 99;		
+
+      // // for yolo label, pablo type
+      // // calculating the label info.
+      // int nName = 99;
+      // string strLabel = label;
+      // if (strLabel == "land_pad")
+      //   nName = 0;
+      // else if (strLabel == "pablo_logo")
+      //   nName = 1;
+      // else
+      //   nName = 99;							
 
       // calculating the bbox center
       Point ptBboxCenter;
@@ -1355,6 +1428,7 @@ void CvtSeg2Bbox::MainLoopImgResizer()
   // assigning variables for browsing raw images recursively
   vector<String> vecImgFileNm;
   glob(cfgParam_.strRawFolderPath, vecImgFileNm, true);
+	sort(vecImgFileNm.begin(), vecImgFileNm.end());
 
   // browsing raw images recursively
   for (size_t i = 0; i < vecImgFileNm.size(); i++)
@@ -1370,12 +1444,12 @@ void CvtSeg2Bbox::MainLoopImgResizer()
     nWidth = imgRaw.cols;
 
     // (option) making crop img
-    Rect recCropBbox;
-    recCropBbox.x = 0;
-    recCropBbox.y = 38;
-    recCropBbox.width = nWidth;
-    recCropBbox.height = 410;
-    imgRaw = imgRaw(recCropBbox);
+    // Rect recCropBbox;
+    // recCropBbox.x = 0;
+    // recCropBbox.y = 38;
+    // recCropBbox.width = nWidth;
+    // recCropBbox.height = 410;
+    // imgRaw = imgRaw(recCropBbox);
 
     // (option) for debugging
     // rectangle(imgRaw, recCropBbox, Scalar(0, 0, 255), 2, 8, 0);
@@ -1389,7 +1463,7 @@ void CvtSeg2Bbox::MainLoopImgResizer()
     // making the filename  using stringstream, with the numbering rule
     stringstream strStreamImgFileName;
     strStreamImgFileName << cfgParam_.strImgFileNmFwd;
-    strStreamImgFileName << std::setfill('0') << std::setw(cfgParam_.nImgFileNmDigit) << i;
+    strStreamImgFileName << std::setfill('0') << std::setw(cfgParam_.nImgFileNmDigit) << i + cfgParam_.nOffsetNumRef;
     strStreamImgFileName << "." + cfgParam_.strImgExt;
 
     // making the full file path
