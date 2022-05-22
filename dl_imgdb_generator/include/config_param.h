@@ -88,6 +88,7 @@ public:
   string strOpenDBImgResExt;
   string strOpenDBXmlResExt;
 
+	string strKttVidFilePath;
   string strKttPicType;
   string strKttTxtType;
   string strKttXmlType;

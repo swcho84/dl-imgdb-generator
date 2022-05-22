@@ -13,6 +13,7 @@ public:
   CvtKtt2Bbox(const ConfigParam& cfg);
   ~CvtKtt2Bbox();
 
+  void MainLoopImgWriter();
   void MainLoopImgResizer();
   void MainLoopBboxGenerator();
   void MainLoopBboxGeneratorV2();
@@ -30,8 +31,11 @@ private:
 
   vector<vector<KittyDB>> vecKittyDB;
 
-  int nHeight;
-  int nWidth;
+  int nHeight_;
+  int nWidth_;
+	int nCounter_;
+	int nFileNum_;
+
 };
 
 #endif

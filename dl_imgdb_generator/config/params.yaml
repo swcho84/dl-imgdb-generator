@@ -105,18 +105,20 @@ LabelKariDB:
     G: 80
     B: 0
 
+# 10: img file saver, raw size only, from video file
 # 11: img file resizer
 # 22: xml file generator
 # 33: xml file checker
 KittyDBConverter:
-  feature: 11
+  feature: 10
 
 #"/Research_DB/workdone_etriDB/v1.0/img/"
 #"/Research_DB/workdone_etriDB/v1.0/label/"
 KittyDBfolder:
+  video: "/yolo_trt_engine/yolov5/infer_vids/src/DJI_0004.MP4"  # DJI_0003.MP4 DJI_0004.MP4
   image: "/LandingPadImgs/before_converted/" #"/kittyDBsmall/image/"  "/Research_DB/raw_etriDB/v1.0/ETRI_kittyDB/image/"
   label: "/jumper_only_data/labels/" #"/kittyDBsmall/label/"
-  cvtimg: "/LandingPadImgs/after_converted/" #"/kittyDBsmall/cvtimg/"
+  cvtimg: "/KariAntiDroneDB/after_converted/" #"/kittyDBsmall/cvtimg/"
   xml_label: "/jumper_only_data/xml_labels/" #"/kittyDBsmall/xml_label/"
   imgfile_type: "*.jpg"
   txtfile_type: "*.txt"
@@ -190,7 +192,7 @@ LabelsCityScapesDB:
 # 5: txt file generator from xml file to yolo
 # 6: txt file generator from yolo file to xml
 CityScapesDBConverter:
-  feature: 3
+  feature: 1
   use_pet_mixing: false
   trial_pet_mixing: 3000
   mix_width_ratio: 0.1
@@ -198,8 +200,8 @@ CityScapesDBConverter:
   mix_inner_ratio: 0.1
 
 CityScapesDBfolder:
-  raw: "/LandingPadDB/pablo_drone_db/visdrone_aerial_view_db_done/img/"              # "/v4.0_additional_data/img/" "/v4.0_5000ea/img/"  "/cityscapeDBsmall/raw/"   /Research_DB/raw_etriDB/v1.0/ETRI_cityscapeDB/raw/
-  cvtimg: "/LandingPadDB/pablo_drone_db/visdrone_aerial_view_db_done/img/" # "/LandingPadDB/h_type/img/" # "/LandingPadDB/pablo_type/img/" # "/MoraiImgLabelDataHandler/img/" # "/v4.0_additional_data/img/"            # "/v4.0_additional_data/img/" "/v4.0_5000ea/img/"  "/cityscapeDBsmall/cvtimg/"    /Research_DB/raw_etriDB/v1.0/ETRI_cityscapeDB/raw_vga/
+  raw: "/Documents/kariDB_backup/raw/masks/"              # "/v4.0_additional_data/img/" "/v4.0_5000ea/img/"  "/cityscapeDBsmall/raw/"   /Research_DB/raw_etriDB/v1.0/ETRI_cityscapeDB/raw/
+  cvtimg: "/Documents/kariDB_backup/converted/masks/" # "/LandingPadDB/h_type/img/" # "/LandingPadDB/pablo_type/img/" # "/MoraiImgLabelDataHandler/img/" # "/v4.0_additional_data/img/"            # "/v4.0_additional_data/img/" "/v4.0_5000ea/img/"  "/cityscapeDBsmall/cvtimg/"    /Research_DB/raw_etriDB/v1.0/ETRI_cityscapeDB/raw_vga/
   color_label: "/Research_DB/raw_etriDB/v1.0/ETRI_cityscapeDB/color_label/"   #"/cityscapeDBsmall/color_label/"
   polygon_data: "/Research_DB/raw_etriDB/v1.0/ETRI_cityscapeDB/polygon/"      #"/cityscapeDBsmall/polygon/"
   xml_label: "/LandingPadDB/pablo_drone_db/visdrone_aerial_view_db_done/label/" # "/LandingPadDB/h_type/label/" # "/LandingPadDB/pablo_type/label/" # "/MoraiImgLabelDataHandler/label/" # "/v4.0_additional_data/label/"       # "/v4.0_additional_data/label/" "/v4.0_5000ea/label/"  "/cityscapeDBsmall/xml_label/"
@@ -211,10 +213,10 @@ CityScapesDBfolder:
   imgfile_type: "*.png"
   polygonfile_type: "*.json"
   xmlfile_type: "*.xml"
-  imgfile_extension: "png"
+  imgfile_extension: "jpg"
   xmlfile_extension: "xml"
-  file_name_fwd: "pablo_autoland_env_db_"
+  file_name_fwd: "kari_regionseg_train_"
   file_name_num_digit: 6
   cvtimg_width: 640
   cvtimg_height: 480
-  file_name_offset_number: 301326 # 25568  # 100763
+  file_name_offset_number: 1 # 25568  # 100763

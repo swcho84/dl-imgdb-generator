@@ -42,6 +42,12 @@ int main(int argc, char** argv)
   {
     switch (cfg.nKttFeatureCase)
     {
+      case KITDB_IMGFILE_SAVER:  // img file writer
+      {
+        ROS_INFO("Feature: img file writer, only raw video size");
+        ktt2Bbox.MainLoopImgWriter();
+        break;
+      }			
       case KITDB_IMGFILE_RESIZER:  // img file resizer
       {
         ROS_INFO("Feature: img file resizer");

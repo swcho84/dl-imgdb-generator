@@ -132,6 +132,7 @@ bool ConfigParam::ReadRosParams()
     ReadRosParam(nh, "/KittyDBConverter/feature", nKttFeatureCase);
 
     // folder name and picture file type
+		ReadRosParam(nh, "/KittyDBfolder/video", strKttVidFilePath);
     ReadRosParam(nh, "/KittyDBfolder/image", strKttImgFolderNm);
     ReadRosParam(nh, "/KittyDBfolder/label", strKttLabelFolderNm);
     ReadRosParam(nh, "/KittyDBfolder/cvtimg", strKttCvtImgFolderNm);

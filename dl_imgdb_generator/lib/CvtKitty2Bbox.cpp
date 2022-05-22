@@ -7,8 +7,10 @@ using namespace cv;
 CvtKtt2Bbox::CvtKtt2Bbox(const ConfigParam& cfg) : cfgParam_(cfg)
 {
   // default: VGA size
-  nHeight = 480;
-  nWidth = 640;
+  nHeight_ = 480;
+  nWidth_ = 640;
+	nCounter_ = 0;
+	nFileNum_ = 15707;
 
   bSizeCalcFlag = false;
 }
@@ -108,8 +110,8 @@ void CvtKtt2Bbox::MainLoopBboxGenerator()
     Mat imgCvtRaw = imread(vecCvtImgFileNm[i]);
 
     // image width and height info. (h1024, w2048)
-    nHeight = imgRaw.rows;
-    nWidth = imgRaw.cols;
+    nHeight_ = imgRaw.rows;
+    nWidth_ = imgRaw.cols;
 
     // reading txt file
     ifstream openFile(vecTxtFileNm[i]);
@@ -155,7 +157,7 @@ void CvtKtt2Bbox::MainLoopBboxGenerator()
             case 4:
             {
               tempKittyDB.fBbox[0] = (float)(atoi(strToken.c_str()));
-              float nNormalized = tempKittyDB.fBbox[0] / nWidth;
+              float nNormalized = tempKittyDB.fBbox[0] / nWidth_;
               float nResized = nNormalized * cfgParam_.nKttWidthRef;
               tempKittyDB.fBbox[0] = nResized;
               break;
@@ -163,7 +165,7 @@ void CvtKtt2Bbox::MainLoopBboxGenerator()
             case 5:
             {
               tempKittyDB.fBbox[1] = (float)(atoi(strToken.c_str()));
-              float nNormalized = tempKittyDB.fBbox[1] / nHeight;
+              float nNormalized = tempKittyDB.fBbox[1] / nHeight_;
               float nResized = nNormalized * cfgParam_.nKttHeightRef;
               tempKittyDB.fBbox[1] = nResized;
               break;
@@ -171,7 +173,7 @@ void CvtKtt2Bbox::MainLoopBboxGenerator()
             case 6:
             {
               tempKittyDB.fBbox[2] = (float)(atoi(strToken.c_str()));
-              float nNormalized = tempKittyDB.fBbox[2] / nWidth;
+              float nNormalized = tempKittyDB.fBbox[2] / nWidth_;
               float nResized = nNormalized * cfgParam_.nKttWidthRef;
               tempKittyDB.fBbox[2] = nResized;
               break;
@@ -179,7 +181,7 @@ void CvtKtt2Bbox::MainLoopBboxGenerator()
             case 7:
             {
               tempKittyDB.fBbox[3] = (float)(atoi(strToken.c_str()));
-              float nNormalized = tempKittyDB.fBbox[3] / nHeight;
+              float nNormalized = tempKittyDB.fBbox[3] / nHeight_;
               float nResized = nNormalized * cfgParam_.nKttHeightRef;
               tempKittyDB.fBbox[3] = nResized;
               break;
@@ -411,8 +413,8 @@ void CvtKtt2Bbox::MainLoopImgResizer()
     Mat imgRaw = imread(vecImgFileNm[i]);
 
     // image width and height info. (h1024, w2048)
-    nHeight = imgRaw.rows;
-    nWidth = imgRaw.cols;
+    nHeight_ = imgRaw.rows;
+    nWidth_ = imgRaw.cols;
 
     // resizing w.r.t the cityscapesDB
     Mat imgResize;
@@ -440,6 +442,66 @@ void CvtKtt2Bbox::MainLoopImgResizer()
 
     // // pausing and destroying all imshow result
     // waitKey(0);
+  }
+
+  return;
+}
+
+// main loop: img file saver
+void CvtKtt2Bbox::MainLoopImgWriter()
+{
+  // capturing the video file
+  VideoCapture cap(getenv("HOME") + cfgParam_.strKttVidFilePath);
+
+  // Check if camera opened successfully
+  if (!cap.isOpened())
+  {
+    ROS_ERROR("Error opening video stream or file");
+    return;
+  }
+  else
+
+  while (1)
+  {
+    // Capture frame-by-frame
+    Mat imgRaw;
+    cap >> imgRaw;
+
+    // If the frame is empty, break immediately
+    if (imgRaw.empty())
+    {
+      ROS_ERROR("Video is ended..");
+      break;
+    }
+
+    // making the result image
+    Mat imgRes;
+    imgRaw.copyTo(imgRes);
+
+		if (nCounter_ > 100)
+		{
+			// making the filename  using stringstream, with the numbering rule
+			stringstream strStreamImgFileName;
+			strStreamImgFileName << cfgParam_.strKttImgFileNmFwd;
+			strStreamImgFileName << std::setfill('0') << std::setw(cfgParam_.nKttImgFileNmDigit) << (nFileNum_);
+			strStreamImgFileName << "." + cfgParam_.strKttImgExt;
+
+			// making the full file path
+			string strCvtImgFile;
+			strCvtImgFile = cfgParam_.strKttCvtImgFolderPath + strStreamImgFileName.str();
+			ROS_INFO("strCvtImgFile:%s", strCvtImgFile.c_str());
+
+			// saving the resized image
+			imwrite(strCvtImgFile, imgRaw);
+			nCounter_ = 0;
+		}
+		else
+			nCounter_++;
+
+    // for debugging
+    // imshow("imgRes", imgRes);
+		nFileNum_++;
+    waitKey(30);
   }
 
   return;
